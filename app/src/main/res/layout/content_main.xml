@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.narmware.jainjeevan.activity.MainActivity"
+    tools:showIn="@layout/activity_main"
+    android:padding="@dimen/screen_padding">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:text="Welcome Back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign in to your account"
+            android:textSize="17sp"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/et_height"
+            style="@style/custom_et_style"
+            android:drawableLeft="@drawable/ic_phone"
+            android:hint="Registered mobile number"
+            android:digits="1234567890"
+            android:inputType="phone"/>
+
+        <EditText
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/et_height"
+            style="@style/custom_et_style"
+            android:drawableLeft="@drawable/ic_lock"
+            android:hint="Enter OTP"
+            android:digits="1234567890"
+            android:inputType="number"/>
+
+
+        <Button
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/custom_bt"
+            android:width="150dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/white"
+            android:text="@string/title_request_otp"/>
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Resend OTP"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/holo_blue_bright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account? Register Now"/>
+    </LinearLayout>
+
+</RelativeLayout>
