@@ -27,7 +27,6 @@ AddVendorFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInterac
     val profileFragment: ProfileFragment = ProfileFragment()
     val aboutFragment: AboutFragment = AboutFragment()
 
-
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container,fragment)
@@ -39,7 +38,6 @@ AddVendorFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInterac
                 .add(R.id.fragment_container,fragment)
                 .commit()
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
