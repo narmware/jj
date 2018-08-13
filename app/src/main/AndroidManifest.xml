@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".activity.DharamshalaActivity2" />
         <activity android:name=".activity.LoginActivity" />
         <activity
@@ -23,7 +22,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.BhojanalayActivity" />
-        <activity android:name=".activity.RestaurantActivity"></activity>
+        <activity android:name=".activity.RestaurantActivity" />
+        <activity android:name=".activity.DetailsActivity">
+
+        </activity>
     </application>
 
 </manifest>

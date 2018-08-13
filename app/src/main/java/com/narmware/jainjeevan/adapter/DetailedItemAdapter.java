@@ -1,7 +1,6 @@
 package com.narmware.jainjeevan.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.activity.DetailsActivity;
-import com.narmware.jainjeevan.pojo.RecommendedItems;
+import com.narmware.jainjeevan.pojo.BhojanItems;
+import com.narmware.jainjeevan.pojo.DetailedItem;
 
 import java.util.ArrayList;
 
@@ -20,54 +19,46 @@ import java.util.ArrayList;
  * Created by rohitsavant on 12/08/18.
  */
 
-public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.MyViewHolder>{
+public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapter.MyViewHolder>{
 
     Context mContext;
-    ArrayList<RecommendedItems> recommendedItems;
+    ArrayList<DetailedItem> detailedItems;
     FragmentManager fragmentManager;
 
-    public RecommendedAdapter(Context mContext, ArrayList<RecommendedItems> recommendedItems, FragmentManager fragmentManager) {
+    public DetailedItemAdapter(Context mContext, ArrayList<DetailedItem> detailedItems, FragmentManager fragmentManager) {
         this.mContext = mContext;
-        this.recommendedItems = recommendedItems;
+        this.detailedItems = detailedItems;
         this.fragmentManager = fragmentManager;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_recommended, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_detailed, parent, false);
 
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        RecommendedItems recommendedItem=recommendedItems.get(position);
-
-        holder.mTxtRecomm.setText(recommendedItem.getTitle());
+        DetailedItem detailedItem=detailedItems.get(position);
+        holder.mTxtDetail.setText(detailedItem.getItem());
     }
 
     @Override
     public int getItemCount() {
-        return recommendedItems.size();
+        return detailedItems.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-
-        ImageView mImgRecomm;
-        TextView mTxtRecomm;
+        TextView mTxtDetail;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            mImgRecomm=itemView.findViewById(R.id.recomm_image);
-            mTxtRecomm=itemView.findViewById(R.id.recomm_title);
-
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(mContext, DetailsActivity.class);
-                    mContext.startActivity(intent);
+
                 }
             });
         }

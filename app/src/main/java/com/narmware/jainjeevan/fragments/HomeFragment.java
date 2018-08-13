@@ -15,14 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.BhojanalayActivity;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.activity.RestaurantActivity;
 import com.narmware.jainjeevan.adapter.RecommendedAdapter;
+import com.narmware.jainjeevan.pojo.BannerImages;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,8 +52,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     ArrayList<RecommendedItems> recommendedItems;
     RecyclerView mRecomRecycler;
     RecommendedAdapter recommendAdapter;
-
+    SliderLayout mSlider;
     LinearLayout mLinDharamshala,mLinResto,mLinBhojanalay;
+    ArrayList<BannerImages> bannerImages;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -86,6 +93,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_home, container, false);
 
+        mSlider=view.findViewById(R.id.slider);
+
         mRecomRecycler=view.findViewById(R.id.home_recycler_recomm);
         mLinDharamshala=view.findViewById(R.id.home_dharamshala);
         mLinBhojanalay=view.findViewById(R.id.home_bhojanalay);
@@ -95,9 +104,54 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mLinDharamshala.setOnClickListener(this);
         mLinResto.setOnClickListener(this);
 
+        setSlider();
         setRecommendAdapter(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         return view;
     }
+
+    private void setSlider() {
+        // HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
+
+        bannerImages=new ArrayList<>();
+        bannerImages.add(new BannerImages("Banner 1","https://qph.fs.quoracdn.net/main-qimg-7edd17cb52dcc5ba1c6385638a7012c2"));
+        bannerImages.add(new BannerImages("Banner 2","https://imgcld.yatra.com/ytimages/image/upload/t_hotel_tg_details_seo/v1433503196/Domestic%20Hotels/Hotels_Dharamshala/Club%20Mahindra%20Dharamshala/Overview_copy.jpg"));
+        bannerImages.add(new BannerImages("Banner 3","http://static.trip101.com/paragraph_media/pictures/000/439/296/large/8e15efd2-aa9b-45ea-b75a-5501101da8d4.jpg?1516700440"));
+
+        HashMap<String,String> file_maps = new HashMap<String, String>();
+
+        for(int i=0;i<bannerImages.size();i++)
+        {
+            file_maps.put(bannerImages.get(i).getBanner_title(),bannerImages.get(i).getService_image());
+        }
+
+        for(String name : file_maps.keySet()){
+            //textSliderView displays image with text title
+            //TextSliderView textSliderView = new TextSliderView(NavigationActivity.this);
+
+            //DefaultSliderView displays only image
+            DefaultSliderView textSliderView = new DefaultSliderView(getContext());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mSlider.addSlider(textSliderView);
+        }
+        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        //mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        //mSlider.setCustomIndicator(custom_indicator);
+        mSlider.setCustomAnimation(new DescriptionAnimation());
+        mSlider.setFitsSystemWindows(true);
+        mSlider.setDuration(3000);
+
+    }
+
 
     public void setRecommendAdapter(RecyclerView.LayoutManager mLayoutManager) {
         recommendedItems = new ArrayList<>();
