@@ -19,22 +19,77 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center">
-            
-            <ImageView
-                android:layout_width="@dimen/home_top_menu"
-                android:layout_height="@dimen/home_top_menu"
-                android:layout_weight="1"
-                android:src="@drawable/ic_phone"/>
-            <ImageView
-                android:layout_width="@dimen/home_top_menu"
-                android:layout_height="@dimen/home_top_menu"
-                android:src="@drawable/ic_phone"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="@dimen/home_top_menu"
-                android:layout_height="@dimen/home_top_menu"
-                android:src="@drawable/ic_phone"
-                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:id="@+id/home_dharamshala"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="@dimen/home_top_menu"
+                    android:layout_height="@dimen/home_top_menu"
+                    android:layout_weight="1"
+                    android:src="@drawable/dharamshala"/>
+                <TextView
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="Dharamshala"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/home_bhojanalay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="@dimen/home_top_menu"
+                    android:layout_height="@dimen/home_top_menu"
+                    android:layout_weight="1"
+                    android:src="@drawable/bhojan"/>
+                <TextView
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="Bhojanalay"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/home_restaurant"
+                android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                android:layout_weight="1">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="@dimen/home_top_menu"
+                        android:layout_height="@dimen/home_top_menu"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_restaurant"/>
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="Restaurants"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
         </LinearLayout>
         
 
