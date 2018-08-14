@@ -38,9 +38,9 @@ public class RoomsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
 
-    ArrayList<DetailedItem> detailedItems;
-    RecyclerView mRecyclerDetails;
-    DetailedItemAdapter detailedItemAdapter;
+    public static ArrayList<DetailedItem> detailedItems;
+    public static RecyclerView mRecyclerDetails;
+    public static DetailedItemAdapter detailedItemAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,10 +50,10 @@ public class RoomsFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static RoomsFragment newInstance( ArrayList<DetailedItem> itemList) {
+    public static RoomsFragment newInstance(ArrayList<DetailedItem> itemList) {
         RoomsFragment fragment = new RoomsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_LIST, itemList);
+        args.putSerializable(ARG_LIST,itemList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,8 +62,11 @@ public class RoomsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            detailedItems = (ArrayList<DetailedItem>) getArguments().getSerializable(ARG_LIST);
-            Log.e("item size",detailedItems.size()+"");
+            try {
+                detailedItems = new ArrayList<>();
+                detailedItems = (ArrayList<DetailedItem>) getArguments().getSerializable(ARG_LIST);
+            }catch (Exception e)
+            {}
         }
     }
 
@@ -75,11 +78,13 @@ public class RoomsFragment extends Fragment {
 
         mRecyclerDetails=view.findViewById(R.id.recycler_details);
         setDetailsAdapter(new LinearLayoutManager(getContext()));
+
         return view;
     }
 
     public void setDetailsAdapter(RecyclerView.LayoutManager mLayoutManager) {
-        detailedItems = new ArrayList<>();
+        Log.e("item size",detailedItems.size()+"");
+
         SnapHelper snapHelper = new LinearSnapHelper();
 
         detailedItemAdapter = new DetailedItemAdapter(getContext(), detailedItems,getActivity().getSupportFragmentManager());

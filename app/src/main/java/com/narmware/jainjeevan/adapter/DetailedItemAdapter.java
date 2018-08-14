@@ -41,6 +41,15 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DetailedItem detailedItem=detailedItems.get(position);
+
+        if(detailedItem.getImg()!=0)
+        {
+            holder.mImgIcon.setVisibility(View.VISIBLE);
+            holder.mImgIcon.setImageResource(detailedItem.getImg());
+        }
+        else{
+            holder.mImgIcon.setVisibility(View.GONE);
+        }
         holder.mTxtDetail.setText(detailedItem.getItem());
     }
 
@@ -51,9 +60,13 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView mTxtDetail;
+        ImageView mImgIcon;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+            mTxtDetail=itemView.findViewById(R.id.txt_item);
+            mImgIcon=itemView.findViewById(R.id.icon);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

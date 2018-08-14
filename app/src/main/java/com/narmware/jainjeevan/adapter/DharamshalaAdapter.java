@@ -87,6 +87,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
                     Intent intent=new Intent(mContext, DetailsActivity.class);
                     intent.putExtra(Constants.TITLE,mItem.getName());
                     intent.putExtra(Constants.ADDRESS,mItem.getAddress());
+                    intent.putExtra(Constants.IMAGE,mItem.getIMG());
                     intent.putExtra(Constants.ID,mItem.getDharmshala_id());
 
                     mContext.startActivity(intent);

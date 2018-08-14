@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,6 +36,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     ArrayList<DharamshalaItem> dharamshalaItems;
     DharamshalaAdapter dharamshalaAdapter;
     RequestQueue mVolleyRequest;
+    TextView mTxtTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(DharamshalaActivity2.this);
         mRecyclerDharam=findViewById(R.id.recycler_dharamshala);
-
+        mTxtTitle=findViewById(R.id.txt_title);
+        mTxtTitle.setText("Dharamshala");
     }
 
     public void setDharamshalaAdapter(RecyclerView.LayoutManager mLayoutManager) {

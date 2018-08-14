@@ -53,8 +53,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     RecyclerView mRecomRecycler;
     RecommendedAdapter recommendAdapter;
     SliderLayout mSlider;
+    SliderLayout mBottomSlider;
     LinearLayout mLinDharamshala,mLinResto,mLinBhojanalay;
     ArrayList<BannerImages> bannerImages;
+    ArrayList<BannerImages> bottomBannerImages;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -94,6 +96,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         View view= inflater.inflate(R.layout.fragment_home, container, false);
 
         mSlider=view.findViewById(R.id.slider);
+        mBottomSlider=view.findViewById(R.id.slider_bottom);
 
         mRecomRecycler=view.findViewById(R.id.home_recycler_recomm);
         mLinDharamshala=view.findViewById(R.id.home_dharamshala);
@@ -105,13 +108,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mLinResto.setOnClickListener(this);
 
         setSlider();
+        setBottomSlider();
         setRecommendAdapter(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         return view;
     }
 
     private void setSlider() {
-        // HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
-
         bannerImages=new ArrayList<>();
         bannerImages.add(new BannerImages("Banner 1","https://qph.fs.quoracdn.net/main-qimg-7edd17cb52dcc5ba1c6385638a7012c2"));
         bannerImages.add(new BannerImages("Banner 2","https://imgcld.yatra.com/ytimages/image/upload/t_hotel_tg_details_seo/v1433503196/Domestic%20Hotels/Hotels_Dharamshala/Club%20Mahindra%20Dharamshala/Overview_copy.jpg"));
@@ -127,7 +129,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         for(String name : file_maps.keySet()){
             //textSliderView displays image with text title
             //TextSliderView textSliderView = new TextSliderView(NavigationActivity.this);
-
             //DefaultSliderView displays only image
             DefaultSliderView textSliderView = new DefaultSliderView(getContext());
             // initialize a SliderLayout
@@ -152,6 +153,45 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    private void setBottomSlider() {
+        bottomBannerImages=new ArrayList<>();
+        bottomBannerImages.add(new BannerImages("Banner 1","http://movingnomads.com/blog/wp-content/uploads/2017/08/Digital-Nomad-India.jpg"));
+        bottomBannerImages.add(new BannerImages("Banner 2","http://jasperhotels.in/wp-content/uploads/2017/12/view-1.jpg"));
+        bottomBannerImages.add(new BannerImages("Banner 3","https://ui.cltpstatic.com/places/hotels/3881/388114/images/Capture_w.jpg"));
+
+        HashMap<String,String> file_maps = new HashMap<String, String>();
+
+        for(int i=0;i<bottomBannerImages.size();i++)
+        {
+            file_maps.put(bottomBannerImages.get(i).getBanner_title(),bottomBannerImages.get(i).getService_image());
+        }
+
+        for(String name : file_maps.keySet()){
+            //textSliderView displays image with text title
+            //TextSliderView textSliderView = new TextSliderView(NavigationActivity.this);
+            //DefaultSliderView displays only image
+            DefaultSliderView textSliderView = new DefaultSliderView(getContext());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mBottomSlider.addSlider(textSliderView);
+        }
+        mBottomSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+        //mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        //mSlider.setCustomIndicator(custom_indicator);
+        mBottomSlider.setCustomAnimation(new DescriptionAnimation());
+        mBottomSlider.setFitsSystemWindows(true);
+        mBottomSlider.setDuration(3000);
+
+    }
 
     public void setRecommendAdapter(RecyclerView.LayoutManager mLayoutManager) {
         recommendedItems = new ArrayList<>();
