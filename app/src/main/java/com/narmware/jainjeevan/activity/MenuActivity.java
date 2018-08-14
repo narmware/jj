@@ -1,6 +1,7 @@
 package com.narmware.jainjeevan.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -19,49 +21,57 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.adapter.DharamshalaAdapter;
+import com.narmware.jainjeevan.adapter.FoodMenuAdapter;
 import com.narmware.jainjeevan.adapter.RestoAdapter;
-import com.narmware.jainjeevan.pojo.DharamshalaItem;
+import com.narmware.jainjeevan.pojo.MenuItem;
+import com.narmware.jainjeevan.pojo.MenuItemResponse;
 import com.narmware.jainjeevan.pojo.RestoItemResponse;
 import com.narmware.jainjeevan.pojo.RestoItems;
+import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class RestaurantActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerResto;
-    ArrayList<RestoItems> restoItems;
-    RestoAdapter restoAdapter;
+    ArrayList<MenuItem> restoItems;
+    FoodMenuAdapter restoAdapter;
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
+    String id,name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant);
+        setContentView(R.layout.activity_menu);
         getSupportActionBar().hide();
 
+        Intent intent=getIntent();
+        id=intent.getStringExtra(Constants.HOTEL_ID);
+        name=intent.getStringExtra(Constants.HOTEL_TITLE);
+
         init();
-        setRestoAdapter(new LinearLayoutManager(RestaurantActivity.this));
-        GetRestos();
+        setMenuAdapter(new LinearLayoutManager(MenuActivity.this));
+        GetMenu();
     }
 
     private void init() {
-        mVolleyRequest = Volley.newRequestQueue(RestaurantActivity.this);
-        mRecyclerResto=findViewById(R.id.recycler_resto);
+        mVolleyRequest = Volley.newRequestQueue(MenuActivity.this);
+        mRecyclerResto=findViewById(R.id.recycler_menu);
         mTxtTitle=findViewById(R.id.txt_title);
-        mTxtTitle.setText("Restaurants");
+        mTxtTitle.setText(name);
     }
 
-    public void setRestoAdapter(RecyclerView.LayoutManager mLayoutManager) {
+    public void setMenuAdapter(RecyclerView.LayoutManager mLayoutManager) {
         restoItems = new ArrayList<>();
         SnapHelper snapHelper = new LinearSnapHelper();
 
-        restoAdapter = new RestoAdapter(RestaurantActivity.this, restoItems,getSupportFragmentManager());
+        restoAdapter = new FoodMenuAdapter(MenuActivity.this, restoItems,getSupportFragmentManager());
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
         mRecyclerResto.setLayoutManager(mLayoutManager);
         mRecyclerResto.setItemAnimator(new DefaultItemAnimator());
@@ -73,27 +83,19 @@ public class RestaurantActivity extends AppCompatActivity {
         restoAdapter.notifyDataSetChanged();
     }
 
-    private void GetRestos() {
+    private void GetMenu() {
 
-        final ProgressDialog dialog = new ProgressDialog(RestaurantActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(MenuActivity.this);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
         dialog.show();
 
         Gson gson=new Gson();
-        // String json_string=gson.toJson(bookSchedule);
-        //Log.e("Schedule json",json_string);
-/*
-
         HashMap<String,String> param = new HashMap();
-        param.put(Constants.MOBILE_NUMBER,mMobile);
-        param.put(Constants.PASSWORD,mPassword);
-*/
+        param.put(Constants.HOTEL_ID,id);
 
         //url with params
-       // String url= SupportFunctions.appendParam(EndPoints.DETAILS_URL,param);
-
-        String url=EndPoints.GET_HOTELS;
+         String url= SupportFunctions.appendParam(EndPoints.GET_HOTEL_MENU,param);
 
         Log.e("Resto url",url);
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
@@ -113,10 +115,10 @@ public class RestaurantActivity extends AppCompatActivity {
                             Log.e("Resto Json_string",response.toString());
                             Gson gson = new Gson();
 
-                            RestoItemResponse restoItemResponse=gson.fromJson(response.toString(),RestoItemResponse.class);
-                            RestoItems[] resto=restoItemResponse.getData();
+                            MenuItemResponse menuItemResponse=gson.fromJson(response.toString(),MenuItemResponse.class);
+                            MenuItem[] resto=menuItemResponse.getData();
 
-                            for(RestoItems item:resto)
+                            for(MenuItem item:resto)
                             {
                                 restoItems.add(item);
                             }
@@ -144,5 +146,4 @@ public class RestaurantActivity extends AppCompatActivity {
         );
         mVolleyRequest.add(obreq);
     }
-
 }

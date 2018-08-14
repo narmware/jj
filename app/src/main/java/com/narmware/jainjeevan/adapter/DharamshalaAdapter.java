@@ -2,6 +2,7 @@ package com.narmware.jainjeevan.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -97,7 +98,9 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
             mBtnCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    String phone = mItem.getMobile();
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    mContext.startActivity(intent);
                 }
             });
         }

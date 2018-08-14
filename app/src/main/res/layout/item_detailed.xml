@@ -21,6 +21,7 @@
 
     <TextView
         android:layout_marginLeft="8dp"
+        android:textColor="@color/grey_900"
         android:id="@+id/txt_item"
         android:text="Hello"
         android:layout_width="match_parent"

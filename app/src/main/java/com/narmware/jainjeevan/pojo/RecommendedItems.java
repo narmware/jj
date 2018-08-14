@@ -6,35 +6,37 @@ package com.narmware.jainjeevan.pojo;
 
 public class RecommendedItems {
 
-    String title,image,id;
+    String name,IMG,dharmshala_id,address;
 
-    public RecommendedItems(String title, String image, String id) {
-        this.title = title;
-        this.image = image;
-        this.id = id;
+    public String getAddress() {
+        return address;
     }
 
-    public String getTitle() {
-        return title;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getName() {
+        return name;
     }
 
-    public String getImage() {
-        return image;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public String getIMG() {
+        return IMG;
     }
 
-    public String getId() {
-        return id;
+    public void setIMG(String IMG) {
+        this.IMG = IMG;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getDharmshala_id() {
+        return dharmshala_id;
+    }
+
+    public void setDharmshala_id(String dharmshala_id) {
+        this.dharmshala_id = dharmshala_id;
     }
 }

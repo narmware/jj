@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.DetailsActivity;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
+import com.narmware.jainjeevan.support.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -42,8 +44,12 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RecommendedItems recommendedItem=recommendedItems.get(position);
+        holder.mItem=recommendedItem;
 
-        holder.mTxtRecomm.setText(recommendedItem.getTitle());
+        holder.mTxtRecomm.setText(recommendedItem.getName());
+        Picasso.with(mContext)
+                .load(recommendedItem.getIMG())
+                .into(holder.mImgRecomm);
     }
 
     @Override
@@ -55,6 +61,7 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
 
         ImageView mImgRecomm;
         TextView mTxtRecomm;
+        RecommendedItems mItem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -67,6 +74,10 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
                 @Override
                 public void onClick(View v) {
                     Intent intent=new Intent(mContext, DetailsActivity.class);
+                    intent.putExtra(Constants.TITLE,mItem.getName());
+                    intent.putExtra(Constants.ADDRESS,mItem.getAddress());
+                    intent.putExtra(Constants.IMAGE,mItem.getIMG());
+                    intent.putExtra(Constants.ID,mItem.getDharmshala_id());
                     mContext.startActivity(intent);
                 }
             });
