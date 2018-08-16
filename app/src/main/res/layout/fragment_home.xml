@@ -82,7 +82,7 @@
                     <TextView
                         android:gravity="center"
                         android:layout_gravity="center"
-                        android:text="Restaurants"
+                        android:text="Food Vendor"
                         android:fontFamily="sans-serif-condensed"
                         android:textSize="12sp"
                         android:textColor="@android:color/black"

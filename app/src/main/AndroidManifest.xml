@@ -21,13 +21,16 @@
         <activity android:name=".activity.DetailsActivity" />
         <activity android:name=".activity.MenuActivity" />
         <activity android:name=".activity.SplashActivity">
+        </activity>
+        <activity android:name=".activity.FilterActivity"></activity>
+
+        <activity android:name=".activity.OtpLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.FilterActivity"></activity>
     </application>
 
 </manifest>
