@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.pojo.BhojanItems;
+import com.narmware.jainjeevan.pojo.Facility;
 import com.narmware.jainjeevan.pojo.Filter;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -25,10 +27,10 @@ import java.util.ArrayList;
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHolder>{
 
     Context mContext;
-    ArrayList<Filter> filters;
+    ArrayList<Facility> filters;
     FragmentManager fragmentManager;
 
-    public FilterAdapter(Context mContext, ArrayList<Filter> filters, FragmentManager fragmentManager) {
+    public FilterAdapter(Context mContext, ArrayList<Facility> filters, FragmentManager fragmentManager) {
         this.mContext = mContext;
         this.filters = filters;
         this.fragmentManager = fragmentManager;
@@ -43,11 +45,18 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Filter filter=filters.get(position);
+        Facility filter=filters.get(position);
         holder.mItem=filter;
 
-        holder.mTxtFilter.setText(filter.getFilter_name());
-        holder.mIcon.setImageResource(R.drawable.ac);
+        holder.mTxtFilter.setText(filter.getFacility_name());
+
+        if(filter.getImg().equals(""))
+        {}
+        else {
+            Picasso.with(mContext)
+                    .load(filter.getImg())
+                    .into(holder.mIcon);
+        }
     }
 
     @Override
@@ -61,7 +70,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         TextView mTxtFilter;
         ImageView mIcon;
 
-        Filter mItem;
+        Facility mItem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -74,7 +83,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b)
                     {
-                        Toast.makeText(mContext,mItem.getFilter_name(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext,mItem.getFacility_id(),Toast.LENGTH_SHORT).show();
                     }
                 }
             });

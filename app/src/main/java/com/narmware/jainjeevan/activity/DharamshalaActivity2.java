@@ -62,18 +62,18 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
 
-        mFabFilter=findViewById(R.id.fab_filter);
+       // mFabFilter=findViewById(R.id.fab_filter);
 
         mTxtTitle.setText("Dharamshala");
 
-        mFabFilter.setOnClickListener(new View.OnClickListener() {
+      /*  mFabFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(DharamshalaActivity2.this,FilterActivity.class);
                 startActivity(intent);
             }
         });
-
+*/
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
