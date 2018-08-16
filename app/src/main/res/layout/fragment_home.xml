@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.narmware.jainjeevan.fragment.HomeFragment">
+   >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                     android:layout_width="@dimen/home_top_menu"
                     android:layout_height="@dimen/home_top_menu"
                     android:layout_weight="1"
-                    android:src="@drawable/bhojan"/>
+                    android:src="@drawable/bhojanalaya"/>
                 <TextView
                     android:gravity="center"
                     android:layout_gravity="center"
@@ -77,7 +77,8 @@
                         android:layout_width="@dimen/home_top_menu"
                         android:layout_height="@dimen/home_top_menu"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_restaurant"/>
+                        app:srcCompat="@drawable/upashray"
+                        />
                     <TextView
                         android:gravity="center"
                         android:layout_gravity="center"
@@ -102,7 +103,15 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             app:cardUseCompatPadding="true"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp">
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                />
+        </android.support.v7.widget.CardView>
         </FrameLayout>
 
         <LinearLayout
@@ -126,20 +135,25 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_marginTop="@dimen/screen_padding"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/blue_50"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recommended"
-                android:layout_marginLeft="7dp"
-                style="@style/tv_title"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:layout_marginBottom="@dimen/screen_padding"
+            android:padding="7dp">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                app:cardUseCompatPadding="true"
+                android:layout_height="220dp">
+                <com.daimajia.slider.library.SliderLayout
+                    android:id="@+id/slider_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    />
+            </android.support.v7.widget.CardView>
+        </FrameLayout>
 
     </LinearLayout>
 

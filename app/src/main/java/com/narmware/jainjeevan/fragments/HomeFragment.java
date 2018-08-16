@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,19 +11,43 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.BhojanalayActivity;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
+import com.narmware.jainjeevan.activity.MenuActivity;
 import com.narmware.jainjeevan.activity.RestaurantActivity;
 import com.narmware.jainjeevan.adapter.RecommendedAdapter;
+import com.narmware.jainjeevan.pojo.BannerImages;
+import com.narmware.jainjeevan.pojo.MenuItem;
+import com.narmware.jainjeevan.pojo.MenuItemResponse;
+import com.narmware.jainjeevan.pojo.RecommendResponse;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
+import com.narmware.jainjeevan.support.Constants;
+import com.narmware.jainjeevan.support.EndPoints;
+import com.narmware.jainjeevan.support.SupportFunctions;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,8 +71,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     ArrayList<RecommendedItems> recommendedItems;
     RecyclerView mRecomRecycler;
     RecommendedAdapter recommendAdapter;
-
+    SliderLayout mSlider;
+    SliderLayout mBottomSlider;
     LinearLayout mLinDharamshala,mLinResto,mLinBhojanalay;
+    ArrayList<BannerImages> bannerImages;
+    ArrayList<BannerImages> bottomBannerImages;
+    RequestQueue mVolleyRequest;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -85,6 +114,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_home, container, false);
+        mVolleyRequest = Volley.newRequestQueue(getContext());
+
+        mSlider=view.findViewById(R.id.slider);
+        mBottomSlider=view.findViewById(R.id.slider_bottom);
 
         mRecomRecycler=view.findViewById(R.id.home_recycler_recomm);
         mLinDharamshala=view.findViewById(R.id.home_dharamshala);
@@ -95,15 +128,93 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mLinDharamshala.setOnClickListener(this);
         mLinResto.setOnClickListener(this);
 
+        setSlider();
+        setBottomSlider();
         setRecommendAdapter(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        GetRecommended();
         return view;
+    }
+
+    private void setSlider() {
+        bannerImages=new ArrayList<>();
+        bannerImages.add(new BannerImages("Banner 1","http://www.hotdealhotels.com/India/images/fort-special-packages-2013.jpg"));
+        bannerImages.add(new BannerImages("Banner 2","https://i.ytimg.com/vi/Mxu0UrShPbw/maxresdefault.jpg"));
+
+        HashMap<String,String> file_maps = new HashMap<String, String>();
+
+        for(int i=0;i<bannerImages.size();i++)
+        {
+            file_maps.put(bannerImages.get(i).getBanner_title(),bannerImages.get(i).getService_image());
+        }
+
+        for(String name : file_maps.keySet()){
+            //textSliderView displays image with text title
+            //TextSliderView textSliderView = new TextSliderView(NavigationActivity.this);
+            //DefaultSliderView displays only image
+            DefaultSliderView textSliderView = new DefaultSliderView(getContext());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mSlider.addSlider(textSliderView);
+        }
+        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        //mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        //mSlider.setCustomIndicator(custom_indicator);
+        mSlider.setCustomAnimation(new DescriptionAnimation());
+        mSlider.setFitsSystemWindows(true);
+        mSlider.setDuration(3000);
+
+    }
+
+    private void setBottomSlider() {
+        bottomBannerImages=new ArrayList<>();
+        bottomBannerImages.add(new BannerImages("Banner 1","https://i.ytimg.com/vi/BV72JtmD9Io/maxresdefault.jpg"));
+        bottomBannerImages.add(new BannerImages("Banner 2","http://shrijagannathmandirdelhi.in/wp-content/uploads/2018/02/booking-1.jpg"));
+
+        HashMap<String,String> file_maps = new HashMap<String, String>();
+
+        for(int i=0;i<bottomBannerImages.size();i++)
+        {
+            file_maps.put(bottomBannerImages.get(i).getBanner_title(),bottomBannerImages.get(i).getService_image());
+        }
+
+        for(String name : file_maps.keySet()){
+            //textSliderView displays image with text title
+            //TextSliderView textSliderView = new TextSliderView(NavigationActivity.this);
+            //DefaultSliderView displays only image
+            DefaultSliderView textSliderView = new DefaultSliderView(getContext());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mBottomSlider.addSlider(textSliderView);
+        }
+        mBottomSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+        //mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        //mSlider.setCustomIndicator(custom_indicator);
+        mBottomSlider.setCustomAnimation(new DescriptionAnimation());
+        mBottomSlider.setFitsSystemWindows(true);
+        mBottomSlider.setDuration(3000);
+
     }
 
     public void setRecommendAdapter(RecyclerView.LayoutManager mLayoutManager) {
         recommendedItems = new ArrayList<>();
-        recommendedItems.add(new RecommendedItems("Vendor1","","1"));
-        recommendedItems.add(new RecommendedItems("Vendor2","","2"));
-        recommendedItems.add(new RecommendedItems("Vendor3","","3"));
 
         SnapHelper snapHelper = new LinearSnapHelper();
 
@@ -149,8 +260,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId())
         {
             case R.id.home_bhojanalay:
-                Intent intentBhojan=new Intent(getContext(), BhojanalayActivity.class);
-                startActivity(intentBhojan);
+               /* Intent intentBhojan=new Intent(getContext(), BhojanalayActivity.class);
+                startActivity(intentBhojan);*/
+
+                Toast.makeText(getContext(), "Coming soon !", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.home_dharamshala:
@@ -179,4 +292,57 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private void GetRecommended() {
+
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+        String url=EndPoints.GET_RECOMMENDED;
+
+        Log.e("Recomm url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            Log.e("Recomm Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            RecommendResponse recommendResponse=gson.fromJson(response.toString(),RecommendResponse.class);
+                            RecommendedItems[] resto=recommendResponse.getData();
+
+                            for(RecommendedItems item:resto)
+                            {
+                                recommendedItems.add(item);
+                            }
+                            recommendAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        dialog.dismiss();
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
 }
