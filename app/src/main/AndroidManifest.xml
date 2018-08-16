@@ -15,20 +15,19 @@
         <activity android:name=".activity.LoginActivity" />
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activity.BhojanalayActivity" />
         <activity android:name=".activity.RestaurantActivity" />
-        <activity android:name=".activity.DetailsActivity"></activity>
-        <activity android:name=".activity.MenuActivity"></activity>
-
+        <activity android:name=".activity.DetailsActivity" />
+        <activity android:name=".activity.MenuActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".activity.FilterActivity"></activity>
     </application>
 
 </manifest>

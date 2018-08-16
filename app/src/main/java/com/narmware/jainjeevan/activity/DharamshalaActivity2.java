@@ -1,6 +1,8 @@
 package com.narmware.jainjeevan.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,6 +11,7 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -37,6 +40,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     DharamshalaAdapter dharamshalaAdapter;
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
+    FloatingActionButton mFabFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,17 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mVolleyRequest = Volley.newRequestQueue(DharamshalaActivity2.this);
         mRecyclerDharam=findViewById(R.id.recycler_dharamshala);
         mTxtTitle=findViewById(R.id.txt_title);
+        mFabFilter=findViewById(R.id.fab_filter);
+
         mTxtTitle.setText("Dharamshala");
+
+        mFabFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(DharamshalaActivity2.this,FilterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void setDharamshalaAdapter(RecyclerView.LayoutManager mLayoutManager) {
