@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/recomm_title"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:padding="2dp"
                 android:ellipsize="end"
                 android:text="Some hotel name is here"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.pojo.BhojanItems;
 import com.narmware.jainjeevan.pojo.DetailedItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -23,12 +24,12 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
 
     Context mContext;
     ArrayList<DetailedItem> detailedItems;
-    FragmentManager fragmentManager;
+    String callFrom;
 
-    public DetailedItemAdapter(Context mContext, ArrayList<DetailedItem> detailedItems, FragmentManager fragmentManager) {
+    public DetailedItemAdapter(Context mContext, ArrayList<DetailedItem> detailedItems,String callFrom) {
         this.mContext = mContext;
         this.detailedItems = detailedItems;
-        this.fragmentManager = fragmentManager;
+        this.callFrom=callFrom;
     }
 
     @Override
@@ -42,13 +43,20 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DetailedItem detailedItem=detailedItems.get(position);
 
-        if(detailedItem.getImg()!=0)
-        {
-            holder.mImgIcon.setVisibility(View.VISIBLE);
-            holder.mImgIcon.setImageResource(detailedItem.getImg());
-        }
-        else{
-            holder.mImgIcon.setVisibility(View.GONE);
+        if(callFrom.equals("Facilities")) {
+            if (detailedItem.getImg().trim().equals("") || detailedItem.getImg().trim().isEmpty() || detailedItem.getImg() == null) {
+                holder.mImgIcon.setVisibility(View.GONE);
+            } else {
+                holder.mImgIcon.setVisibility(View.VISIBLE);
+
+                if (detailedItem.getImg().equals("empty")) {
+
+                } else {
+                    Picasso.with(mContext)
+                            .load(detailedItem.getImg())
+                            .into(holder.mImgIcon);
+                }
+            }
         }
         holder.mTxtDetail.setText(detailedItem.getItem());
     }

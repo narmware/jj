@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
     ArrayList<DetailedItem> mRuleList;
     ArrayList<DetailedItem> mFacilityList;
     ArrayList<DetailedItem> mBhojanList;
+    ImageView mBtnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,14 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         mTxtTitle=findViewById(R.id.txt_title);
         mTxtAddress=findViewById(R.id.txt_address);
         mImgDharam=findViewById(R.id.img_dharam);
+
+        mBtnBack=findViewById(R.id.btn_back);
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         mTxtTitle.setText(name);
         mTxtAddress.setText(address);
@@ -169,7 +179,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 mRoomList.add(roomItem);
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mRoomList),"Rooms");
+                            pagerAdapter.addFragment(RoomsFragment.newInstance(mRoomList,"Rooms"),"Rooms");
                             pagerAdapter.notifyDataSetChanged();
 
                             DetailedItem[] rules=detailedItemResponse.getRules();
@@ -177,7 +187,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 mRuleList.add(ruleItem);
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mRuleList),"Rules");
+                            pagerAdapter.addFragment(RoomsFragment.newInstance(mRuleList,"Rules"),"Rules");
                             pagerAdapter.notifyDataSetChanged();
 
                             DetailedItem[] bhojan=detailedItemResponse.getBhojanshala();
@@ -185,18 +195,24 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 mBhojanList.add(bhojanItem);
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mBhojanList),"Bhojan");
+                            pagerAdapter.addFragment(RoomsFragment.newInstance(mBhojanList,"Bhojan"),"Bhojan");
                             pagerAdapter.notifyDataSetChanged();
 
                             DetailedItem[] facilities=detailedItemResponse.getFacility();
                             for(DetailedItem factem:facilities)
                             {
-                                DetailedItem single=new DetailedItem(factem.getItem(),R.drawable.ac);
-                                mFacilityList.add(single);
+                                if(factem.getImg().equals(""))
+                                {
+                                    DetailedItem single=new DetailedItem(factem.getItem(),"empty");
+                                    mFacilityList.add(single);
+                                }
+                                else {
+                                    DetailedItem single=new DetailedItem(factem.getItem(),factem.getImg());
+                                    mFacilityList.add(single);
+                                }
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mFacilityList),"Facilities");
+                            pagerAdapter.addFragment(RoomsFragment.newInstance(mFacilityList,"Facilities"),"Facilities");
                             pagerAdapter.notifyDataSetChanged();
-                            Log.e("room item size",mRoomList.size()+"");
 
                         } catch (Exception e) {
 

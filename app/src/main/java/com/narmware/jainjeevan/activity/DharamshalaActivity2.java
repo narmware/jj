@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -40,12 +42,14 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     DharamshalaAdapter dharamshalaAdapter;
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
+    ImageView mBtnBack;
+
     FloatingActionButton mFabFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_dharamshala);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dharamshala);
         getSupportActionBar().hide();
 
         init();
@@ -56,6 +60,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mVolleyRequest = Volley.newRequestQueue(DharamshalaActivity2.this);
         mRecyclerDharam=findViewById(R.id.recycler_dharamshala);
         mTxtTitle=findViewById(R.id.txt_title);
+        mBtnBack=findViewById(R.id.btn_back);
+
         mFabFilter=findViewById(R.id.fab_filter);
 
         mTxtTitle.setText("Dharamshala");
@@ -65,6 +71,13 @@ public class DharamshalaActivity2 extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(DharamshalaActivity2.this,FilterActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

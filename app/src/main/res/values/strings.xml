@@ -10,4 +10,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+  <!--  1 Air Conditioner
+    2 AttachedWC
+    3 Attached Indian Toilet
+    4 WIFi
+    5 Driver Accomodation
+    6 Generator
+    7 RO Water
+    8 Hot Water
+    9 Locker
+    10 Parking
+    11 Lift
+    12 Bed
+    13 Water Cooler-->
+
 </resources>

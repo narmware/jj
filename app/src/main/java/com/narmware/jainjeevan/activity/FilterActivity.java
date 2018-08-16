@@ -7,6 +7,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.adapter.DharamshalaAdapter;
@@ -20,11 +22,13 @@ public class FilterActivity extends AppCompatActivity {
     RecyclerView mRecyclerFilter;
     ArrayList<Filter> filters;
     FilterAdapter filterAdapter;
+    ImageView mBtnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+        getSupportActionBar().hide();
 
         init();
     }
@@ -33,6 +37,14 @@ public class FilterActivity extends AppCompatActivity {
 
         mRecyclerFilter=findViewById(R.id.recycler_filter);
         setFilterAdapter(new GridLayoutManager(FilterActivity.this,2));
+        mBtnBack=findViewById(R.id.btn_back);
+
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     public void setFilterAdapter(RecyclerView.LayoutManager mLayoutManager) {

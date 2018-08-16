@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.pojo.BhojanItems;
@@ -42,8 +44,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Filter filter=filters.get(position);
+        holder.mItem=filter;
 
-        holder.mChkFilter.setText(filter.getFilter_name());
+        holder.mTxtFilter.setText(filter.getFilter_name());
+        holder.mIcon.setImageResource(R.drawable.ac);
     }
 
     @Override
@@ -54,10 +58,26 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         CheckBox mChkFilter;
+        TextView mTxtFilter;
+        ImageView mIcon;
+
+        Filter mItem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             mChkFilter=itemView.findViewById(R.id.chk_filter);
+            mTxtFilter=itemView.findViewById(R.id.txt_filter);
+            mIcon=itemView.findViewById(R.id.icon);
+
+            mChkFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b)
+                    {
+                        Toast.makeText(mContext,mItem.getFilter_name(),Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }

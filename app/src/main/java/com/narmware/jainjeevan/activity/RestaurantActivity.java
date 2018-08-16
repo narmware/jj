@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -38,6 +40,7 @@ public class RestaurantActivity extends AppCompatActivity {
     RestoAdapter restoAdapter;
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
+    ImageView mBtnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,16 @@ public class RestaurantActivity extends AppCompatActivity {
         mVolleyRequest = Volley.newRequestQueue(RestaurantActivity.this);
         mRecyclerResto=findViewById(R.id.recycler_resto);
         mTxtTitle=findViewById(R.id.txt_title);
+        mBtnBack=findViewById(R.id.btn_back);
+
         mTxtTitle.setText("Restaurants");
+
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     public void setRestoAdapter(RecyclerView.LayoutManager mLayoutManager) {

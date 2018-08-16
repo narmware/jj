@@ -12,11 +12,24 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_marginTop="10dp"
+            android:elevation="5dp"
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_arrow_back"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            />
+
     <ImageView
         android:scaleType="fitXY"
+        android:background="@color/amber_50"
         android:id="@+id/img_dharam"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <LinearLayout
         android:id="@+id/linear_detail"
         android:background="#82000000"

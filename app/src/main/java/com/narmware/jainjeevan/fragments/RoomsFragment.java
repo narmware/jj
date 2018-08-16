@@ -34,9 +34,10 @@ public class RoomsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_LIST = "list";
+    private static final String CALL_FROM = "call_from";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String callFrom;
 
     public static ArrayList<DetailedItem> detailedItems;
     public static RecyclerView mRecyclerDetails;
@@ -50,10 +51,11 @@ public class RoomsFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static RoomsFragment newInstance(ArrayList<DetailedItem> itemList) {
+    public static RoomsFragment newInstance(ArrayList<DetailedItem> itemList,String callFrom) {
         RoomsFragment fragment = new RoomsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_LIST,itemList);
+        args.putSerializable(CALL_FROM,callFrom);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,6 +67,8 @@ public class RoomsFragment extends Fragment {
             try {
                 detailedItems = new ArrayList<>();
                 detailedItems = (ArrayList<DetailedItem>) getArguments().getSerializable(ARG_LIST);
+
+                callFrom=getArguments().getString(CALL_FROM);
             }catch (Exception e)
             {}
         }
@@ -87,7 +91,7 @@ public class RoomsFragment extends Fragment {
 
         SnapHelper snapHelper = new LinearSnapHelper();
 
-        detailedItemAdapter = new DetailedItemAdapter(getContext(), detailedItems,getActivity().getSupportFragmentManager());
+        detailedItemAdapter = new DetailedItemAdapter(getContext(), detailedItems,callFrom);
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
         mRecyclerDetails.setLayoutManager(mLayoutManager);
         mRecyclerDetails.setItemAnimator(new DefaultItemAnimator());
