@@ -35,10 +35,13 @@ import com.narmware.jainjeevan.pojo.Filter;
 import com.narmware.jainjeevan.pojo.FilterResponse;
 import com.narmware.jainjeevan.pojo.SendFilters;
 import com.narmware.jainjeevan.support.EndPoints;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FilterActivity extends AppCompatActivity {
     RecyclerView mRecyclerFilter;
@@ -52,7 +55,8 @@ public class FilterActivity extends AppCompatActivity {
     ArrayList<City> cities;
     CityAdapter cityAdapter;
 
-    ArrayList<Facility> selected_filters;
+    public static ArrayList<Facility> selected_filters;
+    String selected_city_id;
 
     Button mBtnApply;
 
@@ -85,7 +89,8 @@ public class FilterActivity extends AppCompatActivity {
       mCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               Toast.makeText(FilterActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+              selected_city_id=cities.get(position).getCity_id();
+               //Toast.makeText(FilterActivity.this, cities.get(position).getCity_id(), Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -196,19 +201,26 @@ public class FilterActivity extends AppCompatActivity {
         final ProgressDialog dialog = new ProgressDialog(FilterActivity.this);
         dialog.setMessage("Applying filters...");
         dialog.setCancelable(false);
-        dialog.show();
+        //dialog.show();
 
-        selected_filters.add(new Facility("1","",""));
+       /* selected_filters.add(new Facility("1","",""));
         selected_filters.add(new Facility("2","",""));
-        selected_filters.add(new Facility("3","",""));
+        selected_filters.add(new Facility("3","",""));*/
 
         SendFilters sendFilters=new SendFilters();
-        sendFilters.setCity_id("1");
+        sendFilters.setCity_id(selected_city_id);
         sendFilters.setFacilities(selected_filters);
+
+        Set<String> stringSet = new HashSet<>();
+        for(int i=0;i<selected_filters.size();i++) {
+            stringSet.add(selected_filters.get(i).getFacility_id());
+        }
+        SharedPreferencesHelper.setFilteredFacilities(stringSet,FilterActivity.this);
 
         Gson gson=new Gson();
         String json_string=gson.toJson(sendFilters);
         Log.e("Filter json_string",json_string);
+
 
        /* String url= EndPoints.GET_FILTERS;
 

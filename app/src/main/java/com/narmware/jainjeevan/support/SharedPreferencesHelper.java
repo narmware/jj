@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.narmware.jainjeevan.pojo.Facility;
+
+import java.util.ArrayList;
+import java.util.Set;
+
 /**
  * Created by comp16 on 12/19/2017.
  */
@@ -15,9 +20,25 @@ public class SharedPreferencesHelper {
     private static final String USER_NAME="user_name";
     private static final String USER_MOBILE="user_mobile";
     private static final String USER_EMAIL="user_email";
+    private static final String FILTERED_FACILITIES="filters";
 
     private static final String USER_LOCATION="loc";
 
+
+    public static void setFilteredFacilities(Set<String> facilities, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+        edit.putStringSet(FILTERED_FACILITIES,facilities);
+        edit.commit();
+    }
+
+    public static Set<String> getFilteredFacilities(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> facility=pref.getStringSet(FILTERED_FACILITIES,null);
+        return facility;
+    }
 
     public static void setUserLocation(String loc, Context context)
     {

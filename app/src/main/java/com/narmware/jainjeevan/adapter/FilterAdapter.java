@@ -1,6 +1,7 @@
 package com.narmware.jainjeevan.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.FilterActivity;
 import com.narmware.jainjeevan.pojo.BhojanItems;
 import com.narmware.jainjeevan.pojo.Facility;
 import com.narmware.jainjeevan.pojo.Filter;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -83,7 +86,8 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b)
                     {
-                        Toast.makeText(mContext,mItem.getFacility_id(),Toast.LENGTH_SHORT).show();
+                        FilterActivity.selected_filters.add(new Facility(mItem.getFacility_id(),"",""));
+                        //Toast.makeText(mContext,mItem.getFacility_id(),Toast.LENGTH_SHORT).show();
                     }
                 }
             });
