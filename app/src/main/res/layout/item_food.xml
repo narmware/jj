@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
     app:cardUseCompatPadding="true">
 
 
@@ -17,15 +18,16 @@
             android:scaleType="fitXY"
             android:layout_gravity="center"
             android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_height="100dp"
+            android:src="@drawable/program_hall"/>
 
         <LinearLayout
             android:padding="6dp"
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_gravity="center"
+            android:gravity="center"
             >
 
             <TextView
@@ -33,6 +35,9 @@
                 android:textColor="@color/grey_900"
                 android:textSize="20sp"
                 android:text="Food item"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -40,6 +45,9 @@
                 android:id="@+id/txt_rate"
                 android:textColor="@color/grey_900"
                 android:textSize="16sp"
+                android:text="2pp Rs"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
