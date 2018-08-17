@@ -21,6 +21,7 @@ public class SharedPreferencesHelper {
     private static final String USER_MOBILE="user_mobile";
     private static final String USER_EMAIL="user_email";
     private static final String FILTERED_FACILITIES="filters";
+    private static final String FILTERED_CITY="city";
 
     private static final String USER_LOCATION="loc";
 

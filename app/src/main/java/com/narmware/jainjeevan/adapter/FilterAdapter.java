@@ -60,6 +60,14 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                     .load(filter.getImg())
                     .into(holder.mIcon);
         }
+
+        if(filter.isSelected()==false)
+        {
+            holder.mChkFilter.setChecked(false);
+        }
+        else{
+            holder.mChkFilter.setChecked(true);
+        }
     }
 
     @Override
@@ -84,10 +92,18 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
             mChkFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b)
+                    if(b==true)
                     {
-                        FilterActivity.selected_filters.add(new Facility(mItem.getFacility_id(),"",""));
+                       // FilterActivity.selected_filters.add(new Facility(mItem.getFacility_id(),mItem.getFacility_name(),mItem.getImg(),false));
+                        FilterActivity.selected_filters.add(mItem.getFacility_id());
                         //Toast.makeText(mContext,mItem.getFacility_id(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    if(b==false)
+                    {
+                        FilterActivity.selected_filters.remove(mItem.getFacility_id());
+                        //FilterActivity.selected_filters.remove(new Facility(mItem.getFacility_id(),mItem.getFacility_name(),mItem.getImg(),false));
+                        Toast.makeText(mContext,FilterActivity.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
                     }
                 }
             });

@@ -7,11 +7,21 @@ package com.narmware.jainjeevan.pojo;
 public class Facility {
 
     String facility_id,facility_name,img;
+    boolean isSelected;
 
-    public Facility(String facility_id, String facility_name, String img) {
+    public Facility(String facility_id, String facility_name, String img,boolean isSelected) {
         this.facility_id = facility_id;
         this.facility_name = facility_name;
         this.img = img;
+        this.isSelected = isSelected;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public String getFacility_id() {

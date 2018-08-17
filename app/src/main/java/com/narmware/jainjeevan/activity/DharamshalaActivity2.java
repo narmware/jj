@@ -1,6 +1,7 @@
 package com.narmware.jainjeevan.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -29,32 +30,65 @@ import com.narmware.jainjeevan.adapter.RecommendedAdapter;
 import com.narmware.jainjeevan.pojo.DharamshalaItem;
 import com.narmware.jainjeevan.pojo.DharamshalaResponse;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
+import com.narmware.jainjeevan.pojo.SendFilters;
+import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
+import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DharamshalaActivity2 extends AppCompatActivity {
 
     RecyclerView mRecyclerDharam;
-    ArrayList<DharamshalaItem> dharamshalaItems;
-    DharamshalaAdapter dharamshalaAdapter;
-    RequestQueue mVolleyRequest;
+    public static ArrayList<DharamshalaItem> dharamshalaItems;
+    public static DharamshalaAdapter dharamshalaAdapter;
+    public static RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
 
-    FloatingActionButton mFabFilter;
+    public static ArrayList<String> selected_filters;
+    public static String selected_city_id;
+    public static Set<String> facilitySet;
 
+    FloatingActionButton mFabFilter;
+    public static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dharamshala);
         getSupportActionBar().hide();
-
+        context=DharamshalaActivity2.this;
         init();
         setDharamshalaAdapter(new LinearLayoutManager(DharamshalaActivity2.this));
-        GetDharamshalas();
+
+        if(SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this)!=null)
+        {
+            selected_filters=new ArrayList<>();
+            SendFilters sendFilters=new SendFilters();
+            sendFilters.setCity_id(SharedPreferencesHelper.getUserLocation(DharamshalaActivity2.this));
+            facilitySet=SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this);
+            selected_filters.addAll(facilitySet);
+            sendFilters.setFacilities(selected_filters);
+
+            Gson gson=new Gson();
+            String json_string=gson.toJson(sendFilters);
+            Log.e("Filter json_string",json_string);
+
+            HashMap<String,String> param = new HashMap();
+            param.put(Constants.JSON_STRING,json_string);
+
+            //url with params
+            String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
+            GetDharamshalas(url);
+        }else{
+            GetDharamshalas(EndPoints.GET_DHARAMSHALA);
+        }
     }
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(DharamshalaActivity2.this);
@@ -98,16 +132,14 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         dharamshalaAdapter.notifyDataSetChanged();
     }
 
-    private void GetDharamshalas() {
-        final ProgressDialog dialog = new ProgressDialog(DharamshalaActivity2.this);
+    public static void GetDharamshalas(String url) {
+        dharamshalaItems.clear();
+        final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
         dialog.show();
 
         Gson gson=new Gson();
-
-        //url without params
-        String url= EndPoints.GET_DHARAMSHALA;
 
         Log.e("Dharam url",url);
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
@@ -119,7 +151,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
                         try
                         {
-                            //Log.e("Dharam Json_string",response.toString());
+                            Log.e("Dharam Json_string",response.toString());
                             Gson gson = new Gson();
 
                             DharamshalaResponse dharamshalaResponse=gson.fromJson(response.toString(),DharamshalaResponse.class);

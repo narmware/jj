@@ -1,6 +1,8 @@
 package com.narmware.jainjeevan.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -34,12 +36,15 @@ import com.narmware.jainjeevan.pojo.Facility;
 import com.narmware.jainjeevan.pojo.Filter;
 import com.narmware.jainjeevan.pojo.FilterResponse;
 import com.narmware.jainjeevan.pojo.SendFilters;
+import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
+import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,22 +60,25 @@ public class FilterActivity extends AppCompatActivity {
     ArrayList<City> cities;
     CityAdapter cityAdapter;
 
-    public static ArrayList<Facility> selected_filters;
-    String selected_city_id;
+    public static ArrayList<String> selected_filters;
+    public static String selected_city_id;
+    public static Set<String> facilitySet;
 
     Button mBtnApply;
+public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         getSupportActionBar().hide();
-
+        context=FilterActivity.this;
         init();
     }
 
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(FilterActivity.this);
+        facilitySet = new HashSet<>();
 
         mBtnApply=findViewById(R.id.btn_apply_filter);
         mRecyclerFilter=findViewById(R.id.recycler_filter);
@@ -79,9 +87,9 @@ public class FilterActivity extends AppCompatActivity {
 
         mCitySpinner=findViewById(R.id.spinn_city);
         cities=new ArrayList<>();
-        cities.add(new City("Pune","1"));
+       /* cities.add(new City("Pune","1"));
         cities.add(new City("Nagpur","2"));
-        cities.add(new City("Mumbai","3"));
+        cities.add(new City("Mumbai","3"));*/
 
         cityAdapter=new CityAdapter(FilterActivity.this,cities);
         mCitySpinner.setAdapter(cityAdapter);
@@ -90,6 +98,7 @@ public class FilterActivity extends AppCompatActivity {
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
               selected_city_id=cities.get(position).getCity_id();
+              SharedPreferencesHelper.setUserLocation(cities.get(position).getCity_name(),FilterActivity.this);
                //Toast.makeText(FilterActivity.this, cities.get(position).getCity_id(), Toast.LENGTH_SHORT).show();
           }
 
@@ -112,7 +121,9 @@ public class FilterActivity extends AppCompatActivity {
         mBtnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 SetFilters();
+                finish();
             }
         });
 
@@ -161,9 +172,16 @@ public class FilterActivity extends AppCompatActivity {
 
                             FilterResponse filterResponse=gson.fromJson(response.toString(),FilterResponse.class);
                             City[] city=filterResponse.getCity();
-
                             for(City item:city){
                                 cities.add(item);
+                            }
+                            for(int i=0;i<cities.size();i++)
+                            {
+                                if(SharedPreferencesHelper.getUserLocation(FilterActivity.this)!=null) {
+                                    if (SharedPreferencesHelper.getUserLocation(FilterActivity.this).equals(cities.get(i).getCity_name())) {
+                                        mCitySpinner.setSelection(i);
+                                    }
+                                }
                             }
                             cityAdapter.notifyDataSetChanged();
 
@@ -171,7 +189,21 @@ public class FilterActivity extends AppCompatActivity {
                             Facility[] facility=filterResponse.getFacility();
 
                             for(Facility itemFac:facility){
-                                filters.add(itemFac);
+
+                                //filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+
+                                if(SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this)!=null)
+                                {
+                                    facilitySet=SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this);
+                                    if(facilitySet.contains(itemFac.getFacility_id()))
+                                    {
+                                        filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),true));
+                                    }
+                                    else{
+                                        filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+                                    }
+                                }
+
                             }
                             filterAdapter.notifyDataSetChanged();
 
@@ -197,82 +229,27 @@ public class FilterActivity extends AppCompatActivity {
         mVolleyRequest.add(obreq);
     }
 
-    private void SetFilters() {
-        final ProgressDialog dialog = new ProgressDialog(FilterActivity.this);
-        dialog.setMessage("Applying filters...");
-        dialog.setCancelable(false);
-        //dialog.show();
-
-       /* selected_filters.add(new Facility("1","",""));
-        selected_filters.add(new Facility("2","",""));
-        selected_filters.add(new Facility("3","",""));*/
+    public static void SetFilters() {
 
         SendFilters sendFilters=new SendFilters();
         sendFilters.setCity_id(selected_city_id);
         sendFilters.setFacilities(selected_filters);
-
-        Set<String> stringSet = new HashSet<>();
+        facilitySet.clear();
         for(int i=0;i<selected_filters.size();i++) {
-            stringSet.add(selected_filters.get(i).getFacility_id());
+            facilitySet.add(selected_filters.get(i));
         }
-        SharedPreferencesHelper.setFilteredFacilities(stringSet,FilterActivity.this);
+        SharedPreferencesHelper.setFilteredFacilities(facilitySet,context);
 
         Gson gson=new Gson();
         String json_string=gson.toJson(sendFilters);
         Log.e("Filter json_string",json_string);
 
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.JSON_STRING,json_string);
 
-       /* String url= EndPoints.GET_FILTERS;
-
-        Log.e("Filter url",url);
-        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
-                new Response.Listener<JSONObject>() {
-
-                    // Takes the response from the JSON request
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try
-                        {
-                            Log.e("Filter Json_string",response.toString());
-                            Gson gson = new Gson();
-
-                            FilterResponse filterResponse=gson.fromJson(response.toString(),FilterResponse.class);
-                            City[] city=filterResponse.getCity();
-
-                            for(City item:city){
-                                cities.add(item);
-                            }
-                            cityAdapter.notifyDataSetChanged();
-
-
-                            Facility[] facility=filterResponse.getFacility();
-
-                            for(Facility itemFac:facility){
-                                filters.add(itemFac);
-                            }
-                            filterAdapter.notifyDataSetChanged();
-
-                        } catch (Exception e) {
-
-                            e.printStackTrace();
-                            dialog.dismiss();
-                        }
-                        dialog.dismiss();
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    // Handles errors that occur due to Volley
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley", "Test Error");
-                        dialog.dismiss();
-
-                    }
-                }
-        );
-        mVolleyRequest.add(obreq);*/
+        //url with params
+        String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
+        DharamshalaActivity2.GetDharamshalas(url);
     }
 
 }

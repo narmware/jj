@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SendFilters {
     String city_id;
-    ArrayList<Facility> facilities;
+    ArrayList<String> facilities;
 
     public String getCity_id() {
         return city_id;
@@ -18,11 +18,11 @@ public class SendFilters {
         this.city_id = city_id;
     }
 
-    public ArrayList<Facility> getFacilities() {
+    public ArrayList<String> getFacilities() {
         return facilities;
     }
 
-    public void setFacilities(ArrayList<Facility> facilities) {
+    public void setFacilities(ArrayList<String> facilities) {
         this.facilities = facilities;
     }
 }

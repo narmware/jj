@@ -10,5 +10,5 @@ public class EndPoints {
     public static final String GET_RECOMMENDED=SERVER_URL+"recommended.php";
     public static final String LOGIN_USER=SERVER_URL+"register.php";
     public static final String GET_FILTERS=SERVER_URL+"filter.php";
-
+    public static final String GET_FILTERED_DATA=SERVER_URL+"filtered-data.php";
 }
