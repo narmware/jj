@@ -30,7 +30,7 @@
                 android:layout_marginBottom="20dp">
 
                 <ImageView
-                    android:src="@mipmap/ic_launcher_round"
+                    android:src="@mipmap/ic_launcher"
                     android:layout_width="80dp"
                     android:layout_height="80dp" />
 
@@ -49,7 +49,7 @@
                 android:id="@+id/tv_signin_msg"
                 android:layout_below="@+id/si_logo"
                 android:textColor="@android:color/white"
-                android:text="Welcome to AapliTopli"
+                android:text="Welcome to Jain Jeevan"
                 android:textSize="16sp"
                 android:gravity="center"
                 android:layout_width="match_parent"

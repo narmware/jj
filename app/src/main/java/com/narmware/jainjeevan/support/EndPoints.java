@@ -9,5 +9,6 @@ public class EndPoints {
     public static final String GET_HOTEL_MENU=SERVER_URL+"get-item.php";
     public static final String GET_RECOMMENDED=SERVER_URL+"recommended.php";
     public static final String LOGIN_USER=SERVER_URL+"register.php";
+    public static final String GET_FILTERS=SERVER_URL+"filter.php";
 
 }

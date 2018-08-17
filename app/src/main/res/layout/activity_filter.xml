@@ -31,6 +31,7 @@
         android:layout_height="wrap_content" />
 
     <Spinner
+        android:id="@+id/spinn_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></Spinner>
 
@@ -43,4 +44,13 @@
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_apply_filter"
+        android:text="Apply Filters"
+        android:minHeight="1dp"
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>
