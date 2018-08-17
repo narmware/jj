@@ -7,8 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.narmware.jainjeevan.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +32,8 @@ public class AddVendorFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    protected View mRoot;
+    protected Spinner mServiceType;
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,11 +68,29 @@ public class AddVendorFragment extends Fragment {
         }
     }
 
+    private void init() {
+          mServiceType = mRoot.findViewById(R.id.form_spinner);
+          setSpinner();
+    }
+
+    private void setSpinner() {
+        List<String> categories = new ArrayList<String>();
+        categories.add("Dharamshala");
+        categories.add("Bhojanalaya");
+        categories.add("Food Vendor");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mServiceType.setAdapter(dataAdapter);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_vendor, container, false);
+        mRoot = inflater.inflate(R.layout.fragment_add_vendor, container, false);
+        init();
+        return mRoot;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

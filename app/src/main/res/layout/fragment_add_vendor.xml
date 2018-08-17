@@ -1,13 +1,92 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.narmware.jainjeevan.fragment.AddVendorFragment">
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context="com.narmware.jainjeevan.fragments.AddVendorFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:background="@drawable/custom_et_form"
+        android:hint="Name"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:height="32dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
 
-</FrameLayout>
+    <TextView
+        android:background="@drawable/custom_et_form"
+        android:hint="State"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:height="32dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:background="@drawable/custom_et_form"
+        android:hint="City"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:height="32dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+
+    <TextView
+        android:background="@drawable/custom_et_form"
+        android:hint="Detailed address"
+        android:maxLines="5"
+        android:minLines="5"
+        android:textColor="@android:color/black"
+        android:height="32dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:fontFamily="sans-serif-condensed"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <Spinner
+        android:prompt="Select your service area"
+        android:id="@+id/form_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></Spinner>
+
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_bt"
+        android:layout_gravity="center"
+        android:text="Submit Form"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
