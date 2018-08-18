@@ -13,4 +13,8 @@ public class Constants {
     public static final String NAME="name";
     public static final String EMAIL="email";
     public static final String MOBILE_NUMBER="mobile";
+
+    public static final String BANNER_UP="UP";
+    public static final String BANNER_BOTTOM="BOTTOM";
+
 }

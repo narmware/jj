@@ -1,7 +1,12 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/card_prof"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="300dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -35,7 +40,7 @@
                 android:textAllCaps="true"
                 android:fontFamily="sans-serif-condensed"
                 android:textStyle="bold"
-                android:textSize="30sp"
+                android:textSize="28sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -60,5 +65,14 @@
     </android.support.v7.widget.CardView>
 
 
-
 </android.support.design.widget.CoordinatorLayout>
+    <Button
+        android:id="@+id/btn_logout"
+        android:textColor="@color/colorPrimary"
+        android:background="@android:color/transparent"
+        android:text="Logout"
+        android:layout_below="@+id/card_prof"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

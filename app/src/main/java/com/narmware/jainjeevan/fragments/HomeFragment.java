@@ -38,6 +38,7 @@ import com.narmware.jainjeevan.activity.MenuActivity;
 import com.narmware.jainjeevan.activity.RestaurantActivity;
 import com.narmware.jainjeevan.adapter.RecommendedAdapter;
 import com.narmware.jainjeevan.pojo.BannerImages;
+import com.narmware.jainjeevan.pojo.BannerResponse;
 import com.narmware.jainjeevan.pojo.MenuItem;
 import com.narmware.jainjeevan.pojo.MenuItemResponse;
 import com.narmware.jainjeevan.pojo.RecommendResponse;
@@ -131,8 +132,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mLinDharamshala.setOnClickListener(this);
         mLinResto.setOnClickListener(this);
 
-        setSlider();
-        setBottomSlider();
+        /*setSlider();
+        setBottomSlider();*/
+        bannerImages=new ArrayList<>();
+        bottomBannerImages=new ArrayList<>();
+        GetBanners();
+
         setRecommendAdapter(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         GetRecommended();
 
@@ -142,15 +147,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setSlider() {
-        bannerImages=new ArrayList<>();
-        bannerImages.add(new BannerImages("Banner 1","http://www.hotdealhotels.com/India/images/fort-special-packages-2013.jpg"));
-        bannerImages.add(new BannerImages("Banner 2","https://i.ytimg.com/vi/Mxu0UrShPbw/maxresdefault.jpg"));
-
         HashMap<String,String> file_maps = new HashMap<String, String>();
 
         for(int i=0;i<bannerImages.size();i++)
         {
-            file_maps.put(bannerImages.get(i).getBanner_title(),bannerImages.get(i).getService_image());
+            file_maps.put(bannerImages.get(i).getBanner_title(),bannerImages.get(i).getBanner_image());
         }
 
         for(String name : file_maps.keySet()){
@@ -181,15 +182,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setBottomSlider() {
-        bottomBannerImages=new ArrayList<>();
-        bottomBannerImages.add(new BannerImages("Banner 1","https://i.ytimg.com/vi/BV72JtmD9Io/maxresdefault.jpg"));
-        bottomBannerImages.add(new BannerImages("Banner 2","http://shrijagannathmandirdelhi.in/wp-content/uploads/2018/02/booking-1.jpg"));
-
         HashMap<String,String> file_maps = new HashMap<String, String>();
 
         for(int i=0;i<bottomBannerImages.size();i++)
         {
-            file_maps.put(bottomBannerImages.get(i).getBanner_title(),bottomBannerImages.get(i).getService_image());
+            file_maps.put(bottomBannerImages.get(i).getBanner_title(),bottomBannerImages.get(i).getBanner_image());
         }
 
         for(String name : file_maps.keySet()){
@@ -307,7 +304,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         dialog.show();
         String url=EndPoints.GET_RECOMMENDED;
 
-        Log.e("Recomm url",url);
+        //Log.e("Recomm url",url);
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
 
                 new Response.Listener<JSONObject>() {
@@ -318,7 +315,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                         try
                         {
-                            Log.e("Recomm Json_string",response.toString());
+                            //Log.e("Recomm Json_string",response.toString());
                             Gson gson = new Gson();
 
                             RecommendResponse recommendResponse=gson.fromJson(response.toString(),RecommendResponse.class);
@@ -335,10 +332,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
-                        if(mNoConnectionDialog.isShowing()==true)
-                        {
-                            mNoConnectionDialog.dismiss();
-                        }
+
                         dialog.dismiss();
                     }
                 },
@@ -355,6 +349,69 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         );
         mVolleyRequest.add(obreq);
     }
+
+    private void GetBanners() {
+
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+        String url=EndPoints.GET_BANNERS;
+
+        Log.e("Banner url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            Log.e("Banner Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            BannerResponse bannerResponse=gson.fromJson(response.toString(),BannerResponse.class);
+                            BannerImages[] banner=bannerResponse.getData();
+
+                            for(BannerImages item:banner)
+                            {
+                                if(item.getBanner_type().equals(Constants.BANNER_UP))
+                                {
+                                    bannerImages.add(item);
+                                }
+                                if(item.getBanner_type().equals(Constants.BANNER_BOTTOM))
+                                {
+                                    bottomBannerImages.add(item);
+                                }
+                            }
+                            setSlider();
+                            setBottomSlider();
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        dialog.dismiss();
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
 
     public void showNoConnectionDialog() {
         mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);

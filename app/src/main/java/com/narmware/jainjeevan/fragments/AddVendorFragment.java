@@ -7,8 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
 
@@ -34,6 +38,10 @@ public class AddVendorFragment extends Fragment {
     private String mParam2;
     protected View mRoot;
     protected Spinner mServiceType;
+    EditText mEdtName,mEdtState,mEdtCity,mEdtAddress;
+    Button mBtnSubmitForm;
+
+    String mName,mState,mCity,mAddress,mService;
 
     private OnFragmentInteractionListener mListener;
 
@@ -69,8 +77,25 @@ public class AddVendorFragment extends Fragment {
     }
 
     private void init() {
-          mServiceType = mRoot.findViewById(R.id.form_spinner);
-          setSpinner();
+        mServiceType = mRoot.findViewById(R.id.form_spinner);
+        mEdtName=mRoot.findViewById(R.id.edt_name);
+        mEdtCity=mRoot.findViewById(R.id.edt_city);
+        mEdtAddress=mRoot.findViewById(R.id.edt_address);
+        mEdtState=mRoot.findViewById(R.id.edt_state);
+
+        mBtnSubmitForm=mRoot.findViewById(R.id.btn_submit_form);
+        mBtnSubmitForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mName=mEdtName.getText().toString().trim();
+                mCity=mEdtCity.getText().toString().trim();
+                mState=mEdtState.getText().toString().trim();
+                mAddress=mEdtAddress.getText().toString().trim();
+                //mService=mEdtName.getText().toString().trim();
+
+            }
+        });
+        setSpinner();
     }
 
     private void setSpinner() {
@@ -82,6 +107,18 @@ public class AddVendorFragment extends Fragment {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mServiceType.setAdapter(dataAdapter);
+
+        mServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override

@@ -1,16 +1,21 @@
 package com.narmware.jainjeevan.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.OtpLoginActivity;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +46,40 @@ public class ProfileFragment extends Fragment {
         TextView name = mRoot.findViewById(R.id.profile_name);
         TextView email = mRoot.findViewById(R.id.profile_email);
         TextView mobile = mRoot.findViewById(R.id.profile_mobile);
+        Button mBtnLogout=mRoot.findViewById(R.id.btn_logout);
+        mBtnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure")
+                        .setContentText("Your want to Logout")
+                        .setConfirmText("Yes")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+
+                                SharedPreferencesHelper.setIsLogin(false,getContext());
+                                SharedPreferencesHelper.setFilteredCity(null,getContext());
+                                SharedPreferencesHelper.setFilteredFacilities(null,getContext());
+                                SharedPreferencesHelper.setUserLocation(null,getContext());
+
+                                Intent intent=new Intent(getContext(),OtpLoginActivity.class);
+                                getContext().startActivity(intent);
+                                getActivity().finish();
+                            }
+                        })
+                        .showCancelButton(true)
+                        .setCancelText("Cancel")
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
+            }
+        });
         name.setText(SharedPreferencesHelper.getUserName(getActivity()));
         email.setText(SharedPreferencesHelper.getUserEmail(getActivity()));
         mobile.setText(SharedPreferencesHelper.getUserMobile(getActivity()));

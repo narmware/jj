@@ -21,10 +21,19 @@
             android:icon="@drawable/ic_info"
             android:title="About" />
 
-        <item
+        <!--<item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_share"
-            android:title="Share" />
+            android:title="Share" />-->
     </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_share"
+                android:title="Share" />
+        </menu>
+    </item>
 
 </menu>

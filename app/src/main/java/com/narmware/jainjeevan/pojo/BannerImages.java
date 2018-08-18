@@ -5,11 +5,12 @@ package com.narmware.jainjeevan.pojo;
  */
 
 public class BannerImages {
-    String banner_title,service_image;
+    String banner_title,banner_image,banner_type;
 
-    public BannerImages(String banner_title, String service_image) {
+    public BannerImages(String banner_title, String banner_image, String banner_type) {
         this.banner_title = banner_title;
-        this.service_image = service_image;
+        this.banner_image = banner_image;
+        this.banner_type = banner_type;
     }
 
     public String getBanner_title() {
@@ -20,11 +21,19 @@ public class BannerImages {
         this.banner_title = banner_title;
     }
 
-    public String getService_image() {
-        return service_image;
+    public String getBanner_image() {
+        return banner_image;
     }
 
-    public void setService_image(String service_image) {
-        this.service_image = service_image;
+    public void setBanner_image(String banner_image) {
+        this.banner_image = banner_image;
+    }
+
+    public String getBanner_type() {
+        return banner_type;
+    }
+
+    public void setBanner_type(String banner_type) {
+        this.banner_type = banner_type;
     }
 }
