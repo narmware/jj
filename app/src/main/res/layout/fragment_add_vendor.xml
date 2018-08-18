@@ -65,6 +65,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"/>
 
+    <TextView
+        android:text="Select service area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <Spinner
         android:id="@+id/form_spinner"
         android:layout_width="match_parent"
