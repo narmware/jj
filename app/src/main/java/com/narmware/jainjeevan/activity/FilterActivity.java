@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -65,7 +66,9 @@ public class FilterActivity extends AppCompatActivity {
     public static Set<String> facilitySet;
 
     Button mBtnApply,mBtnClearFilter;
-public static Context context;
+    Dialog mNoConnectionDialog;
+
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +137,16 @@ public static Context context;
         mBtnClearFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(FilterActivity.this, filters.size()+"", Toast.LENGTH_SHORT).show();
 
+                for(int i=0;i<filters.size();i++)
+                {
+                    filters.get(i).setSelected(false);
+                    filterAdapter.notifyDataSetChanged();
+                    selected_filters.clear();
+                    facilitySet.clear();
+                    SharedPreferencesHelper.setFilteredFacilities(null,context);
+                }
             }
         });
         selected_filters=new ArrayList<>();
@@ -213,6 +225,10 @@ public static Context context;
                                         filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
                                     }
                                 }
+                                if(SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this)==null)
+                                {
+                                    filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+                                }
 
                             }
                             filterAdapter.notifyDataSetChanged();
@@ -264,4 +280,18 @@ public static Context context;
         DharamshalaActivity2.GetDharamshalas(url);
     }
 
+    private void showNoConnectionDialog() {
+        mNoConnectionDialog = new Dialog(FilterActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
+
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
 }
