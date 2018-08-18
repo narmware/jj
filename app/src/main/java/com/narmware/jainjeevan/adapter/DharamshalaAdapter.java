@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.DetailsActivity;
+import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.pojo.DharamshalaItem;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
 import com.narmware.jainjeevan.support.Constants;
@@ -62,6 +63,14 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
 
     @Override
     public int getItemCount() {
+
+        if(dharamshalaItems.size()==0)
+        {
+            DharamshalaActivity2.mLinEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            DharamshalaActivity2.mLinEmpty.setVisibility(View.INVISIBLE);
+        }
         return dharamshalaItems.size();
     }
 
@@ -84,7 +93,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,mItem.getName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext,mItem.getName(), Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(mContext, DetailsActivity.class);
                     intent.putExtra(Constants.TITLE,mItem.getName());
                     intent.putExtra(Constants.ADDRESS,mItem.getAddress());

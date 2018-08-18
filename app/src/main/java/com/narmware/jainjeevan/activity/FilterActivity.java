@@ -82,6 +82,7 @@ public class FilterActivity extends AppCompatActivity {
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(FilterActivity.this);
         facilitySet = new HashSet<>();
+        mNoConnectionDialog = new Dialog(FilterActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mBtnApply=findViewById(R.id.btn_apply_filter);
         mRecyclerFilter=findViewById(R.id.recycler_filter);
@@ -238,6 +239,10 @@ public class FilterActivity extends AppCompatActivity {
                             e.printStackTrace();
                             dialog.dismiss();
                         }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
                         dialog.dismiss();
                     }
                 },
@@ -247,6 +252,7 @@ public class FilterActivity extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
                         dialog.dismiss();
 
                     }
@@ -281,7 +287,6 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void showNoConnectionDialog() {
-        mNoConnectionDialog = new Dialog(FilterActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
         mNoConnectionDialog.setCancelable(false);
         mNoConnectionDialog.show();

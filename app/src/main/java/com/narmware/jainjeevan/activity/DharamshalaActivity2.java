@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +55,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     public static RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
+    public static LinearLayout mLinEmpty;
+    public static Dialog mNoConnectionDialog;
 
     public static ArrayList<String> selected_filters;
     public static String selected_city_id;
@@ -98,6 +103,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mRecyclerDharam=findViewById(R.id.recycler_dharamshala);
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
+        mLinEmpty=findViewById(R.id.lin_empty);
+        mNoConnectionDialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mFabFilter=findViewById(R.id.fab_filter);
 
@@ -135,7 +142,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         dharamshalaAdapter.notifyDataSetChanged();
     }
 
-    public static void GetDharamshalas(String url) {
+    public static void GetDharamshalas(final String url) {
         dharamshalaItems.clear();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Getting Details...");
@@ -169,6 +176,10 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                             e.printStackTrace();
                             dialog.dismiss();
                         }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
                         dialog.dismiss();
                     }
                 },
@@ -179,12 +190,24 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
                         dialog.dismiss();
-
+                        showNoConnectionDialog(url);
                     }
                 }
         );
         mVolleyRequest.add(obreq);
     }
 
+    public static void showNoConnectionDialog(final String url) {
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
 
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetDharamshalas(url);
+            }
+        });
+    }
 }

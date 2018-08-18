@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.fragments;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -77,6 +79,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     ArrayList<BannerImages> bannerImages;
     ArrayList<BannerImages> bottomBannerImages;
     RequestQueue mVolleyRequest;
+    Dialog mNoConnectionDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -132,6 +135,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         setBottomSlider();
         setRecommendAdapter(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         GetRecommended();
+
+        mNoConnectionDialog = new Dialog(getContext(), android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+
         return view;
     }
 
@@ -329,6 +335,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
                         dialog.dismiss();
                     }
                 },
@@ -338,6 +348,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
                         dialog.dismiss();
                     }
                 }
@@ -345,4 +356,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mVolleyRequest.add(obreq);
     }
 
+    public void showNoConnectionDialog() {
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
+
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetRecommended();
+            }
+        });
+    }
 }

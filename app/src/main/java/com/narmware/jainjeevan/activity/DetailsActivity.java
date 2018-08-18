@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +58,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
     ArrayList<DetailedItem> mFacilityList;
     ArrayList<DetailedItem> mBhojanList;
     ImageView mBtnBack;
+    Dialog mNoConnectionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                 onBackPressed();
             }
         });
+        mNoConnectionDialog = new Dialog(DetailsActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mTxtTitle.setText(name);
         mTxtAddress.setText(address);
@@ -219,6 +223,10 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             e.printStackTrace();
                             dialog.dismiss();
                         }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
                         dialog.dismiss();
                     }
                 },
@@ -228,12 +236,28 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
                         dialog.dismiss();
 
                     }
                 }
         );
         mVolleyRequest.add(obreq);
+    }
+
+
+    public void showNoConnectionDialog() {
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
+
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetData();
+            }
+        });
     }
 
 

@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.DharamshalaActivity2;
+import com.narmware.jainjeevan.fragments.RoomsFragment;
 import com.narmware.jainjeevan.pojo.BhojanItems;
 import com.narmware.jainjeevan.pojo.DetailedItem;
 import com.squareup.picasso.Picasso;
@@ -43,26 +45,38 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DetailedItem detailedItem=detailedItems.get(position);
 
-        if(callFrom.equals("Facilities")) {
-            if (detailedItem.getImg().trim().equals("") || detailedItem.getImg().trim().isEmpty() || detailedItem.getImg() == null) {
-                holder.mImgIcon.setVisibility(View.GONE);
-            } else {
-                holder.mImgIcon.setVisibility(View.VISIBLE);
-
-                if (detailedItem.getImg().equals("empty")) {
-
+        try {
+            if (callFrom.equals("Facilities")) {
+                if (detailedItem.getImg().trim().equals("") || detailedItem.getImg().trim().isEmpty() || detailedItem.getImg() == null) {
+                    holder.mImgIcon.setVisibility(View.GONE);
                 } else {
-                    Picasso.with(mContext)
-                            .load(detailedItem.getImg())
-                            .into(holder.mImgIcon);
+                    holder.mImgIcon.setVisibility(View.VISIBLE);
+
+                    if (detailedItem.getImg().equals("empty")) {
+
+                    } else {
+                        Picasso.with(mContext)
+                                .load(detailedItem.getImg())
+                                .into(holder.mImgIcon);
+                    }
                 }
             }
+        }catch (Exception e)
+        {
+
         }
         holder.mTxtDetail.setText(detailedItem.getItem());
     }
 
     @Override
     public int getItemCount() {
+        if(detailedItems.size()==0)
+        {
+            RoomsFragment.mLinEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            RoomsFragment.mLinEmpty.setVisibility(View.INVISIBLE);
+        }
         return detailedItems.size();
     }
 

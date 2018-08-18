@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.adapter.DetailedItemAdapter;
@@ -42,6 +43,7 @@ public class RoomsFragment extends Fragment {
     public static ArrayList<DetailedItem> detailedItems;
     public static RecyclerView mRecyclerDetails;
     public static DetailedItemAdapter detailedItemAdapter;
+    public static LinearLayout mLinEmpty;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,6 +82,7 @@ public class RoomsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_rooms, container, false);
 
+        mLinEmpty=view.findViewById(R.id.lin_empty);
         mRecyclerDetails=view.findViewById(R.id.recycler_details);
         setDetailsAdapter(new LinearLayoutManager(getContext()));
 

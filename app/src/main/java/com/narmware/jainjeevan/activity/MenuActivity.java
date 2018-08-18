@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -43,7 +48,11 @@ public class MenuActivity extends AppCompatActivity {
     FoodMenuAdapter restoAdapter;
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
+    ImageView mBtnBack;
     String id,name;
+    Dialog mNoConnectionDialog;
+
+    public static LinearLayout mLinEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,17 @@ public class MenuActivity extends AppCompatActivity {
         mRecyclerResto=findViewById(R.id.recycler_menu);
         mTxtTitle=findViewById(R.id.txt_title);
         mTxtTitle.setText(name);
+        mLinEmpty=findViewById(R.id.lin_empty);
+        mNoConnectionDialog = new Dialog(MenuActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+
+        mBtnBack=findViewById(R.id.btn_back);
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     public void setMenuAdapter(RecyclerView.LayoutManager mLayoutManager) {
@@ -129,6 +149,10 @@ public class MenuActivity extends AppCompatActivity {
                             //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
                         dialog.dismiss();
                     }
                 },
@@ -139,11 +163,26 @@ public class MenuActivity extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
                         dialog.dismiss();
 
                     }
                 }
         );
         mVolleyRequest.add(obreq);
+    }
+
+    public void showNoConnectionDialog() {
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
+
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetMenu();
+            }
+        });
     }
 }

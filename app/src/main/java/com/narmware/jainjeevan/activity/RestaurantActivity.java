@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -41,6 +44,8 @@ public class RestaurantActivity extends AppCompatActivity {
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
+    public static LinearLayout mLinEmpty;
+    Dialog mNoConnectionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +63,10 @@ public class RestaurantActivity extends AppCompatActivity {
         mRecyclerResto=findViewById(R.id.recycler_resto);
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
+        mLinEmpty=findViewById(R.id.lin_empty);
+        mNoConnectionDialog = new Dialog(RestaurantActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mTxtTitle.setText("Restaurants");
-
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,17 +99,6 @@ public class RestaurantActivity extends AppCompatActivity {
         dialog.show();
 
         Gson gson=new Gson();
-        // String json_string=gson.toJson(bookSchedule);
-        //Log.e("Schedule json",json_string);
-/*
-
-        HashMap<String,String> param = new HashMap();
-        param.put(Constants.MOBILE_NUMBER,mMobile);
-        param.put(Constants.PASSWORD,mPassword);
-*/
-
-        //url with params
-       // String url= SupportFunctions.appendParam(EndPoints.DETAILS_URL,param);
 
         String url=EndPoints.GET_HOTELS;
 
@@ -139,6 +134,10 @@ public class RestaurantActivity extends AppCompatActivity {
                             //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
                         dialog.dismiss();
                     }
                 },
@@ -149,6 +148,7 @@ public class RestaurantActivity extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
                         dialog.dismiss();
 
                     }
@@ -157,4 +157,17 @@ public class RestaurantActivity extends AppCompatActivity {
         mVolleyRequest.add(obreq);
     }
 
+    public void showNoConnectionDialog() {
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
+
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetRestos();
+            }
+        });
+    }
 }

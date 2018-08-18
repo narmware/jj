@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.DetailsActivity;
+import com.narmware.jainjeevan.activity.DharamshalaActivity2;
+import com.narmware.jainjeevan.activity.MenuActivity;
 import com.narmware.jainjeevan.pojo.MenuItem;
 import com.narmware.jainjeevan.pojo.RestoItems;
 import com.narmware.jainjeevan.support.Constants;
@@ -60,6 +62,13 @@ public class FoodMenuAdapter extends RecyclerView.Adapter<FoodMenuAdapter.MyView
 
     @Override
     public int getItemCount() {
+        if(restoItems.size()==0)
+        {
+            MenuActivity.mLinEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            MenuActivity.mLinEmpty.setVisibility(View.INVISIBLE);
+        }
         return restoItems.size();
     }
 
