@@ -17,12 +17,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.fragments.AboutFragment;
 import com.narmware.jainjeevan.fragments.AddVendorFragment;
 import com.narmware.jainjeevan.fragments.HomeFragment;
 import com.narmware.jainjeevan.fragments.ProfileFragment;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener
 ,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener{
@@ -30,6 +32,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    private void setHeader(View header) {
+        TextView name = header.findViewById(R.id.header_name);
+        TextView email = header.findViewById(R.id.header_mail);
+        TextView mobile = header.findViewById(R.id.header_mobile);
+        name.setText(SharedPreferencesHelper.getUserName(this));
+        email.setText(SharedPreferencesHelper.getUserEmail(this));
+        mobile.setText(SharedPreferencesHelper.getUserMobile(this));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -46,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        setHeader(navigationView.getHeaderView(0));
 
         setFragment(new HomeFragment());
     }
