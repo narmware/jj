@@ -98,7 +98,6 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                 .load(img)
                 .into(mImgDharam);
         mViewPager=findViewById(R.id.view_pager);
-
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
 
@@ -147,6 +146,11 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
             // get item count - equal to number of tabs
             return fragments.size();
         }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
     }
 
     private void GetData() {
@@ -191,7 +195,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 mRuleList.add(ruleItem);
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mRuleList,"Rules"),"Rules");
+                            pagerAdapter.addFragment(RulesFragment.newInstance(mRuleList,"Rules"),"Rules");
                             pagerAdapter.notifyDataSetChanged();
 
                             DetailedItem[] bhojan=detailedItemResponse.getBhojanshala();
@@ -199,7 +203,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 mBhojanList.add(bhojanItem);
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mBhojanList,"Bhojan"),"Bhojan");
+                            pagerAdapter.addFragment(BhojanshalaFragment.newInstance(mBhojanList,"Bhojan"),"Bhojan");
                             pagerAdapter.notifyDataSetChanged();
 
                             DetailedItem[] facilities=detailedItemResponse.getFacility();
@@ -215,8 +219,10 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                                     mFacilityList.add(single);
                                 }
                             }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mFacilityList,"Facilities"),"Facilities");
+                            pagerAdapter.addFragment(FacilitiesFragment.newInstance(mFacilityList,"Facilities"),"Facilities");
                             pagerAdapter.notifyDataSetChanged();
+
+                            mViewPager.setOffscreenPageLimit(4);
 
                         } catch (Exception e) {
 

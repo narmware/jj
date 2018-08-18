@@ -4,29 +4,46 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.adapter.DetailedItemAdapter;
+import com.narmware.jainjeevan.adapter.RecommendedAdapter;
+import com.narmware.jainjeevan.pojo.DetailedItem;
+import com.narmware.jainjeevan.pojo.RecommendedItems;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FacilitiesFragment.OnFragmentInteractionListener} interface
+ * {@link RoomsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FacilitiesFragment#newInstance} factory method to
+ * Use the {@link RoomsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class FacilitiesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_LIST = "list";
+    private static final String CALL_FROM = "call_from";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String callFrom;
+
+    public static ArrayList<DetailedItem> detailedItems;
+    public static RecyclerView mRecyclerDetails;
+    public static DetailedItemAdapter detailedItemAdapter;
+    public static LinearLayout mLinEmpty;
 
     private OnFragmentInteractionListener mListener;
 
@@ -34,20 +51,13 @@ public class FacilitiesFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FacilitiesFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static FacilitiesFragment newInstance(String param1, String param2) {
+    public static FacilitiesFragment newInstance(ArrayList<DetailedItem> itemList,String callFrom) {
         FacilitiesFragment fragment = new FacilitiesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_LIST,itemList);
+        args.putSerializable(CALL_FROM,callFrom);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +66,13 @@ public class FacilitiesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            try {
+                detailedItems = new ArrayList<>();
+                detailedItems = (ArrayList<DetailedItem>) getArguments().getSerializable(ARG_LIST);
+
+                callFrom=getArguments().getString(CALL_FROM);
+            }catch (Exception e)
+            {}
         }
     }
 
@@ -65,7 +80,30 @@ public class FacilitiesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_facilities, container, false);
+        View view= inflater.inflate(R.layout.fragment_facilities, container, false);
+
+        mLinEmpty=view.findViewById(R.id.lin_empty);
+        mRecyclerDetails=view.findViewById(R.id.recycler_details);
+        setDetailsAdapter(new LinearLayoutManager(getContext()));
+
+        return view;
+    }
+
+    public void setDetailsAdapter(RecyclerView.LayoutManager mLayoutManager) {
+        Log.e("item size",detailedItems.size()+"");
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+
+        detailedItemAdapter = new DetailedItemAdapter(getContext(), detailedItems,callFrom);
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
+        mRecyclerDetails.setLayoutManager(mLayoutManager);
+        mRecyclerDetails.setItemAnimator(new DefaultItemAnimator());
+        //snapHelper.attachToRecyclerView(mRecyclerView);
+        mRecyclerDetails.setAdapter(detailedItemAdapter);
+        mRecyclerDetails.setNestedScrollingEnabled(false);
+        mRecyclerDetails.setFocusable(false);
+
+        detailedItemAdapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
