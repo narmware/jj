@@ -64,7 +64,7 @@
                     android:id="@+id/txt_room_charge"
                     android:fontFamily="sans-serif-condensed"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/red_600"
+                    android:textColor="@color/jain_green"
                     android:text="Rooms availabe from 300 onwards"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
