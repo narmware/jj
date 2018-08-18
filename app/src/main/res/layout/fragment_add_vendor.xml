@@ -66,7 +66,6 @@
         android:layout_marginBottom="10dp"/>
 
     <Spinner
-        android:prompt="Select your service area"
         android:id="@+id/form_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></Spinner>

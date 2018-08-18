@@ -41,6 +41,21 @@ public class SharedPreferencesHelper {
         return facility;
     }
 
+    public static void setFilteredCity(String city, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+        edit.putString(FILTERED_CITY,city);
+        edit.commit();
+    }
+
+    public static String getFilteredCity(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        String city=pref.getString(FILTERED_CITY,null);
+        return city;
+    }
+
     public static void setUserLocation(String loc, Context context)
     {
         SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);

@@ -64,7 +64,7 @@ public class FilterActivity extends AppCompatActivity {
     public static String selected_city_id;
     public static Set<String> facilitySet;
 
-    Button mBtnApply;
+    Button mBtnApply,mBtnClearFilter;
 public static Context context;
 
     @Override
@@ -99,7 +99,8 @@ public static Context context;
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
               selected_city_id=cities.get(position).getCity_id();
               SharedPreferencesHelper.setUserLocation(cities.get(position).getCity_name(),FilterActivity.this);
-               //Toast.makeText(FilterActivity.this, cities.get(position).getCity_id(), Toast.LENGTH_SHORT).show();
+              SharedPreferencesHelper.setFilteredCity(cities.get(position).getCity_id(),FilterActivity.this);
+              //Toast.makeText(FilterActivity.this, cities.get(position).getCity_id(), Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -127,6 +128,15 @@ public static Context context;
             }
         });
 
+        mBtnClearFilter=findViewById(R.id.btn_clear_filter);
+        mBtnClearFilter.setVisibility(View.VISIBLE);
+
+        mBtnClearFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         selected_filters=new ArrayList<>();
     }
 
@@ -238,6 +248,8 @@ public static Context context;
         for(int i=0;i<selected_filters.size();i++) {
             facilitySet.add(selected_filters.get(i));
         }
+       // Toast.makeText(context, "Size: "+facilitySet.size(), Toast.LENGTH_SHORT).show();
+        SharedPreferencesHelper.setFilteredFacilities(null,context);
         SharedPreferencesHelper.setFilteredFacilities(facilitySet,context);
 
         Gson gson=new Gson();

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -71,8 +72,10 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         {
             selected_filters=new ArrayList<>();
             SendFilters sendFilters=new SendFilters();
-            sendFilters.setCity_id(SharedPreferencesHelper.getUserLocation(DharamshalaActivity2.this));
+            sendFilters.setCity_id(SharedPreferencesHelper.getFilteredCity(DharamshalaActivity2.this));
             facilitySet=SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this);
+            //Toast.makeText(context, "Size: "+facilitySet.size(), Toast.LENGTH_SHORT).show();
+
             selected_filters.addAll(facilitySet);
             sendFilters.setFacilities(selected_filters);
 

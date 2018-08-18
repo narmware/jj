@@ -12,6 +12,7 @@
 
         <ImageView
             android:id="@+id/btn_back"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_width="wrap_content"
             app:srcCompat="@drawable/ic_arrow_back"
             android:layout_marginRight="6dp"
@@ -28,4 +29,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <Button
+            android:id="@+id/btn_clear_filter"
+            android:visibility="gone"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="Clear Filters"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 </RelativeLayout>

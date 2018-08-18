@@ -24,6 +24,15 @@
     android:layout_margin="@dimen/activity_horizontal_margin"
     tools:context="com.narmware.jainjeevan.activity.FilterActivity">
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <TextView
         android:text="Select City"
         android:textSize="16sp"
@@ -33,18 +42,37 @@
 
     <Spinner
         android:id="@+id/spinn_city"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Select Facilities"
+                android:textSize="16sp"
+                android:textColor="@color/grey_900"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
         android:id="@+id/recycler_filter"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
-
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
 
     <Button
