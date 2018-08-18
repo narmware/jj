@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,12 +29,23 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    protected View mRoot;
 
     private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
+
+    private void init() {
+        TextView name = mRoot.findViewById(R.id.profile_name);
+        TextView email = mRoot.findViewById(R.id.profile_email);
+        TextView mobile = mRoot.findViewById(R.id.profile_mobile);
+        name.setText(SharedPreferencesHelper.getUserName(getActivity()));
+        email.setText(SharedPreferencesHelper.getUserEmail(getActivity()));
+        mobile.setText(SharedPreferencesHelper.getUserMobile(getActivity()));
+    }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -65,7 +78,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        mRoot = inflater.inflate(R.layout.fragment_profile, container, false);
+        init();
+        return mRoot;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
