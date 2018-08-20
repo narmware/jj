@@ -11,27 +11,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".activity.DharamshalaActivity2" />
-        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.DharamshalaActivity2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".activity.BhojanalayActivity" />
-        <activity android:name=".activity.RestaurantActivity" />
-        <activity android:name=".activity.DetailsActivity" />
-        <activity android:name=".activity.MenuActivity" />
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.BhojanalayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RestaurantActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.DetailsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.FilterActivity"></activity>
+        <activity android:name=".activity.FilterActivity"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".activity.OtpLoginActivity">
+        <activity android:name=".activity.OtpLoginActivity"
+            android:screenOrientation="portrait">
 
         </activity>
     </application>
