@@ -107,6 +107,7 @@
 
                 <EditText
                     android:id="@+id/profile_city"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:background="@drawable/custom_et_form"
                     android:hint="City"
                     android:maxLines="1"
@@ -123,6 +124,7 @@
 
                 <EditText
                     android:id="@+id/profile_state"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:background="@drawable/custom_et_form"
                     android:hint="State"
                     android:maxLines="1"

@@ -77,7 +77,7 @@ public class AddVendorFragment extends Fragment {
     }
 
     private void init() {
-        mServiceType = mRoot.findViewById(R.id.form_spinner);
+        //mServiceType = mRoot.findViewById(R.id.form_spinner);
         mEdtName=mRoot.findViewById(R.id.edt_name);
         mEdtCity=mRoot.findViewById(R.id.edt_city);
         mEdtAddress=mRoot.findViewById(R.id.edt_address);
@@ -95,7 +95,7 @@ public class AddVendorFragment extends Fragment {
 
             }
         });
-        setSpinner();
+       // setSpinner();
     }
 
     private void setSpinner() {
