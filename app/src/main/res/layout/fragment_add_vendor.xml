@@ -13,7 +13,7 @@
     <EditText
         android:id="@+id/edt_name"
         android:inputType="text"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:background="@drawable/custom_et_form"
         android:hint="Business name/ Owner name"
         android:maxLines="1"
@@ -46,7 +46,7 @@
 
     <EditText
         android:id="@+id/edt_contact_person"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:background="@drawable/custom_et_form"
         android:hint="Contact person name"
         android:maxLines="1"

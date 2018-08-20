@@ -15,7 +15,7 @@
 
         <RelativeLayout
             android:id="@+id/backround_relative"
-            android:background="@color/colorPrimary"
+            android:background="@color/red_200"
             android:layout_width="match_parent"
             android:layout_height="250dp">
 
@@ -26,12 +26,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp">
 
                 <ImageView
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_width="80dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/jj_logo_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="80dp" />
 
                 <!--  <TextView
@@ -45,15 +46,7 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_signin_msg"
-                android:layout_below="@+id/si_logo"
-                android:textColor="@android:color/white"
-                android:text="Welcome to Jain Jeevan"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
         </RelativeLayout>
 
 
@@ -92,7 +85,7 @@
                             android:layout_marginTop="4dp">
                             <EditText
                                 android:id="@+id/edt_name"
-                                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="text"
