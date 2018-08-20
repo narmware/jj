@@ -21,13 +21,16 @@ import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.fragments.AboutFragment;
+import com.narmware.jainjeevan.fragments.AddBhojanshalaFragment;
+import com.narmware.jainjeevan.fragments.AddDharamshalaFragment;
 import com.narmware.jainjeevan.fragments.AddVendorFragment;
 import com.narmware.jainjeevan.fragments.HomeFragment;
 import com.narmware.jainjeevan.fragments.ProfileFragment;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener
-,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener{
+,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,AddDharamshalaFragment.OnFragmentInteractionListener,
+        AddBhojanshalaFragment.OnFragmentInteractionListener{
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -103,6 +106,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
            case R.id.nav_add_vendor:
                setFragment(new AddVendorFragment());
+               break;
+
+           case R.id.nav_add_dharamshala:
+               setFragment(new AddDharamshalaFragment());
+               break;
+
+           case R.id.nav_add_bhojanalay:
+               setFragment(new AddBhojanshalaFragment());
                break;
 
            case R.id.nav_share:

@@ -12,6 +12,17 @@
             android:id="@+id/nav_add_vendor"
             android:icon="@drawable/ic_person"
             android:title="Add Vendor" />
+
+        <item
+            android:id="@+id/nav_add_dharamshala"
+            android:icon="@drawable/ic_person"
+            android:title="Add Dharamshala" />
+
+        <item
+            android:id="@+id/nav_add_bhojanalay"
+            android:icon="@drawable/ic_person"
+            android:title="Add Bhojanalay" />
+
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_person_profile"

@@ -7,27 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddVendorFragment.OnFragmentInteractionListener} interface
+ * {@link AddBhojanshalaFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddVendorFragment#newInstance} factory method to
+ * Use the {@link AddBhojanshalaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddVendorFragment extends Fragment {
+public class AddBhojanshalaFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,16 +27,10 @@ public class AddVendorFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    protected View mRoot;
-    protected Spinner mServiceType;
-    EditText mEdtName,mEdtProdName,mEdtContactPerson,mEdtMail,mEdtMobile,mEdtCity,mEdtAddress,mEdtPincode;
-    Button mBtnSubmitForm;
-
-    String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mCity,mAddress;
 
     private OnFragmentInteractionListener mListener;
 
-    public AddVendorFragment() {
+    public AddBhojanshalaFragment() {
         // Required empty public constructor
     }
 
@@ -55,11 +40,11 @@ public class AddVendorFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AddVendorFragment.
+     * @return A new instance of fragment AddBhojanshalaFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddVendorFragment newInstance(String param1, String param2) {
-        AddVendorFragment fragment = new AddVendorFragment();
+    public static AddBhojanshalaFragment newInstance(String param1, String param2) {
+        AddBhojanshalaFragment fragment = new AddBhojanshalaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,57 +61,11 @@ public class AddVendorFragment extends Fragment {
         }
     }
 
-    private void init() {
-        //mServiceType = mRoot.findViewById(R.id.form_spinner);
-        mEdtName=mRoot.findViewById(R.id.edt_name);
-        mEdtProdName=mRoot.findViewById(R.id.edt_prod_name);
-        mEdtContactPerson=mRoot.findViewById(R.id.edt_contact_person);
-
-
-        mBtnSubmitForm=mRoot.findViewById(R.id.btn_submit_form);
-        mBtnSubmitForm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mName=mEdtName.getText().toString().trim();
-                mCity=mEdtCity.getText().toString().trim();
-                mAddress=mEdtAddress.getText().toString().trim();
-                //mService=mEdtName.getText().toString().trim();
-
-            }
-        });
-       // setSpinner();
-    }
-
-    private void setSpinner() {
-        List<String> categories = new ArrayList<String>();
-        categories.add("Dharamshala");
-        categories.add("Bhojanalaya");
-        categories.add("Food Vendor");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mServiceType.setAdapter(dataAdapter);
-
-        mServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mRoot = inflater.inflate(R.layout.fragment_add_vendor, container, false);
-        init();
-        return mRoot;
+        return inflater.inflate(R.layout.fragment_add_bhojanshala, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
