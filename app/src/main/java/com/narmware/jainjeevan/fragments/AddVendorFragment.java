@@ -81,17 +81,24 @@ public class AddVendorFragment extends Fragment {
         mEdtName=mRoot.findViewById(R.id.edt_name);
         mEdtProdName=mRoot.findViewById(R.id.edt_prod_name);
         mEdtContactPerson=mRoot.findViewById(R.id.edt_contact_person);
-
+        mEdtMail=mRoot.findViewById(R.id.edt_mail);
+        mEdtMobile=mRoot.findViewById(R.id.edt_mobile);
+        mEdtCity=mRoot.findViewById(R.id.edt_city);
+        mEdtAddress=mRoot.findViewById(R.id.edt_address);
+        mEdtPincode=mRoot.findViewById(R.id.edt_pincode);
 
         mBtnSubmitForm=mRoot.findViewById(R.id.btn_submit_form);
         mBtnSubmitForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mName=mEdtName.getText().toString().trim();
+                mProdName=mEdtProdName.getText().toString().trim();
+                mContactPerson=mEdtContactPerson.getText().toString().trim();
+                mMail=mEdtMail.getText().toString().trim();
+                mMobile=mEdtMobile.getText().toString().trim();
                 mCity=mEdtCity.getText().toString().trim();
                 mAddress=mEdtAddress.getText().toString().trim();
-                //mService=mEdtName.getText().toString().trim();
-
+                mPincode=mEdtPincode.getText().toString().trim();
             }
         });
        // setSpinner();
