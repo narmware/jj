@@ -182,7 +182,7 @@ public class AddDharamshalaFragment extends Fragment {
         final List<String> categories = new ArrayList<String>();
         categories.add("Dharamshala");
         categories.add("Bhojanalaya");
-        categories.add("Food Vendor");
+        categories.add("Both");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

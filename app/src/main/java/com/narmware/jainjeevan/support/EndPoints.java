@@ -12,5 +12,6 @@ public class EndPoints {
     public static final String GET_FILTERS=SERVER_URL+"filter.php";
     public static final String GET_FILTERED_DATA=SERVER_URL+"filtered-data.php";
     public static final String GET_BANNERS=SERVER_URL+"get-banner.php";
+    public static final String SET_VENDOR=SERVER_URL+"vendor.php";
 
 }
