@@ -67,6 +67,25 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/edt_mail"
+        android:inputType="text"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:background="@drawable/custom_et_form"
+        android:hint="Email"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:height="32dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"/>
+
     <EditText
         android:id="@+id/edt_mobile"
         android:inputType="text"
@@ -174,6 +193,17 @@
             android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_submit_form"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/custom_bt"
+        android:layout_gravity="center"
+        android:text="Submit"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content" />
 </LinearLayout>
 
 </ScrollView>

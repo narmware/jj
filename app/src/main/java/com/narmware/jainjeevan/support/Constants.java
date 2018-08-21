@@ -17,4 +17,7 @@ public class Constants {
     public static final String BANNER_UP="UP";
     public static final String BANNER_BOTTOM="BOTTOM";
 
+    public static final String DHARAMSHALA="dharamshala";
+    public static final String FILTER="filter";
+
 }

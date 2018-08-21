@@ -91,10 +91,6 @@ public class FilterActivity extends AppCompatActivity {
 
         mCitySpinner=findViewById(R.id.spinn_city);
         cities=new ArrayList<>();
-       /* cities.add(new City("Pune","1"));
-        cities.add(new City("Nagpur","2"));
-        cities.add(new City("Mumbai","3"));*/
-
         cityAdapter=new CityAdapter(FilterActivity.this,cities);
         mCitySpinner.setAdapter(cityAdapter);
 
@@ -157,7 +153,7 @@ public class FilterActivity extends AppCompatActivity {
         filters = new ArrayList<>();
         SnapHelper snapHelper = new LinearSnapHelper();
 
-        filterAdapter = new FilterAdapter(FilterActivity.this, filters,getSupportFragmentManager());
+        filterAdapter = new FilterAdapter(FilterActivity.this, filters,Constants.FILTER);
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
         mRecyclerFilter.setLayoutManager(mLayoutManager);
         mRecyclerFilter.setItemAnimator(new DefaultItemAnimator());

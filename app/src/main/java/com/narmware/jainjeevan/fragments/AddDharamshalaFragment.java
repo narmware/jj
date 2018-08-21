@@ -1,14 +1,54 @@
 package com.narmware.jainjeevan.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.DharamshalaActivity2;
+import com.narmware.jainjeevan.activity.FilterActivity;
+import com.narmware.jainjeevan.adapter.FilterAdapter;
+import com.narmware.jainjeevan.pojo.City;
+import com.narmware.jainjeevan.pojo.Facility;
+import com.narmware.jainjeevan.pojo.FilterResponse;
+import com.narmware.jainjeevan.pojo.SendFilters;
+import com.narmware.jainjeevan.support.Constants;
+import com.narmware.jainjeevan.support.EndPoints;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
+import com.narmware.jainjeevan.support.SupportFunctions;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +69,19 @@ public class AddDharamshalaFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    protected Spinner mServiceType;
+    RecyclerView mRecyclerFacility;
+    ArrayList<Facility> facilities;
+    FilterAdapter facilityAdapter;
+
+    public static ArrayList<String> selected_filters;
+    public static Set<String> facilitySet;
+    RequestQueue mVolleyRequest;
+    public static Context mContext;
+
+    Button mBtnSubmitForm;
+    EditText mEdtName,mEdtContactPerson,mEdtMail,mEdtMobile,mEdtPhone,mEdtCity,mEdtAddress,mEdtPincode;
+    String mName,mContactPerson,mMail,mMobile,mPhone,mPincode,mCity,mAddress,mType;
 
     public AddDharamshalaFragment() {
         // Required empty public constructor
@@ -65,8 +118,172 @@ public class AddDharamshalaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_dharamshala, container, false);
+        View view= inflater.inflate(R.layout.fragment_add_dharamshala, container, false);
+        mContext=getContext();
+        init(view);
+        return view;
     }
+
+    private void init(View view) {
+        mVolleyRequest = Volley.newRequestQueue(getContext());
+        facilitySet = new HashSet<>();
+        selected_filters=new ArrayList<>();
+
+        mEdtName=view.findViewById(R.id.edt_name);
+        mEdtContactPerson=view.findViewById(R.id.edt_contact_person);
+        mEdtMail=view.findViewById(R.id.edt_mail);
+        mEdtMobile=view.findViewById(R.id.edt_mobile);
+        mEdtPhone=view.findViewById(R.id.edt_phone);
+        mEdtCity=view.findViewById(R.id.edt_city);
+        mEdtAddress=view.findViewById(R.id.edt_address);
+        mEdtPincode=view.findViewById(R.id.edt_pincode);
+
+        mServiceType=view.findViewById(R.id.spinn_type);
+        mRecyclerFacility=view.findViewById(R.id.recycler_facilities);
+        mBtnSubmitForm=view.findViewById(R.id.btn_submit_form);
+        mBtnSubmitForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SetFilters();
+
+                mName=mEdtName.getText().toString().trim();
+                mContactPerson=mEdtContactPerson.getText().toString().trim();
+                mMail=mEdtMail.getText().toString().trim();
+                mMobile=mEdtMobile.getText().toString().trim();
+                mPhone=mEdtPhone.getText().toString().trim();
+                mCity=mEdtCity.getText().toString().trim();
+                mAddress=mEdtAddress.getText().toString().trim();
+                mPincode=mEdtPincode.getText().toString().trim();
+            }
+        });
+        setSpinner();
+
+        setFacilityAdapter(new GridLayoutManager(getContext(),2));
+        GetFacilities();
+    }
+
+    public void setFacilityAdapter(RecyclerView.LayoutManager mLayoutManager) {
+        facilities = new ArrayList<>();
+        SnapHelper snapHelper = new LinearSnapHelper();
+
+        facilityAdapter = new FilterAdapter(getContext(), facilities,Constants.DHARAMSHALA);
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
+        mRecyclerFacility.setLayoutManager(mLayoutManager);
+        mRecyclerFacility.setItemAnimator(new DefaultItemAnimator());
+        //snapHelper.attachToRecyclerView(mRecyclerView);
+        mRecyclerFacility.setAdapter(facilityAdapter);
+        mRecyclerFacility.setNestedScrollingEnabled(false);
+        mRecyclerFacility.setFocusable(false);
+
+        facilityAdapter.notifyDataSetChanged();
+    }
+
+    private void setSpinner() {
+        final List<String> categories = new ArrayList<String>();
+        categories.add("Dharamshala");
+        categories.add("Bhojanalaya");
+        categories.add("Food Vendor");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mServiceType.setAdapter(dataAdapter);
+
+        mServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mType=categories.get(position);
+               // Toast.makeText(getContext(), ""+categories.get(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public static void SetFilters() {
+
+        facilitySet.clear();
+        for(int i=0;i<selected_filters.size();i++) {
+            facilitySet.add(selected_filters.get(i));
+        }
+        // Toast.makeText(context, "Size: "+facilitySet.size(), Toast.LENGTH_SHORT).show();
+        SharedPreferencesHelper.setDharamshalaFacilities(null,mContext);
+        SharedPreferencesHelper.setDharamshalaFacilities(facilitySet,mContext);
+    }
+
+    private void GetFacilities() {
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        //url without params
+        String url= EndPoints.GET_FILTERS;
+
+        Log.e("Filter url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            Log.e("Filter Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            FilterResponse filterResponse=gson.fromJson(response.toString(),FilterResponse.class);
+                            Facility[] facility=filterResponse.getFacility();
+
+                            for(Facility itemFac:facility){
+
+                                //filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+
+                                if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())!=null)
+                                {
+                                    facilitySet=SharedPreferencesHelper.getDharamshalaFacilities(getContext());
+                                    if(facilitySet.contains(itemFac.getFacility_id()))
+                                    {
+                                        facilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),true));
+                                    }
+                                    else{
+                                        facilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+                                    }
+                                }
+                                if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())==null)
+                                {
+                                    facilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+                                }
+
+                            }
+                            facilityAdapter.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        dialog.dismiss();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

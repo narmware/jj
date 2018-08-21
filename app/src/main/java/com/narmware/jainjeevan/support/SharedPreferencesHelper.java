@@ -21,10 +21,25 @@ public class SharedPreferencesHelper {
     private static final String USER_MOBILE="user_mobile";
     private static final String USER_EMAIL="user_email";
     private static final String FILTERED_FACILITIES="filters";
+    private static final String DHARAMSHALA_FACILITIES="dharam_facilities";
     private static final String FILTERED_CITY="city";
-
     private static final String USER_LOCATION="loc";
 
+
+    public static void setDharamshalaFacilities(Set<String> facilities1, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+        edit.putStringSet(DHARAMSHALA_FACILITIES,facilities1);
+        edit.commit();
+    }
+
+    public static Set<String> getDharamshalaFacilities(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> facility1=pref.getStringSet(DHARAMSHALA_FACILITIES,null);
+        return facility1;
+    }
 
     public static void setFilteredFacilities(Set<String> facilities, Context context)
     {

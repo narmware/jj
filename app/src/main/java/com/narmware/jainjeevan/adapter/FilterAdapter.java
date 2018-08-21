@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.FilterActivity;
+import com.narmware.jainjeevan.fragments.AddDharamshalaFragment;
 import com.narmware.jainjeevan.pojo.BhojanItems;
 import com.narmware.jainjeevan.pojo.Facility;
 import com.narmware.jainjeevan.pojo.Filter;
+import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.squareup.picasso.Picasso;
 
@@ -31,12 +33,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
     Context mContext;
     ArrayList<Facility> filters;
-    FragmentManager fragmentManager;
+    String callFrom;
 
-    public FilterAdapter(Context mContext, ArrayList<Facility> filters, FragmentManager fragmentManager) {
+    public FilterAdapter(Context mContext, ArrayList<Facility> filters,String callFrom) {
         this.mContext = mContext;
         this.filters = filters;
-        this.fragmentManager = fragmentManager;
+        this.callFrom = callFrom;
     }
 
     @Override
@@ -54,8 +56,11 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         holder.mTxtFilter.setText(filter.getFacility_name());
 
         if(filter.getImg().equals(""))
-        {}
+        {
+        }
         else {
+            holder.mIcon.setVisibility(View.VISIBLE);
+
             Picasso.with(mContext)
                     .load(filter.getImg())
                     .into(holder.mIcon);
@@ -94,16 +99,27 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b==true)
                     {
-                       // FilterActivity.selected_filters.add(new Facility(mItem.getFacility_id(),mItem.getFacility_name(),mItem.getImg(),false));
-                        FilterActivity.selected_filters.add(mItem.getFacility_id());
-                        //Toast.makeText(mContext,mItem.getFacility_id(),Toast.LENGTH_SHORT).show();
+                        if(callFrom.equals(Constants.FILTER))
+                        {
+                            FilterActivity.selected_filters.add(mItem.getFacility_id());
+                        }
+                        else{
+                            AddDharamshalaFragment.selected_filters.add(mItem.getFacility_id());
+                            Toast.makeText(mContext,AddDharamshalaFragment.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     if(b==false)
                     {
-                        FilterActivity.selected_filters.remove(mItem.getFacility_id());
-                        //FilterActivity.selected_filters.remove(new Facility(mItem.getFacility_id(),mItem.getFacility_name(),mItem.getImg(),false));
-                        Toast.makeText(mContext,FilterActivity.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                        if(callFrom.equals(Constants.FILTER))
+                        {
+                            FilterActivity.selected_filters.remove(mItem.getFacility_id());
+                        }
+
+                        else{
+                            AddDharamshalaFragment.selected_filters.remove(mItem.getFacility_id());
+                            Toast.makeText(mContext,AddDharamshalaFragment.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
