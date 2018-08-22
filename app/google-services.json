@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "821512862447",
+    "firebase_url": "https://jainjeevan-375b6.firebaseio.com",
+    "project_id": "jainjeevan-375b6",
+    "storage_bucket": "jainjeevan-375b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821512862447:android:17b5559957f266ce",
+        "android_client_info": {
+          "package_name": "com.narmware.jainjeevan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821512862447-e9nq3e6pctlrhoq4mspl2q6vubvfpgg3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.narmware.jainjeevan",
+            "certificate_hash": "5fe71a33245fd1e9d6393ffcf12ba068a9735718"
+          }
+        },
+        {
+          "client_id": "821512862447-ka152k3vl7s47n73pmpalidoectj8u0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEr75XlQ4PYWAS8rSBwytnIbcmnO3hb94"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821512862447-ka152k3vl7s47n73pmpalidoectj8u0r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

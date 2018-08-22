@@ -13,5 +13,7 @@ public class EndPoints {
     public static final String GET_FILTERED_DATA=SERVER_URL+"filtered-data.php";
     public static final String GET_BANNERS=SERVER_URL+"get-banner.php";
     public static final String SET_VENDOR=SERVER_URL+"vendor.php";
+    public static final String SET_PROFILE_IMG=SERVER_URL+"profile-img.php";
+    public static final String SET_PROFILE=SERVER_URL+"upload-details.php";
 
 }

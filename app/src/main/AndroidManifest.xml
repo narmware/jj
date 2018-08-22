@@ -3,10 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.narmware.jainjeevan">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+    <!-- Required to show current location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Required OpenGL ES 2.0. for Maps V2 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -16,32 +27,38 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-
         <receiver android:name=".broadcast.SMSReciver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.DharamshalaActivity2"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.DharamshalaActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".activity.BhojanalayActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.RestaurantActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.DetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.MenuActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.SplashActivity"
+        <activity
+            android:name=".activity.BhojanalayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RestaurantActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,15 +66,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.FilterActivity"
+        <activity
+            android:name=".activity.FilterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OtpLoginActivity"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".activity.OtpLoginActivity"
-            android:screenOrientation="portrait">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".activity.MapsActivity"
+            android:label="@string/title_activity_maps">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

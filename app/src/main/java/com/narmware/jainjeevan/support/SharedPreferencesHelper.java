@@ -2,10 +2,13 @@ package com.narmware.jainjeevan.support;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 
 import com.narmware.jainjeevan.pojo.Facility;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -20,6 +23,7 @@ public class SharedPreferencesHelper {
     private static final String USER_NAME="user_name";
     private static final String USER_MOBILE="user_mobile";
     private static final String USER_EMAIL="user_email";
+    private static final String USER_PROFILE_IMAGE="profile_image";
     private static final String FILTERED_FACILITIES="filters";
     private static final String DHARAMSHALA_FACILITIES="dharam_facilities";
     private static final String BHOJAN_FACILITIES="bhojan_facilities";
@@ -70,6 +74,21 @@ public class SharedPreferencesHelper {
         Set<String> facility=pref.getStringSet(FILTERED_FACILITIES,null);
         return facility;
     }
+    public static void setUserProfileImage(String prof_img, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+        edit.putString(USER_PROFILE_IMAGE,prof_img);
+        edit.commit();
+    }
+
+    public static String getUserProfileImage(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        String prof_img=pref.getString(USER_PROFILE_IMAGE,null);
+        return prof_img;
+    }
+
 
     public static void setFilteredCity(String city, Context context)
     {
@@ -176,5 +195,29 @@ public class SharedPreferencesHelper {
         String user_email=pref.getString(USER_MOBILE,null);
         return user_email;
     }
+
+
+  /*  public static void setUserProfImg(Bitmap user_img, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        user_img.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+
+        edit.putString(USER_PROF_IMG,temp);
+        edit.commit();
+    }
+
+    public static String getUserProfImg(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        String user_img=pref.getString(USER_PROF_IMG,null);
+        return user_img;
+    }*/
+
+
 }
 

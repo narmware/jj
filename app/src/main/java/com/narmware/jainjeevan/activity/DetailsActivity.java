@@ -1,10 +1,13 @@
 package com.narmware.jainjeevan.activity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -26,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.fragments.AddressFragment;
 import com.narmware.jainjeevan.fragments.BhojanshalaFragment;
 import com.narmware.jainjeevan.fragments.FacilitiesFragment;
 import com.narmware.jainjeevan.fragments.ProfileFragment;
@@ -46,12 +50,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,RoomsFragment.OnFragmentInteractionListener,
-        FacilitiesFragment.OnFragmentInteractionListener,BhojanshalaFragment.OnFragmentInteractionListener,RulesFragment.OnFragmentInteractionListener{
+        FacilitiesFragment.OnFragmentInteractionListener,BhojanshalaFragment.OnFragmentInteractionListener,RulesFragment.OnFragmentInteractionListener,
+        AddressFragment.OnFragmentInteractionListener{
+
     PagerAdapter pagerAdapter;
     ViewPager mViewPager;
     RequestQueue mVolleyRequest;
-    String id,name,address,img;
-    TextView mTxtTitle,mTxtAddress;
+    String id,name,address,img,latitude,longitude,contact_person,contact_number;
+    TextView mTxtTitle;
     ImageView mImgDharam;
     ArrayList<DetailedItem> mRoomList;
     ArrayList<DetailedItem> mRuleList;
@@ -67,20 +73,50 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         getSupportActionBar().hide();
 
         mVolleyRequest = Volley.newRequestQueue(DetailsActivity.this);
-
+        ActivityCompat.requestPermissions(DetailsActivity.this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                1);
         Intent intent=getIntent();
         id=intent.getStringExtra(Constants.ID);
         address=intent.getStringExtra(Constants.ADDRESS);
         name=intent.getStringExtra(Constants.TITLE);
         img=intent.getStringExtra(Constants.IMAGE);
+        latitude=intent.getStringExtra(Constants.LATITUDE);
+        longitude=intent.getStringExtra(Constants.LONGITUDE);
+        contact_number=intent.getStringExtra(Constants.MOBILE_NUMBER);
+        contact_person=intent.getStringExtra(Constants.CONTACT_PERSON);
 
         init();
         GetData();
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
 
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(DetailsActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
     private void init() {
         mTxtTitle=findViewById(R.id.txt_title);
-        mTxtAddress=findViewById(R.id.txt_address);
+        //mTxtAddress=findViewById(R.id.txt_address);
         mImgDharam=findViewById(R.id.img_dharam);
 
         mBtnBack=findViewById(R.id.btn_back);
@@ -93,13 +129,16 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         mNoConnectionDialog = new Dialog(DetailsActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mTxtTitle.setText(name);
-        mTxtAddress.setText(address);
+        //mTxtAddress.setText(address);
         Picasso.with(DetailsActivity.this)
                 .load(img)
                 .into(mImgDharam);
         mViewPager=findViewById(R.id.view_pager);
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
+
+        pagerAdapter.addFragment(AddressFragment.newInstance(latitude,longitude,address,name,contact_person,contact_number),"Address");
+        pagerAdapter.notifyDataSetChanged();
 
         TabLayout viewPagerTab =  findViewById(R.id.simpleTabLayout);
         viewPagerTab.setupWithViewPager(mViewPager);

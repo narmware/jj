@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
@@ -74,14 +77,23 @@ public class AddDharamshalaFragment extends Fragment {
     ArrayList<Facility> facilities;
     FilterAdapter facilityAdapter;
 
+    RecyclerView mRecyclerBhojanFacility;
+    ArrayList<Facility> bhojanFacilities;
+    FilterAdapter bhojanFacilityAdapter;
+
     public static ArrayList<String> selected_filters;
     public static Set<String> facilitySet;
+
+    public static ArrayList<String> selected_bhojan_filters;
+    public static Set<String> bhojanFacilitySet;
+
     RequestQueue mVolleyRequest;
     public static Context mContext;
 
     Button mBtnSubmitForm;
     EditText mEdtName,mEdtContactPerson,mEdtMail,mEdtMobile,mEdtPhone,mEdtCity,mEdtAddress,mEdtPincode;
     String mName,mContactPerson,mMail,mMobile,mPhone,mPincode,mCity,mAddress,mType;
+    CardView mCardDharamFacility,mCardBhojanFacility;
 
     public AddDharamshalaFragment() {
         // Required empty public constructor
@@ -129,6 +141,9 @@ public class AddDharamshalaFragment extends Fragment {
         facilitySet = new HashSet<>();
         selected_filters=new ArrayList<>();
 
+        bhojanFacilitySet = new HashSet<>();
+        selected_bhojan_filters=new ArrayList<>();
+
         mEdtName=view.findViewById(R.id.edt_name);
         mEdtContactPerson=view.findViewById(R.id.edt_contact_person);
         mEdtMail=view.findViewById(R.id.edt_mail);
@@ -138,8 +153,13 @@ public class AddDharamshalaFragment extends Fragment {
         mEdtAddress=view.findViewById(R.id.edt_address);
         mEdtPincode=view.findViewById(R.id.edt_pincode);
 
+        mCardDharamFacility=view.findViewById(R.id.card_dharam_facility);
+        mCardBhojanFacility=view.findViewById(R.id.card_bhojan_facility);
+
         mServiceType=view.findViewById(R.id.spinn_type);
         mRecyclerFacility=view.findViewById(R.id.recycler_facilities);
+        mRecyclerBhojanFacility=view.findViewById(R.id.recycler_bhojan_facilities);
+
         mBtnSubmitForm=view.findViewById(R.id.btn_submit_form);
         mBtnSubmitForm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +179,8 @@ public class AddDharamshalaFragment extends Fragment {
         setSpinner();
 
         setFacilityAdapter(new GridLayoutManager(getContext(),2));
+        setBhojanFacilityAdapter(new GridLayoutManager(getContext(),2));
+
         GetFacilities();
     }
 
@@ -178,6 +200,27 @@ public class AddDharamshalaFragment extends Fragment {
         facilityAdapter.notifyDataSetChanged();
     }
 
+    public void setBhojanFacilityAdapter(RecyclerView.LayoutManager mLayoutManager) {
+        bhojanFacilities = new ArrayList<>();
+        bhojanFacilities.add(new Facility("1","Chauvihar","",false));
+        bhojanFacilities.add(new Facility("2","Weekend open","",false));
+        bhojanFacilities.add(new Facility("3","Ambil Khata","",false));
+        bhojanFacilities.add(new Facility("4","Breakfast","",false));
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+
+        bhojanFacilityAdapter = new FilterAdapter(getContext(), bhojanFacilities,Constants.BHOJANMSHALA);
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
+        mRecyclerBhojanFacility.setLayoutManager(mLayoutManager);
+        mRecyclerBhojanFacility.setItemAnimator(new DefaultItemAnimator());
+        //snapHelper.attachToRecyclerView(mRecyclerView);
+        mRecyclerBhojanFacility.setAdapter(bhojanFacilityAdapter);
+        mRecyclerBhojanFacility.setNestedScrollingEnabled(false);
+        mRecyclerBhojanFacility.setFocusable(false);
+
+        bhojanFacilityAdapter.notifyDataSetChanged();
+    }
+
     private void setSpinner() {
         final List<String> categories = new ArrayList<String>();
         categories.add("Dharamshala");
@@ -192,7 +235,47 @@ public class AddDharamshalaFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mType=categories.get(position);
-               // Toast.makeText(getContext(), ""+categories.get(position), Toast.LENGTH_SHORT).show();
+
+
+                if(mType.equals("Dharamshala"))
+                {
+                    mCardDharamFacility.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.SlideInRight)
+                            .duration(400)
+                            .playOn(mCardDharamFacility);
+
+
+                    YoYo.with(Techniques.SlideOutRight)
+                            .duration(400)
+                            .playOn(mCardBhojanFacility);
+                    mCardBhojanFacility.setVisibility(View.GONE);
+                }
+
+                if(mType.equals("Bhojanalaya"))
+                {
+                    mCardBhojanFacility.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.SlideInRight)
+                            .duration(400)
+                            .playOn(mCardBhojanFacility);
+
+                    YoYo.with(Techniques.SlideOutRight)
+                            .duration(400)
+                            .playOn(mCardDharamFacility);
+                    mCardDharamFacility.setVisibility(View.GONE);
+                }
+
+                if(mType.equals("Both"))
+                {
+                    mCardDharamFacility.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.SlideInRight)
+                            .duration(400)
+                            .playOn(mCardDharamFacility);
+
+                    mCardBhojanFacility.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.SlideInRight)
+                            .duration(400)
+                            .playOn(mCardBhojanFacility);
+                }
             }
 
             @Override
@@ -212,6 +295,18 @@ public class AddDharamshalaFragment extends Fragment {
         SharedPreferencesHelper.setDharamshalaFacilities(null,mContext);
         SharedPreferencesHelper.setDharamshalaFacilities(facilitySet,mContext);
     }
+
+    public static void SetBhojanFilters() {
+
+        bhojanFacilitySet.clear();
+        for(int i=0;i<selected_bhojan_filters.size();i++) {
+            bhojanFacilitySet.add(selected_bhojan_filters.get(i));
+        }
+        // Toast.makeText(context, "Size: "+facilitySet.size(), Toast.LENGTH_SHORT).show();
+        SharedPreferencesHelper.setBhojanFacilities(null,mContext);
+        SharedPreferencesHelper.setBhojanFacilities(bhojanFacilitySet,mContext);
+    }
+
 
     private void GetFacilities() {
         final ProgressDialog dialog = new ProgressDialog(getContext());

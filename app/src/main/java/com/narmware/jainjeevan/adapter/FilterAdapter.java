@@ -103,9 +103,17 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                         {
                             FilterActivity.selected_filters.add(mItem.getFacility_id());
                         }
-                        else{
+
+                        if(callFrom.equals(Constants.DHARAMSHALA))
+                        {
                             AddDharamshalaFragment.selected_filters.add(mItem.getFacility_id());
-                            Toast.makeText(mContext,AddDharamshalaFragment.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(mContext,AddDharamshalaFragment.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                        }
+
+                        if(callFrom.equals(Constants.BHOJANMSHALA))
+                        {
+                            AddDharamshalaFragment.selected_bhojan_filters.add(mItem.getFacility_id());
+                           // Toast.makeText(mContext, mItem.getFacility_name(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -116,9 +124,16 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                             FilterActivity.selected_filters.remove(mItem.getFacility_id());
                         }
 
-                        else{
+                        if(callFrom.equals(Constants.DHARAMSHALA))
+                        {
                             AddDharamshalaFragment.selected_filters.remove(mItem.getFacility_id());
-                            Toast.makeText(mContext,AddDharamshalaFragment.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext,AddDharamshalaFragment.selected_filters.size()+"",Toast.LENGTH_SHORT).show();
+                        }
+
+                        if(callFrom.equals(Constants.BHOJANMSHALA))
+                        {
+                            AddDharamshalaFragment.selected_bhojan_filters.remove(mItem.getFacility_id());
+                            //Toast.makeText(mContext, mItem.getFacility_name(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

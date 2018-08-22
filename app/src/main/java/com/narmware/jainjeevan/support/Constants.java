@@ -18,6 +18,14 @@ public class Constants {
     public static final String BANNER_BOTTOM="BOTTOM";
 
     public static final String DHARAMSHALA="dharamshala";
+    public static final String BHOJANMSHALA="bhojanshala";
     public static final String FILTER="filter";
+    public static final String USER_ID="cust_id";
+    public static final String PROF_IMG="image";
+    public static final int REQUEST_CODE = 2000;
+
+    public static final String LATITUDE="lat";
+    public static final String LONGITUDE="long";
+    public static final String CONTACT_PERSON="person";
 
 }
