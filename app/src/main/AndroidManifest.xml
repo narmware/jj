@@ -49,7 +49,7 @@
             android:name=".activity.BhojanalayActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.RestaurantActivity"
+            android:name=".activity.FoodVendorActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.DetailsActivity"

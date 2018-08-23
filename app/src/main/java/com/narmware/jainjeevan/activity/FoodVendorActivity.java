@@ -24,23 +24,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.adapter.DharamshalaAdapter;
-import com.narmware.jainjeevan.adapter.RestoAdapter;
-import com.narmware.jainjeevan.pojo.DharamshalaItem;
+import com.narmware.jainjeevan.adapter.FoodVendorAdapter;
 import com.narmware.jainjeevan.pojo.RestoItemResponse;
 import com.narmware.jainjeevan.pojo.RestoItems;
 import com.narmware.jainjeevan.support.EndPoints;
-import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class RestaurantActivity extends AppCompatActivity {
+public class FoodVendorActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerResto;
     ArrayList<RestoItems> restoItems;
-    RestoAdapter restoAdapter;
+    FoodVendorAdapter restoAdapter;
     RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
@@ -50,23 +47,23 @@ public class RestaurantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant);
+        setContentView(R.layout.activity_food_vendor);
         getSupportActionBar().hide();
 
         init();
-        setRestoAdapter(new LinearLayoutManager(RestaurantActivity.this));
+        setRestoAdapter(new LinearLayoutManager(FoodVendorActivity.this));
         GetRestos();
     }
 
     private void init() {
-        mVolleyRequest = Volley.newRequestQueue(RestaurantActivity.this);
+        mVolleyRequest = Volley.newRequestQueue(FoodVendorActivity.this);
         mRecyclerResto=findViewById(R.id.recycler_resto);
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
         mLinEmpty=findViewById(R.id.lin_empty);
-        mNoConnectionDialog = new Dialog(RestaurantActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        mNoConnectionDialog = new Dialog(FoodVendorActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
-        mTxtTitle.setText("Restaurants");
+        mTxtTitle.setText("Food Vendor");
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +76,7 @@ public class RestaurantActivity extends AppCompatActivity {
         restoItems = new ArrayList<>();
         SnapHelper snapHelper = new LinearSnapHelper();
 
-        restoAdapter = new RestoAdapter(RestaurantActivity.this, restoItems,getSupportFragmentManager());
+        restoAdapter = new FoodVendorAdapter(FoodVendorActivity.this, restoItems,getSupportFragmentManager());
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
         mRecyclerResto.setLayoutManager(mLayoutManager);
         mRecyclerResto.setItemAnimator(new DefaultItemAnimator());
@@ -93,7 +90,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
     private void GetRestos() {
 
-        final ProgressDialog dialog = new ProgressDialog(RestaurantActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(FoodVendorActivity.this);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
         dialog.show();

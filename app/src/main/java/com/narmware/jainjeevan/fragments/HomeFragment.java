@@ -32,20 +32,15 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.activity.BhojanalayActivity;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
-import com.narmware.jainjeevan.activity.MenuActivity;
-import com.narmware.jainjeevan.activity.RestaurantActivity;
+import com.narmware.jainjeevan.activity.FoodVendorActivity;
 import com.narmware.jainjeevan.adapter.RecommendedAdapter;
 import com.narmware.jainjeevan.pojo.BannerImages;
 import com.narmware.jainjeevan.pojo.BannerResponse;
-import com.narmware.jainjeevan.pojo.MenuItem;
-import com.narmware.jainjeevan.pojo.MenuItemResponse;
 import com.narmware.jainjeevan.pojo.RecommendResponse;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
-import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
 
@@ -275,7 +270,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.home_restaurant:
-                Intent intentResto=new Intent(getContext(), RestaurantActivity.class);
+                Intent intentResto=new Intent(getContext(), FoodVendorActivity.class);
                 startActivity(intentResto);
             break;
         }
@@ -315,7 +310,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                         try
                         {
-                            //Log.e("Recomm Json_string",response.toString());
+                            Log.e("Recomm Json_string",response.toString());
                             Gson gson = new Gson();
 
                             RecommendResponse recommendResponse=gson.fromJson(response.toString(),RecommendResponse.class);

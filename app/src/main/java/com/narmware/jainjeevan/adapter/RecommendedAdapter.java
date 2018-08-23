@@ -78,6 +78,10 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
                     intent.putExtra(Constants.ADDRESS,mItem.getAddress());
                     intent.putExtra(Constants.IMAGE,mItem.getIMG());
                     intent.putExtra(Constants.ID,mItem.getDharmshala_id());
+                   /* intent.putExtra(Constants.LATITUDE,mItem.getLatitude());
+                    intent.putExtra(Constants.LONGITUDE,mItem.getLongitude());
+                    intent.putExtra(Constants.MOBILE_NUMBER,mItem.getMobile());
+                    intent.putExtra(Constants.CONTACT_PERSON,mItem.getManager());*/
                     mContext.startActivity(intent);
                 }
             });
