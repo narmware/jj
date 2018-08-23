@@ -28,4 +28,5 @@ public class Constants {
     public static final String LONGITUDE="long";
     public static final String CONTACT_PERSON="person";
 
+    public static final String IS_FIRST="isfirst";
 }

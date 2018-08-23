@@ -251,8 +251,8 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 if(factem.getImg().equals(""))
                                 {
-                                    DetailedItem single=new DetailedItem(factem.getItem(),"empty");
-                                    mFacilityList.add(single);
+                                    /*DetailedItem single=new DetailedItem(factem.getItem(),"empty");
+                                    mFacilityList.add(single);*/
                                 }
                                 else {
                                     DetailedItem single=new DetailedItem(factem.getItem(),factem.getImg());

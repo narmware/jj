@@ -1,15 +1,23 @@
 package com.narmware.jainjeevan.pojo;
 
-public class UpdateProfile {
-    String cust_id,profile_city,profile_state,profile_pincode,profile_address,profile_dob;
+public class Profile {
+    String cust_id,profile_city,profile_state,profile_pincode,profile_address,profile_dob,profile_img;
 
-    public UpdateProfile(String cust_id,String profile_city, String profile_state, String profile_pincode, String profile_address,String profile_dob) {
+    public Profile(String cust_id, String profile_city, String profile_state, String profile_pincode, String profile_address, String profile_dob) {
         this.profile_city = profile_city;
         this.profile_state = profile_state;
         this.profile_pincode = profile_pincode;
         this.profile_address = profile_address;
         this.cust_id=cust_id;
         this.profile_dob = profile_dob;
+    }
+
+    public String getProfile_img() {
+        return profile_img;
+    }
+
+    public void setProfile_img(String profile_img) {
+        this.profile_img = profile_img;
     }
 
     public String getProfile_dob() {

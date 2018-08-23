@@ -64,6 +64,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
     FloatingActionButton mFabFilter;
     public static Context context;
+    private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +73,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         getSupportActionBar().hide();
         context=DharamshalaActivity2.this;
         init();
-        setDharamshalaAdapter(new LinearLayoutManager(DharamshalaActivity2.this));
+        setDharamshalaAdapter();
 
         if(SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this)!=null)
         {
@@ -95,7 +97,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
             String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
             GetDharamshalas(url);
         }else{
-            GetDharamshalas(EndPoints.GET_DHARAMSHALA);
+           // GetDharamshalas(EndPoints.GET_DHARAMSHALA);
         }
     }
     private void init() {
@@ -125,19 +127,50 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         });
     }
 
-    public void setDharamshalaAdapter(RecyclerView.LayoutManager mLayoutManager) {
+    public void setDharamshalaAdapter() {
         dharamshalaItems = new ArrayList<>();
 
         SnapHelper snapHelper = new LinearSnapHelper();
 
         dharamshalaAdapter = new DharamshalaAdapter(DharamshalaActivity2.this, dharamshalaItems,getSupportFragmentManager());
+        final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(DharamshalaActivity2.this);
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
-        mRecyclerDharam.setLayoutManager(mLayoutManager);
+        mRecyclerDharam.setLayoutManager(linearLayoutManager);
         mRecyclerDharam.setItemAnimator(new DefaultItemAnimator());
         //snapHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerDharam.setAdapter(dharamshalaAdapter);
         mRecyclerDharam.setNestedScrollingEnabled(false);
         mRecyclerDharam.setFocusable(false);
+
+        mRecyclerDharam.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                if(dy > 0) //check for scroll down
+                {
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+
+                    if (loading)
+                    {
+                        if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
+                        {
+                            loading = false;
+                            Log.v("...", "Last Item Wow !");
+                            //Do pagination.. i.e. fetch new data
+                        }
+                    }
+                }
+                else {
+                    visibleItemCount=0;
+                    totalItemCount=0;
+                    pastVisiblesItems=0;
+                    loading=true;
+                }
+            }
+        });
 
         dharamshalaAdapter.notifyDataSetChanged();
     }

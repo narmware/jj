@@ -2,7 +2,6 @@ package com.narmware.jainjeevan.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,14 +23,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.activity.OtpLoginActivity;
 import com.narmware.jainjeevan.pojo.AddVendor;
-import com.narmware.jainjeevan.pojo.BannerImages;
-import com.narmware.jainjeevan.pojo.BannerResponse;
-import com.narmware.jainjeevan.pojo.VendorResponse;
+import com.narmware.jainjeevan.pojo.ApiResponse;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
-import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
@@ -273,7 +267,7 @@ public class AddVendorFragment extends Fragment {
                             Log.e("Vendor Json_string",response.toString());
                             Gson gson = new Gson();
 
-                            VendorResponse vendorResponse=gson.fromJson(response.toString(),VendorResponse.class);
+                            ApiResponse vendorResponse=gson.fromJson(response.toString(),ApiResponse.class);
                             if(vendorResponse.getResponse().equals("100")) {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Registeration Successfull !")

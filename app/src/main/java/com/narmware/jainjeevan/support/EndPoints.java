@@ -16,5 +16,6 @@ public class EndPoints {
     public static final String SET_VENDOR=SERVER_URL+"vendor.php";
     public static final String SET_PROFILE_IMG=SERVER_URL+"profile-img.php";
     public static final String SET_PROFILE=SERVER_URL+"upload-details.php";
+    public static final String SET_DHARAM_BHOJAN=SERVER_URL+"set-data.php";
 
 }

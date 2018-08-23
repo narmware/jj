@@ -1,19 +1,14 @@
 package com.narmware.jainjeevan.fragments;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,13 +29,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.narmware.jainjeevan.MyApplication;
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.activity.MainActivity;
 import com.narmware.jainjeevan.activity.OtpLoginActivity;
-import com.narmware.jainjeevan.pojo.AddVendor;
-import com.narmware.jainjeevan.pojo.UpdateProfile;
-import com.narmware.jainjeevan.pojo.VendorResponse;
+import com.narmware.jainjeevan.pojo.Profile;
+import com.narmware.jainjeevan.pojo.ApiResponse;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.ImageBlur;
@@ -49,12 +40,9 @@ import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.narmware.jainjeevan.support.SupportFunctions;
 import com.squareup.picasso.Picasso;
 
-import net.gotev.uploadservice.MultipartUploadRequest;
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -233,6 +221,7 @@ public class ProfileFragment extends Fragment{
         // Inflate the layout for this fragment
         mRoot = inflater.inflate(R.layout.fragment_profile, container, false);
         init();
+        getUserProfile();
         return mRoot;
     }
 
@@ -308,7 +297,7 @@ public class ProfileFragment extends Fragment{
         dialog.show();
 
         Gson gson=new Gson();
-        UpdateProfile updateProfile=new UpdateProfile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob) ;
+        Profile updateProfile=new Profile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob) ;
         String json_string=gson.toJson(updateProfile);
 
         HashMap<String,String> param = new HashMap();
@@ -331,7 +320,7 @@ public class ProfileFragment extends Fragment{
                             Log.e("profile Json_string",response.toString());
                             Gson gson = new Gson();
 
-                            VendorResponse vendorResponse=gson.fromJson(response.toString(),VendorResponse.class);
+                            ApiResponse vendorResponse=gson.fromJson(response.toString(),ApiResponse.class);
                             if(vendorResponse.getResponse().equals("100")) {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Profile update Successfully !")
@@ -345,6 +334,66 @@ public class ProfileFragment extends Fragment{
                                         })
                                         .show();
                             }
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        dialog.dismiss();
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
+    private void getUserProfile() {
+
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting profile...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.USER_ID,SharedPreferencesHelper.getUserId(getContext()));
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_PROFILE,param);
+
+        Log.e("profile url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            Log.e("profile Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            Profile profileResponse=gson.fromJson(response.toString(),Profile.class);
+                            if(profileResponse!=null)
+                            {
+                                mEdtCity.setText(profileResponse.getProfile_city());
+                                mEdtState.setText(profileResponse.getProfile_state());
+                                mEdtPincode.setText(profileResponse.getProfile_pincode());
+                                mEdtAddress.setText(profileResponse.getProfile_address());
+                                mBtnDob.setText(profileResponse.getProfile_dob());
+                            }
+
 
                         } catch (Exception e) {
 
