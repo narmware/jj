@@ -95,9 +95,14 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
             //url with params
             String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
+            dharamshalaItems.clear();
             GetDharamshalas(url);
         }else{
-           // GetDharamshalas(EndPoints.GET_DHARAMSHALA);
+            HashMap<String,String> param = new HashMap();
+            param.put(Constants.IS_FIRST,"1");
+            String url= SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA,param);
+            dharamshalaItems.clear();
+            GetDharamshalas(url);
         }
     }
     private void init() {
@@ -153,12 +158,21 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                     totalItemCount = linearLayoutManager.getItemCount();
                     pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
 
+                    Log.v("...", ""+visibleItemCount+"  "+totalItemCount+"   "+pastVisiblesItems);
+
                     if (loading)
                     {
                         if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                         {
                             loading = false;
-                            Log.v("...", "Last Item Wow !");
+
+                            HashMap<String,String> param = new HashMap();
+                            String pos=dharamshalaItems.get(dharamshalaItems.size()-1).getDharmshala_id();
+                            param.put(Constants.ID,pos);
+                            String url= SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA,param);
+                            GetDharamshalas(url);
+
+                            Log.v("...", "Last Item Wow !"+dharamshalaItems.size());
                             //Do pagination.. i.e. fetch new data
                         }
                     }
@@ -176,7 +190,6 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     }
 
     public static void GetDharamshalas(final String url) {
-        dharamshalaItems.clear();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);

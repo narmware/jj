@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.addToBackStack(null);
         }
         if(fragment_call==0) {
-            fragmentTransaction.add(R.id.fragment_container,fragment,tag);
+            fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
         }
             fragmentTransaction.commit();
     }

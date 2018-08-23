@@ -31,6 +31,7 @@
             android:layout_height="match_parent" />
 
         <ImageButton
+            android:visibility="gone"
             android:id="@+id/edit_prof_img"
             android:foreground="?attr/selectableItemBackground"
             android:background="@android:color/transparent"
