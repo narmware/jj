@@ -1,13 +1,19 @@
 package com.narmware.jainjeevan.fragments;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,6 +44,7 @@ import com.narmware.jainjeevan.pojo.UpdateProfile;
 import com.narmware.jainjeevan.pojo.VendorResponse;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
+import com.narmware.jainjeevan.support.ImageBlur;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.narmware.jainjeevan.support.SupportFunctions;
 import com.squareup.picasso.Picasso;
@@ -59,7 +67,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -71,10 +79,14 @@ public class ProfileFragment extends Fragment {
     protected View mRoot;
     ImageButton mImgBtnProfChange;
     public static CircleImageView mImgProf;
+    ImageView imgBlurredBack;
+
     Button mBtnProfileUpdate;
-    EditText mEdtCity,mEdtState,mEdtPincode,mEdtAddress,mEdtDob;
+    public static Button mBtnDob;
+    EditText mEdtCity,mEdtState,mEdtPincode,mEdtAddress;
     String mDob,mState,mPincode,mCity,mAddress;
     RequestQueue mVolleyRequest;
+    Bitmap bitmap;
 
     private OnFragmentInteractionListener mListener;
 
@@ -92,6 +104,16 @@ public class ProfileFragment extends Fragment {
         mEdtState=mRoot.findViewById(R.id.profile_state);
         mEdtAddress=mRoot.findViewById(R.id.profile_address);
         mEdtPincode=mRoot.findViewById(R.id.profile_pincode);
+        imgBlurredBack=mRoot.findViewById(R.id.profile_top_root);
+
+        mBtnDob=mRoot.findViewById(R.id.btn_dob);
+        mBtnDob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new SelectDateFragment();
+                newFragment.show(getActivity().getFragmentManager(), "DatePicker");
+            }
+        });
 
         mBtnProfileUpdate=mRoot.findViewById(R.id.profile_update);
         mBtnProfileUpdate.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +123,7 @@ public class ProfileFragment extends Fragment {
                 mState=mEdtState.getText().toString().trim();
                 mAddress=mEdtAddress.getText().toString().trim();
                 mPincode=mEdtPincode.getText().toString().trim();
+                mDob=mBtnDob.getText().toString().trim();
 
                 updateProfile();
             }
@@ -112,7 +135,12 @@ public class ProfileFragment extends Fragment {
             if (SharedPreferencesHelper.getUserProfileImage(getContext()) != null) {
                 Picasso.with(getContext())
                         .load(SharedPreferencesHelper.getUserProfileImage(getContext()))
+                        .placeholder(R.drawable.placeholder)
                         .into(mImgProf);
+
+                bitmap = new ImageBlur().getBitmapFromURL(SharedPreferencesHelper.getUserProfileImage(getContext()));
+                imgBlurredBack.setImageBitmap(new ImageBlur().fastblur(bitmap, 20));
+
                 //mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
             }
         }catch (Exception e)
@@ -256,6 +284,7 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -279,7 +308,7 @@ public class ProfileFragment extends Fragment {
         dialog.show();
 
         Gson gson=new Gson();
-        UpdateProfile updateProfile=new UpdateProfile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress) ;
+        UpdateProfile updateProfile=new UpdateProfile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob) ;
         String json_string=gson.toJson(updateProfile);
 
         HashMap<String,String> param = new HashMap();

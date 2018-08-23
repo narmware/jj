@@ -57,6 +57,7 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
                     } else {
                         Picasso.with(mContext)
                                 .load(detailedItem.getImg())
+                                .placeholder(R.drawable.placeholder)
                                 .into(holder.mImgIcon);
                     }
                 }

@@ -63,6 +63,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
             Picasso.with(mContext)
                     .load(filter.getImg())
+                    .placeholder(R.drawable.placeholder)
                     .into(holder.mIcon);
         }
 

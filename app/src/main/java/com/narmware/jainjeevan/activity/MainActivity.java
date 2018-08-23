@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (SharedPreferencesHelper.getUserProfileImage(MainActivity.this) != null) {
                 Picasso.with(MainActivity.this)
                         .load(SharedPreferencesHelper.getUserProfileImage(MainActivity.this))
+                        .placeholder(R.drawable.placeholder)
                         .into(imageView);
                 //mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
             }
@@ -283,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(),MainActivity.this);
         Picasso.with(MainActivity.this)
                 .load(imageUploadResponse.getUrl())
+                .placeholder(R.drawable.placeholder)
                 .into(ProfileFragment.mImgProf);
     }
 
