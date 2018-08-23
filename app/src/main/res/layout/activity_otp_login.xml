@@ -15,7 +15,7 @@
 
         <RelativeLayout
             android:id="@+id/backround_relative"
-            android:background="@color/red_200"
+            android:background="@drawable/jain_sculptures"
             android:layout_width="match_parent"
             android:layout_height="250dp">
 
