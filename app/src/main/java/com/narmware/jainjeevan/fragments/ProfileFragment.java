@@ -30,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.MyApplication;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.MainActivity;
 import com.narmware.jainjeevan.activity.OtpLoginActivity;
 import com.narmware.jainjeevan.pojo.AddVendor;
 import com.narmware.jainjeevan.pojo.UpdateProfile;
@@ -38,6 +39,7 @@ import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.narmware.jainjeevan.support.SupportFunctions;
+import com.squareup.picasso.Picasso;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
 
@@ -68,7 +70,7 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     protected View mRoot;
     ImageButton mImgBtnProfChange;
-    public static ImageView mImgProf;
+    public static CircleImageView mImgProf;
     Button mBtnProfileUpdate;
     EditText mEdtCity,mEdtState,mEdtPincode,mEdtAddress,mEdtDob;
     String mDob,mState,mPincode,mCity,mAddress;
@@ -108,7 +110,10 @@ public class ProfileFragment extends Fragment {
 
         try {
             if (SharedPreferencesHelper.getUserProfileImage(getContext()) != null) {
-                mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
+                Picasso.with(getContext())
+                        .load(SharedPreferencesHelper.getUserProfileImage(getContext()))
+                        .into(mImgProf);
+                //mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
             }
         }catch (Exception e)
         {

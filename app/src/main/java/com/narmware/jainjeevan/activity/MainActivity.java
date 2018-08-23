@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener
 ,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,AddDharamshalaFragment.OnFragmentInteractionListener,
         AddBhojanshalaFragment.OnFragmentInteractionListener,SingleUploadBroadcastReceiver.Delegate{
@@ -54,11 +58,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FragmentTransaction fragmentTransaction;
     private final SingleUploadBroadcastReceiver uploadReceiver =
             new SingleUploadBroadcastReceiver();
+    ProgressDialog dialog;
 
     private void setHeader(View header) {
         TextView name = header.findViewById(R.id.header_name);
         TextView email = header.findViewById(R.id.header_mail);
         TextView mobile = header.findViewById(R.id.header_mobile);
+        CircleImageView imageView = header.findViewById(R.id.imageView);
+
+        try {
+            if (SharedPreferencesHelper.getUserProfileImage(MainActivity.this) != null) {
+                Picasso.with(MainActivity.this)
+                        .load(SharedPreferencesHelper.getUserProfileImage(MainActivity.this))
+                        .into(imageView);
+                //mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
+            }
+        }catch (Exception e)
+        {
+
+        }
         name.setText(SharedPreferencesHelper.getUserName(this));
         email.setText(SharedPreferencesHelper.getUserEmail(this));
         mobile.setText(SharedPreferencesHelper.getUserMobile(this));
@@ -195,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             cursor.close();
             uploadMultipart(picturePath);
 
-            ProfileFragment.mImgProf.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            //ProfileFragment.mImgProf.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
         else {
             Toast.makeText(MainActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
@@ -238,6 +256,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onProgress(int progress) {
+        dialog = new ProgressDialog(MainActivity.this);
+        dialog.setMessage("Uploading...");
+        dialog.setCancelable(false);
+        dialog.show();
         Log.e("Progress",""+progress);
     }
 
@@ -249,14 +271,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onError(Exception exception) {
         Log.e("ServerError","Errrrrorrrr!!!!");
+        Toast.makeText(this, "Oops! Something went wrong", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCompleted(int serverResponseCode, byte[] serverResponseBody) {
-
+        dialog.dismiss();
         Log.e("ServerResponse", new String(serverResponseBody) + "   " + serverResponseCode);
         Gson gson=new Gson();
         ImageUploadResponse imageUploadResponse=gson.fromJson(new String(serverResponseBody),ImageUploadResponse.class);
+       SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(),MainActivity.this);
         Picasso.with(MainActivity.this)
                 .load(imageUploadResponse.getUrl())
                 .into(ProfileFragment.mImgProf);
