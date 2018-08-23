@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.pojo.BhojanItems;
-import com.narmware.jainjeevan.pojo.DharamshalaItem;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,7 @@ public class BhojanAdapter extends RecyclerView.Adapter<BhojanAdapter.MyViewHold
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_hotel, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_food_vendor, parent, false);
 
         return new MyViewHolder(view);
     }

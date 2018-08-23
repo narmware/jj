@@ -14,12 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.narmware.jainjeevan.R;
-import com.narmware.jainjeevan.activity.DetailsActivity;
-import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.activity.MenuActivity;
-import com.narmware.jainjeevan.activity.RestaurantActivity;
-import com.narmware.jainjeevan.pojo.BhojanItems;
-import com.narmware.jainjeevan.pojo.DharamshalaItem;
+import com.narmware.jainjeevan.activity.FoodVendorActivity;
 import com.narmware.jainjeevan.pojo.RestoItems;
 import com.narmware.jainjeevan.support.Constants;
 import com.squareup.picasso.Picasso;
@@ -30,13 +26,13 @@ import java.util.ArrayList;
  * Created by rohitsavant on 12/08/18.
  */
 
-public class RestoAdapter extends RecyclerView.Adapter<RestoAdapter.MyViewHolder>{
+public class FoodVendorAdapter extends RecyclerView.Adapter<FoodVendorAdapter.MyViewHolder>{
 
     Context mContext;
     ArrayList<RestoItems> restoItems;
     FragmentManager fragmentManager;
 
-    public RestoAdapter(Context mContext, ArrayList<RestoItems> restoItems, FragmentManager fragmentManager) {
+    public FoodVendorAdapter(Context mContext, ArrayList<RestoItems> restoItems, FragmentManager fragmentManager) {
         this.mContext = mContext;
         this.restoItems = restoItems;
         this.fragmentManager = fragmentManager;
@@ -44,7 +40,7 @@ public class RestoAdapter extends RecyclerView.Adapter<RestoAdapter.MyViewHolder
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_hotel, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_food_vendor, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -67,10 +63,10 @@ public class RestoAdapter extends RecyclerView.Adapter<RestoAdapter.MyViewHolder
     public int getItemCount() {
         if(restoItems.size()==0)
         {
-            RestaurantActivity.mLinEmpty.setVisibility(View.VISIBLE);
+            FoodVendorActivity.mLinEmpty.setVisibility(View.VISIBLE);
         }
         else{
-            RestaurantActivity.mLinEmpty.setVisibility(View.INVISIBLE);
+            FoodVendorActivity.mLinEmpty.setVisibility(View.INVISIBLE);
         }
         return restoItems.size();
     }
