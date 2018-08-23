@@ -172,7 +172,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             mSlider.addSlider(textSliderView);
         }
-        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mSlider.setPresetTransformer(SliderLayout.Transformer.Default);
         //mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         //mSlider.setCustomIndicator(custom_indicator);
         mSlider.setCustomAnimation(new DescriptionAnimation());
