@@ -123,7 +123,7 @@ public class ProfileFragment extends Fragment{
             if (SharedPreferencesHelper.getUserProfileImage(getContext()) != null) {
                 Picasso.with(getContext())
                         .load(SharedPreferencesHelper.getUserProfileImage(getContext()))
-                        .placeholder(R.drawable.placeholder)
+                        .placeholder(R.drawable.logo)
                         .into(mImgProf);
 
                 bitmap = new ImageBlur().getBitmapFromURL(SharedPreferencesHelper.getUserProfileImage(getContext()));

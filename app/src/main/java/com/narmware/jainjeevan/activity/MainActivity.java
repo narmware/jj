@@ -28,6 +28,7 @@ import com.narmware.jainjeevan.fragments.AboutFragment;
 import com.narmware.jainjeevan.fragments.AddDharamshalaFragment;
 import com.narmware.jainjeevan.fragments.AddVendorFragment;
 import com.narmware.jainjeevan.fragments.HomeFragment;
+import com.narmware.jainjeevan.fragments.PrivacyFragment;
 import com.narmware.jainjeevan.fragments.ProfileFragment;
 import com.narmware.jainjeevan.pojo.ImageUploadResponse;
 import com.narmware.jainjeevan.support.Constants;
@@ -42,7 +43,8 @@ import java.util.UUID;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener
-,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,AddDharamshalaFragment.OnFragmentInteractionListener, SingleUploadBroadcastReceiver.Delegate{
+,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,
+        AddDharamshalaFragment.OnFragmentInteractionListener, SingleUploadBroadcastReceiver.Delegate,PrivacyFragment.OnFragmentInteractionListener{
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (SharedPreferencesHelper.getUserProfileImage(MainActivity.this) != null) {
                 Picasso.with(MainActivity.this)
                         .load(SharedPreferencesHelper.getUserProfileImage(MainActivity.this))
-                        .placeholder(R.drawable.placeholder)
+                        .placeholder(R.drawable.logo)
                         .into(imageView);
                 //mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
             }

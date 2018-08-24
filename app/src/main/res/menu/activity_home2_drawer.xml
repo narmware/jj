@@ -16,7 +16,7 @@
         <item
             android:id="@+id/nav_add_dharamshala"
             android:icon="@drawable/ic_account"
-            android:title="Add Dharamshala/Bhojanalaya" />
+            android:title="@string/nav_add" />
 
         <item
             android:id="@+id/nav_profile"

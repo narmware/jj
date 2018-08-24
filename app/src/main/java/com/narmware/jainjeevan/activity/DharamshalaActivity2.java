@@ -56,6 +56,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     public static RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
+    public static TextView mTxtNoData;
     public static LinearLayout mLinEmpty;
     public static Dialog mNoConnectionDialog;
 
@@ -115,6 +116,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
         mLinEmpty=findViewById(R.id.lin_empty);
+        mTxtNoData=findViewById(R.id.txt_no_data);
         mProgressWheel=findViewById(R.id.progressWheel);
         mNoConnectionDialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
