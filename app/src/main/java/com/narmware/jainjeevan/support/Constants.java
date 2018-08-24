@@ -33,8 +33,9 @@ public class Constants {
     //nav menu
     public static final String HOME="Home";
     public static final String ADD_VENDOR="Add Vendor";
-    public static final String ADD_DHARAMSHALA="Add Dharamshala Bhojanshala";
+    public static final String ADD_DHARAMSHALA="Add Dharamshala/Bhojanshala";
     public static final String PROFILE="Profile";
+    public static final String ABOUT="About";
     public static final String SHARE="Share";
 
 }

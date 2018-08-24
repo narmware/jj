@@ -74,7 +74,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
             {
             }
             else{
-                DharamshalaActivity2.mTxtNoData.setText("No content available for select filter. \n Please change or remove filter");
+                DharamshalaActivity2.mTxtNoData.setText("No content available for selected filter. \n Please change or remove filter.");
             }
         }
         else{

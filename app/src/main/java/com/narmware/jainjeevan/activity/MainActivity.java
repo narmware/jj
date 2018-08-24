@@ -18,11 +18,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.adapter.NavAdapter;
 import com.narmware.jainjeevan.broadcast.SingleUploadBroadcastReceiver;
 import com.narmware.jainjeevan.fragments.AboutFragment;
 import com.narmware.jainjeevan.fragments.AddDharamshalaFragment;
@@ -31,6 +34,7 @@ import com.narmware.jainjeevan.fragments.HomeFragment;
 import com.narmware.jainjeevan.fragments.PrivacyFragment;
 import com.narmware.jainjeevan.fragments.ProfileFragment;
 import com.narmware.jainjeevan.pojo.ImageUploadResponse;
+import com.narmware.jainjeevan.pojo.NavMenu;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
@@ -38,6 +42,8 @@ import com.squareup.picasso.Picasso;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,15 +56,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FragmentTransaction fragmentTransaction;
     private final SingleUploadBroadcastReceiver uploadReceiver =
             new SingleUploadBroadcastReceiver();
-    NavigationView navigationView;
+    public static NavigationView navigationView;
     ProgressDialog dialog;
     int fragment_call=0;
 
+    ListView mListNav;
+    NavAdapter navAdapter;
+    ArrayList<NavMenu> navMenus;
+
     private void setHeader(View header) {
-        TextView name = header.findViewById(R.id.header_name);
-        TextView email = header.findViewById(R.id.header_mail);
-        TextView mobile = header.findViewById(R.id.header_mobile);
-        CircleImageView imageView = header.findViewById(R.id.imageView);
+        TextView name = findViewById(R.id.header_name);
+        TextView email = findViewById(R.id.header_mail);
+        TextView mobile = findViewById(R.id.header_mobile);
+        CircleImageView imageView = findViewById(R.id.imageView);
 
         try {
             if (SharedPreferencesHelper.getUserProfileImage(MainActivity.this) != null) {
@@ -84,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -95,9 +104,73 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         setHeader(navigationView.getHeaderView(0));
 
+        setNavData();
+        mListNav=findViewById(R.id.list_nav);
+        navAdapter=new NavAdapter(MainActivity.this,navMenus);
+        mListNav.setAdapter(navAdapter);
+
+        mListNav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(MainActivity.this,navMenus.get(i).getNav_title(),Toast.LENGTH_SHORT).show();
+                {
+                    switch (navMenus.get(i).getNav_title())
+                    {
+                        case Constants.HOME:
+                            fragment_call=0;
+                            setFragment(new HomeFragment(),"Home");
+                            break;
+
+                        case Constants.PROFILE:
+                            fragment_call=1;
+                            setFragment(new ProfileFragment(),"Profile");
+                            break;
+
+                        case Constants.ABOUT:
+                            fragment_call=1;
+                            setFragment(new AboutFragment(),"About");
+                            break;
+
+                        case Constants.ADD_VENDOR:
+                            fragment_call=1;
+                            setFragment(new AddVendorFragment(),"Vendor");
+                            break;
+
+                        case Constants.ADD_DHARAMSHALA:
+                            fragment_call=1;
+                            setFragment(new AddDharamshalaFragment(),"Dharamshala");
+                            break;
+
+                        case Constants.SHARE:
+                            String shareBody = "Here is the share content body";
+                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                            startActivity(Intent.createChooser(sharingIntent,"Share Using"));
+                            break;
+
+                    }
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
         setFragment(new HomeFragment(),"Home");
     }
 
+    public void setNavData()
+    {
+        navMenus=new ArrayList<>();
+        navMenus.add(new NavMenu(Constants.HOME,R.drawable.ic_home));
+        navMenus.add(new NavMenu(Constants.ADD_VENDOR,R.drawable.ic_person_black));
+        navMenus.add(new NavMenu(Constants.ADD_DHARAMSHALA,R.drawable.ic_account));
+        navMenus.add(new NavMenu(Constants.PROFILE,R.drawable.ic_person_profile));
+        navMenus.add(new NavMenu(Constants.ABOUT,R.drawable.ic_info));
+        navMenus.add(new NavMenu(Constants.SHARE,R.drawable.ic_share));
+
+    }
     @Override
     public void onBackPressed() {
 
@@ -142,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       switch (id)
+       /*switch (id)
        {
            case R.id.nav_home:
                fragment_call=0;
@@ -178,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                startActivity(Intent.createChooser(sharingIntent,"Share Using"));
                break;
        }
-
+*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
