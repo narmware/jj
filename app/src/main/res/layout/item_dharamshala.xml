@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="5dp"
-    android:layout_margin="10dp">
+    android:layout_margin="5dp">
 
 
 

@@ -64,7 +64,9 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
     FloatingActionButton mFabFilter;
     public static Context context;
-    private boolean loading = true;
+    public static boolean loading = true;
+    int temp_id;
+
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,31 +159,37 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                     visibleItemCount = linearLayoutManager.getChildCount();
                     totalItemCount = linearLayoutManager.getItemCount();
                     pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    int size=dharamshalaItems.size();
+                    Log.v("...", ""+visibleItemCount+"  "+linearLayoutManager.findLastVisibleItemPosition()+"   "+size);
 
-                    Log.v("...", ""+visibleItemCount+"  "+totalItemCount+"   "+pastVisiblesItems);
+                    int current_id= Integer.parseInt(dharamshalaItems.get(dharamshalaItems.size()-1).getDharmshala_id());
 
+                    if(temp_id > current_id)
+                    {
+                        loading=true;
+                    }
                     if (loading)
                     {
-                        if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
-                        {
-                            loading = false;
 
-                            HashMap<String,String> param = new HashMap();
+                         //if ( (visibleItemCount + pastVisiblesItems) >= dharamshalaItems.size()-3){
+                        if(linearLayoutManager.findLastVisibleItemPosition() == dharamshalaItems.size()-1){
+                        //if(pastVisiblesItems == dharamshalaItems.size()-3 ){
+                            loading = false;
+                           HashMap<String,String> param = new HashMap();
                             String pos=dharamshalaItems.get(dharamshalaItems.size()-1).getDharmshala_id();
+                            temp_id= Integer.parseInt(pos);
                             param.put(Constants.ID,pos);
                             String url= SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA,param);
                             GetDharamshalas(url);
 
                             Log.v("...", "Last Item Wow !"+dharamshalaItems.size());
                             //Do pagination.. i.e. fetch new data
+
                         }
-                    }
-                }
-                else {
-                    visibleItemCount=0;
-                    totalItemCount=0;
-                    pastVisiblesItems=0;
-                    loading=true;
+                        if(linearLayoutManager.findLastVisibleItemPosition() < dharamshalaItems.size()) {
+                           // loading = true;
+                        }
+                        }
                 }
             }
         });

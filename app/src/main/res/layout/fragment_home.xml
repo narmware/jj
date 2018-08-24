@@ -79,7 +79,7 @@
                         android:layout_width="@dimen/home_top_menu"
                         android:layout_height="@dimen/home_top_menu"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/upashray"
+                        app:srcCompat="@drawable/food_vendor"
                         />
                     <TextView
                         android:gravity="center"
