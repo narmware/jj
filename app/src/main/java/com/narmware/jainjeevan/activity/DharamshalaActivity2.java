@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     public static Context context;
     public static boolean loading = true;
     int temp_id;
+    public static ProgressBar mProgressWheel;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     @Override
@@ -113,6 +115,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
         mLinEmpty=findViewById(R.id.lin_empty);
+        mProgressWheel=findViewById(R.id.progressWheel);
         mNoConnectionDialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mFabFilter=findViewById(R.id.fab_filter);
@@ -198,11 +201,11 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     }
 
     public static void GetDharamshalas(final String url) {
-        final ProgressDialog dialog = new ProgressDialog(context);
+      /*  final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
-        dialog.show();
-
+        dialog.show();*/
+      mProgressWheel.setVisibility(View.VISIBLE);
         Gson gson=new Gson();
 
         Log.e("Dharam url",url);
@@ -228,13 +231,15 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                         } catch (Exception e) {
 
                             e.printStackTrace();
-                            dialog.dismiss();
+                            //dialog.dismiss();
+                            mProgressWheel.setVisibility(View.GONE);
                         }
                         if(mNoConnectionDialog.isShowing()==true)
                         {
                             mNoConnectionDialog.dismiss();
                         }
-                        dialog.dismiss();
+                        //dialog.dismiss();
+                        mProgressWheel.setVisibility(View.GONE);
                     }
                 },
 
@@ -243,8 +248,9 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
-                        dialog.dismiss();
+                       // dialog.dismiss();
                         showNoConnectionDialog(url);
+                        mProgressWheel.setVisibility(View.GONE);
                     }
                 }
         );

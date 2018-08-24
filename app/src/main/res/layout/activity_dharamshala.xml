@@ -31,6 +31,14 @@
        <include layout="@layout/empty_layout"></include>
     </LinearLayout>
 
+   <ProgressBar
+       android:id="@+id/progressWheel"
+       android:visibility="gone"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_filter"
         android:layout_width="wrap_content"
