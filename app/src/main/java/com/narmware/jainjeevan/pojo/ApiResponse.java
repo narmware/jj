@@ -1,6 +1,6 @@
 package com.narmware.jainjeevan.pojo;
 
-public class VendorResponse {
+public class ApiResponse {
     String response;
 
     public String getResponse() {

@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     public static RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
+    public static TextView mTxtNoData;
     public static LinearLayout mLinEmpty;
     public static Dialog mNoConnectionDialog;
 
@@ -64,6 +66,11 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
     FloatingActionButton mFabFilter;
     public static Context context;
+    public static boolean loading = true;
+    int temp_id;
+    public static ProgressBar mProgressWheel;
+
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +78,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         getSupportActionBar().hide();
         context=DharamshalaActivity2.this;
         init();
-        setDharamshalaAdapter(new LinearLayoutManager(DharamshalaActivity2.this));
+        setDharamshalaAdapter();
 
         if(SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this)!=null)
         {
@@ -93,9 +100,14 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
             //url with params
             String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
+            dharamshalaItems.clear();
             GetDharamshalas(url);
         }else{
-            GetDharamshalas(EndPoints.GET_DHARAMSHALA);
+            HashMap<String,String> param = new HashMap();
+            param.put(Constants.IS_FIRST,"1");
+            String url= SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA,param);
+            dharamshalaItems.clear();
+            GetDharamshalas(url);
         }
     }
     private void init() {
@@ -104,6 +116,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
         mLinEmpty=findViewById(R.id.lin_empty);
+        mTxtNoData=findViewById(R.id.txt_no_data);
+        mProgressWheel=findViewById(R.id.progressWheel);
         mNoConnectionDialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mFabFilter=findViewById(R.id.fab_filter);
@@ -125,30 +139,75 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         });
     }
 
-    public void setDharamshalaAdapter(RecyclerView.LayoutManager mLayoutManager) {
+    public void setDharamshalaAdapter() {
         dharamshalaItems = new ArrayList<>();
 
         SnapHelper snapHelper = new LinearSnapHelper();
 
         dharamshalaAdapter = new DharamshalaAdapter(DharamshalaActivity2.this, dharamshalaItems,getSupportFragmentManager());
+        final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(DharamshalaActivity2.this);
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
-        mRecyclerDharam.setLayoutManager(mLayoutManager);
+        mRecyclerDharam.setLayoutManager(linearLayoutManager);
         mRecyclerDharam.setItemAnimator(new DefaultItemAnimator());
         //snapHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerDharam.setAdapter(dharamshalaAdapter);
         mRecyclerDharam.setNestedScrollingEnabled(false);
         mRecyclerDharam.setFocusable(false);
 
+        mRecyclerDharam.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                if(dy > 0) //check for scroll down
+                {
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    int size=dharamshalaItems.size();
+                    Log.v("...", ""+visibleItemCount+"  "+linearLayoutManager.findLastVisibleItemPosition()+"   "+size);
+
+                    int current_id= Integer.parseInt(dharamshalaItems.get(dharamshalaItems.size()-1).getDharmshala_id());
+
+                    if(temp_id > current_id)
+                    {
+                        loading=true;
+                    }
+                    if (loading)
+                    {
+
+                         //if ( (visibleItemCount + pastVisiblesItems) >= dharamshalaItems.size()-3){
+                        if(linearLayoutManager.findLastVisibleItemPosition() == dharamshalaItems.size()-1){
+                        //if(pastVisiblesItems == dharamshalaItems.size()-3 ){
+                            loading = false;
+                           HashMap<String,String> param = new HashMap();
+                            String pos=dharamshalaItems.get(dharamshalaItems.size()-1).getDharmshala_id();
+                            temp_id= Integer.parseInt(pos);
+                            param.put(Constants.ID,pos);
+                            String url= SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA,param);
+                            GetDharamshalas(url);
+
+                            Log.v("...", "Last Item Wow !"+dharamshalaItems.size());
+                            //Do pagination.. i.e. fetch new data
+
+                        }
+                        if(linearLayoutManager.findLastVisibleItemPosition() < dharamshalaItems.size()) {
+                           // loading = true;
+                        }
+                        }
+                }
+            }
+        });
+
         dharamshalaAdapter.notifyDataSetChanged();
     }
 
     public static void GetDharamshalas(final String url) {
-        dharamshalaItems.clear();
-        final ProgressDialog dialog = new ProgressDialog(context);
+      /*  final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
-        dialog.show();
-
+        dialog.show();*/
+      mProgressWheel.setVisibility(View.VISIBLE);
         Gson gson=new Gson();
 
         Log.e("Dharam url",url);
@@ -174,13 +233,15 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                         } catch (Exception e) {
 
                             e.printStackTrace();
-                            dialog.dismiss();
+                            //dialog.dismiss();
+                            mProgressWheel.setVisibility(View.GONE);
                         }
                         if(mNoConnectionDialog.isShowing()==true)
                         {
                             mNoConnectionDialog.dismiss();
                         }
-                        dialog.dismiss();
+                        //dialog.dismiss();
+                        mProgressWheel.setVisibility(View.GONE);
                     }
                 },
 
@@ -189,8 +250,9 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
-                        dialog.dismiss();
+                       // dialog.dismiss();
                         showNoConnectionDialog(url);
+                        mProgressWheel.setVisibility(View.GONE);
                     }
                 }
         );

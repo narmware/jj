@@ -19,6 +19,7 @@ import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.pojo.DharamshalaItem;
 import com.narmware.jainjeevan.pojo.RecommendedItems;
 import com.narmware.jainjeevan.support.Constants;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
 
         Picasso.with(mContext)
                 .load(dharamshalaItem.getIMG())
+                .placeholder(R.drawable.placeholder)
                 .into(holder.mImgDharam);
 
         holder.mItem=dharamshalaItem;
@@ -67,6 +69,13 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
         if(dharamshalaItems.size()==0)
         {
             DharamshalaActivity2.mLinEmpty.setVisibility(View.VISIBLE);
+
+            if(SharedPreferencesHelper.getFilteredFacilities(mContext)==null || SharedPreferencesHelper.getFilteredCity(mContext)==null)
+            {
+            }
+            else{
+                DharamshalaActivity2.mTxtNoData.setText("No content available for selected filter. \n Please change or remove filter.");
+            }
         }
         else{
             DharamshalaActivity2.mLinEmpty.setVisibility(View.INVISIBLE);

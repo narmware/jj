@@ -279,6 +279,7 @@ public class FilterActivity extends AppCompatActivity {
 
         //url with params
         String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
+        DharamshalaActivity2.dharamshalaItems.clear();
         DharamshalaActivity2.GetDharamshalas(url);
     }
 

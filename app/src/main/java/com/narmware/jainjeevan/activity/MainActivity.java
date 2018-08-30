@@ -3,13 +3,9 @@ package com.narmware.jainjeevan.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,22 +17,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.adapter.NavAdapter;
 import com.narmware.jainjeevan.broadcast.SingleUploadBroadcastReceiver;
 import com.narmware.jainjeevan.fragments.AboutFragment;
-import com.narmware.jainjeevan.fragments.AddBhojanshalaFragment;
 import com.narmware.jainjeevan.fragments.AddDharamshalaFragment;
 import com.narmware.jainjeevan.fragments.AddVendorFragment;
 import com.narmware.jainjeevan.fragments.HomeFragment;
+import com.narmware.jainjeevan.fragments.PrivacyFragment;
 import com.narmware.jainjeevan.fragments.ProfileFragment;
 import com.narmware.jainjeevan.pojo.ImageUploadResponse;
+import com.narmware.jainjeevan.pojo.NavMenu;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
@@ -44,32 +42,39 @@ import com.squareup.picasso.Picasso;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener
-,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,AddDharamshalaFragment.OnFragmentInteractionListener,
-        AddBhojanshalaFragment.OnFragmentInteractionListener,SingleUploadBroadcastReceiver.Delegate{
+,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,
+        AddDharamshalaFragment.OnFragmentInteractionListener, SingleUploadBroadcastReceiver.Delegate,PrivacyFragment.OnFragmentInteractionListener{
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private final SingleUploadBroadcastReceiver uploadReceiver =
             new SingleUploadBroadcastReceiver();
+    public static NavigationView navigationView;
     ProgressDialog dialog;
+    int fragment_call=0;
+
+    ListView mListNav;
+    NavAdapter navAdapter;
+    ArrayList<NavMenu> navMenus;
 
     private void setHeader(View header) {
-        TextView name = header.findViewById(R.id.header_name);
-        TextView email = header.findViewById(R.id.header_mail);
-        TextView mobile = header.findViewById(R.id.header_mobile);
-        CircleImageView imageView = header.findViewById(R.id.imageView);
+        TextView name = findViewById(R.id.header_name);
+        TextView email = findViewById(R.id.header_mail);
+        TextView mobile = findViewById(R.id.header_mobile);
+        CircleImageView imageView = findViewById(R.id.imageView);
 
         try {
             if (SharedPreferencesHelper.getUserProfileImage(MainActivity.this) != null) {
                 Picasso.with(MainActivity.this)
                         .load(SharedPreferencesHelper.getUserProfileImage(MainActivity.this))
+                        .placeholder(R.drawable.logo)
                         .into(imageView);
                 //mImgProf.setImageBitmap(BitmapFactory.decodeFile(SharedPreferencesHelper.getUserProfileImage(getContext())));
             }
@@ -89,22 +94,91 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         setHeader(navigationView.getHeaderView(0));
 
-        setFragment(new HomeFragment());
+        setNavData();
+        mListNav=findViewById(R.id.list_nav);
+        navAdapter=new NavAdapter(MainActivity.this,navMenus);
+        mListNav.setAdapter(navAdapter);
+
+        mListNav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(MainActivity.this,navMenus.get(i).getNav_title(),Toast.LENGTH_SHORT).show();
+                {
+                    switch (navMenus.get(i).getNav_title())
+                    {
+                        case Constants.HOME:
+                            fragment_call=0;
+                            setFragment(new HomeFragment(),"Home");
+                            break;
+
+                        case Constants.PROFILE:
+                            fragment_call=1;
+                            setFragment(new ProfileFragment(),"Profile");
+                            break;
+
+                        case Constants.ABOUT:
+                            fragment_call=1;
+                            setFragment(new AboutFragment(),"About");
+                            break;
+
+                        case Constants.ADD_VENDOR:
+                            fragment_call=1;
+                            setFragment(new AddVendorFragment(),"Vendor");
+                            break;
+
+                        case Constants.ADD_DHARAMSHALA:
+                            fragment_call=1;
+                            setFragment(new AddDharamshalaFragment(),"Dharamshala");
+                            break;
+
+                        case Constants.SHARE:
+                            String shareBody = "Here is the share content body";
+                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                            startActivity(Intent.createChooser(sharingIntent,"Share Using"));
+                            break;
+
+                    }
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        setFragment(new HomeFragment(),"Home");
     }
 
+    public void setNavData()
+    {
+        navMenus=new ArrayList<>();
+        navMenus.add(new NavMenu(Constants.HOME,R.drawable.ic_home));
+        navMenus.add(new NavMenu(Constants.ADD_VENDOR,R.drawable.ic_person_black));
+        navMenus.add(new NavMenu(Constants.ADD_DHARAMSHALA,R.drawable.ic_account));
+        navMenus.add(new NavMenu(Constants.PROFILE,R.drawable.ic_person_profile));
+        navMenus.add(new NavMenu(Constants.ABOUT,R.drawable.ic_info));
+        navMenus.add(new NavMenu(Constants.SHARE,R.drawable.ic_share));
+
+    }
     @Override
     public void onBackPressed() {
+
+        int size = navigationView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -114,12 +188,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setFragment(Fragment fragment)
+    public void setFragment(Fragment fragment,String tag)
     {
+        if(fragment_call==1) {
+
+            FragmentManager fm = getSupportFragmentManager();
+            for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }}
+
         fragmentManager=getSupportFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,fragment);
-        fragmentTransaction.commit();
+        if(fragment_call==1) {
+            fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
+            fragmentTransaction.addToBackStack(null);
+        }
+        if(fragment_call==0) {
+            fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
+        }
+            fragmentTransaction.commit();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -128,30 +215,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       switch (id)
+       /*switch (id)
        {
            case R.id.nav_home:
-               setFragment(new HomeFragment());
+               fragment_call=0;
+               setFragment(new HomeFragment(),"Home");
                break;
 
            case R.id.nav_profile:
-               setFragment(new ProfileFragment());
+               fragment_call=1;
+               setFragment(new ProfileFragment(),"Profile");
                break;
 
            case R.id.nav_about:
-               setFragment(new AboutFragment());
+               fragment_call=1;
+               setFragment(new AboutFragment(),"About");
                break;
 
            case R.id.nav_add_vendor:
-               setFragment(new AddVendorFragment());
+               fragment_call=1;
+               setFragment(new AddVendorFragment(),"Vendor");
                break;
 
            case R.id.nav_add_dharamshala:
-               setFragment(new AddDharamshalaFragment());
-               break;
-
-           case R.id.nav_add_bhojanalay:
-               setFragment(new AddBhojanshalaFragment());
+               fragment_call=1;
+               setFragment(new AddDharamshalaFragment(),"Dharamshala");
                break;
 
            case R.id.nav_share:
@@ -163,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                startActivity(Intent.createChooser(sharingIntent,"Share Using"));
                break;
        }
-
+*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -284,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(),MainActivity.this);
         Picasso.with(MainActivity.this)
                 .load(imageUploadResponse.getUrl())
+                .placeholder(R.drawable.placeholder)
                 .into(ProfileFragment.mImgProf);
     }
 

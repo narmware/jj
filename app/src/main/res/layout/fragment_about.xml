@@ -1,13 +1,58 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
 
-    <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/webview"
+    <RelativeLayout
+        android:layout_centerVertical="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="wrap_content">
+    <ImageView
+        android:src="@drawable/logo"
+        android:id="@+id/img_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_width="180dp"
+        android:layout_height="180dp" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_below="@+id/img_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:padding="2dp"
+            android:textSize="18sp"
+            android:textColor="@color/grey_800"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/app_name"/>
+
+             <TextView
+                android:padding="2dp"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="version 1.1"/>
+
+        <Button
+            android:id="@+id/btn_privacy_policy"
+            android:layout_gravity="center_horizontal"
+            android:foreground="?attr/selectableItemBackground"
+            android:textColor="@color/colorPrimary"
+            android:background="@android:color/transparent"
+            android:text="Privacy Policy"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

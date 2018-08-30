@@ -85,6 +85,7 @@
         android:id="@+id/edt_mobile"
         android:inputType="phone"
         android:digits="1234567890"
+        android:maxLength="10"
         android:background="@drawable/custom_et_form"
         android:hint="Contact number"
         android:maxLines="1"

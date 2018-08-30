@@ -132,6 +132,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         //mTxtAddress.setText(address);
         Picasso.with(DetailsActivity.this)
                 .load(img)
+                .placeholder(R.drawable.placeholder)
                 .into(mImgDharam);
         mViewPager=findViewById(R.id.view_pager);
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());
@@ -250,8 +251,8 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             {
                                 if(factem.getImg().equals(""))
                                 {
-                                    DetailedItem single=new DetailedItem(factem.getItem(),"empty");
-                                    mFacilityList.add(single);
+                                    /*DetailedItem single=new DetailedItem(factem.getItem(),"empty");
+                                    mFacilityList.add(single);*/
                                 }
                                 else {
                                     DetailedItem single=new DetailedItem(factem.getItem(),factem.getImg());

@@ -28,4 +28,14 @@ public class Constants {
     public static final String LONGITUDE="long";
     public static final String CONTACT_PERSON="person";
 
+    public static final String IS_FIRST="isfirst";
+
+    //nav menu
+    public static final String HOME="Home";
+    public static final String ADD_VENDOR="Add Vendor";
+    public static final String ADD_DHARAMSHALA="Add Dharamshala/Bhojanshala";
+    public static final String PROFILE="Profile";
+    public static final String ABOUT="About";
+    public static final String SHARE="Share";
+
 }
