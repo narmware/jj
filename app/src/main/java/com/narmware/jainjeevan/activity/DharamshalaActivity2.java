@@ -173,28 +173,29 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                     {
                         loading=true;
                     }
-                    if (loading)
-                    {
+                    if (loading) {
 
-                         //if ( (visibleItemCount + pastVisiblesItems) >= dharamshalaItems.size()-3){
-                        if(linearLayoutManager.findLastVisibleItemPosition() == dharamshalaItems.size()-1){
-                        //if(pastVisiblesItems == dharamshalaItems.size()-3 ){
-                            loading = false;
-                           HashMap<String,String> param = new HashMap();
-                            String pos=dharamshalaItems.get(dharamshalaItems.size()-1).getDharmshala_id();
-                            temp_id= Integer.parseInt(pos);
-                            param.put(Constants.ID,pos);
-                            String url= SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA,param);
-                            GetDharamshalas(url);
+                        if (SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this) == null) {
+                            //if ( (visibleItemCount + pastVisiblesItems) >= dharamshalaItems.size()-3){
+                            if (linearLayoutManager.findLastVisibleItemPosition() == dharamshalaItems.size() - 1) {
+                                //if(pastVisiblesItems == dharamshalaItems.size()-3 ){
+                                loading = false;
+                                HashMap<String, String> param = new HashMap();
+                                String pos = dharamshalaItems.get(dharamshalaItems.size() - 1).getDharmshala_id();
+                                temp_id = Integer.parseInt(pos);
+                                param.put(Constants.ID, pos);
+                                String url = SupportFunctions.appendParam(EndPoints.GET_DHARAMSHALA, param);
+                                GetDharamshalas(url);
 
-                            Log.v("...", "Last Item Wow !"+dharamshalaItems.size());
-                            //Do pagination.. i.e. fetch new data
+                                Log.v("...", "Last Item Wow !" + dharamshalaItems.size());
+                                //Do pagination.. i.e. fetch new data
 
+                            }
+                            if (linearLayoutManager.findLastVisibleItemPosition() < dharamshalaItems.size()) {
+                                // loading = true;
+                            }
                         }
-                        if(linearLayoutManager.findLastVisibleItemPosition() < dharamshalaItems.size()) {
-                           // loading = true;
-                        }
-                        }
+                    }
                 }
             }
         });
