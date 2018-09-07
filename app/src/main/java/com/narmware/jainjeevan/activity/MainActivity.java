@@ -308,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     public void uploadMultipart(String path) {
 
         String uploadId = UUID.randomUUID().toString();

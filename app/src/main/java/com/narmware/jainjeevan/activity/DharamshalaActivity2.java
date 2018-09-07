@@ -174,7 +174,12 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                         loading=true;
                     }
                     if (loading) {
+<<<<<<< HEAD
+
+                        if (SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this) == null) {
+=======
                         if (SharedPreferencesHelper.getFilteredFacilities(DharamshalaActivity2.this) == null){
+>>>>>>> a4a443b3de0aa4611e7d3b5bb21d61f43ac0c93a
                             //if ( (visibleItemCount + pastVisiblesItems) >= dharamshalaItems.size()-3){
                             if (linearLayoutManager.findLastVisibleItemPosition() == dharamshalaItems.size() - 1) {
                                 //if(pastVisiblesItems == dharamshalaItems.size()-3 ){
@@ -190,11 +195,18 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                                 //Do pagination.. i.e. fetch new data
 
                             }
+<<<<<<< HEAD
+                            if (linearLayoutManager.findLastVisibleItemPosition() < dharamshalaItems.size()) {
+                                // loading = true;
+                            }
+=======
                         if (linearLayoutManager.findLastVisibleItemPosition() < dharamshalaItems.size()) {
                             // loading = true;
                         }
                     }
+>>>>>>> a4a443b3de0aa4611e7d3b5bb21d61f43ac0c93a
                         }
+                    }
                 }
             }
         });
