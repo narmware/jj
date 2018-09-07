@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,15 +68,19 @@ public class ProfileFragment extends Fragment{
     private String mParam2;
     protected View mRoot;
     ImageButton mImgBtnProfChange;
+    RadioGroup radioGroup;
+    RadioButton radBtnMale,radBtnFemale;
+
     public static CircleImageView mImgProf;
     ImageView imgBlurredBack;
 
     Button mBtnProfileUpdate;
     public static Button mBtnDob;
     EditText mEdtCity,mEdtState,mEdtPincode,mEdtAddress;
-    String mDob,mState,mPincode,mCity,mAddress;
+    String mDob,mState,mPincode,mCity,mAddress,mGender;
     RequestQueue mVolleyRequest;
     Bitmap bitmap;
+    int validData=0;
 
     private OnFragmentInteractionListener mListener;
 
@@ -94,6 +100,23 @@ public class ProfileFragment extends Fragment{
         mEdtPincode=mRoot.findViewById(R.id.profile_pincode);
         imgBlurredBack=mRoot.findViewById(R.id.profile_top_root);
 
+        radioGroup =mRoot.findViewById(R.id.rad_grp_gender);
+        radBtnMale=mRoot.findViewById(R.id.rad_male);
+        radBtnFemale=mRoot.findViewById(R.id.rad_female);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+
+                // find the radiobutton by returned id
+                RadioButton radioButton = mRoot.findViewById(selectedId);
+                mGender=radioButton.getText().toString().trim();
+
+            }
+        });
+
         mBtnDob=mRoot.findViewById(R.id.btn_dob);
         mBtnDob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +135,7 @@ public class ProfileFragment extends Fragment{
                 mAddress=mEdtAddress.getText().toString().trim();
                 mPincode=mEdtPincode.getText().toString().trim();
                 mDob=mBtnDob.getText().toString().trim();
+
 
                 updateProfile();
             }
@@ -186,7 +210,6 @@ public class ProfileFragment extends Fragment{
         email.setText(SharedPreferencesHelper.getUserEmail(getActivity()));
         mobile.setText(SharedPreferencesHelper.getUserMobile(getActivity()));
     }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -297,7 +320,7 @@ public class ProfileFragment extends Fragment{
         dialog.show();
 
         Gson gson=new Gson();
-        Profile updateProfile=new Profile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob) ;
+        Profile updateProfile=new Profile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob,mGender) ;
         String json_string=gson.toJson(updateProfile);
 
         HashMap<String,String> param = new HashMap();
@@ -392,6 +415,15 @@ public class ProfileFragment extends Fragment{
                                 mEdtPincode.setText(profileResponse.getProfile_pincode());
                                 mEdtAddress.setText(profileResponse.getProfile_address());
                                 mBtnDob.setText(profileResponse.getProfile_dob());
+
+                                if(profileResponse.getProfile_gender().equals(Constants.MALE))
+                                {
+                                    radBtnMale.setChecked(true);
+                                }
+                                if(profileResponse.getProfile_gender().equals(Constants.FEMALE))
+                                {
+                                    radBtnFemale.setChecked(true);
+                                }
                             }
 
 

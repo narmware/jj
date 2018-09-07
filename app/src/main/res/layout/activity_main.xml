@@ -31,6 +31,10 @@
                 <include layout="@layout/nav_header_main"></include>
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_below="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></RelativeLayout>
         <ListView
             android:layout_below="@+id/header"
             android:id="@+id/list_nav"
