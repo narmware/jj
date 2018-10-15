@@ -11,13 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.BhojanalayActivity;
 import com.narmware.jainjeevan.activity.DetailsActivity;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.pojo.DharamshalaItem;
-import com.narmware.jainjeevan.pojo.RecommendedItems;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.squareup.picasso.Picasso;
@@ -28,13 +27,13 @@ import java.util.ArrayList;
  * Created by rohitsavant on 12/08/18.
  */
 
-public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.MyViewHolder>{
+public class BhojanalayaAdapter extends RecyclerView.Adapter<BhojanalayaAdapter.MyViewHolder>{
 
     Context mContext;
     ArrayList<DharamshalaItem> dharamshalaItems;
     FragmentManager fragmentManager;
 
-    public DharamshalaAdapter(Context mContext, ArrayList<DharamshalaItem> dharamshalaItems, FragmentManager fragmentManager) {
+    public BhojanalayaAdapter(Context mContext, ArrayList<DharamshalaItem> dharamshalaItems, FragmentManager fragmentManager) {
         this.mContext = mContext;
         this.dharamshalaItems = dharamshalaItems;
         this.fragmentManager = fragmentManager;
@@ -68,17 +67,17 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
 
         if(dharamshalaItems.size()==0)
         {
-            DharamshalaActivity2.mLinEmpty.setVisibility(View.VISIBLE);
+            BhojanalayActivity.mLinEmpty.setVisibility(View.VISIBLE);
 
             if(SharedPreferencesHelper.getFilteredFacilities(mContext)==null || SharedPreferencesHelper.getFilteredCity(mContext)==null)
             {
             }
             else{
-                DharamshalaActivity2.mTxtNoData.setText("No content available for selected filter. \n Please change or remove filter.");
+                BhojanalayActivity.mTxtNoData.setText("No content available for selected filter. \n Please change or remove filter.");
             }
         }
         else{
-            DharamshalaActivity2.mLinEmpty.setVisibility(View.INVISIBLE);
+            BhojanalayActivity.mLinEmpty.setVisibility(View.INVISIBLE);
         }
         return dharamshalaItems.size();
     }
@@ -112,7 +111,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
                     intent.putExtra(Constants.LONGITUDE,mItem.getLongitude());
                     intent.putExtra(Constants.MOBILE_NUMBER,mItem.getMobile());
                     intent.putExtra(Constants.CONTACT_PERSON,mItem.getManager());
-                    intent.putExtra(Constants.TYPE,Constants.TYPE_DHARMSHALA);
+                    intent.putExtra(Constants.TYPE,Constants.TYPE_BHOJANALAYA);
 
                     mContext.startActivity(intent);
                 }

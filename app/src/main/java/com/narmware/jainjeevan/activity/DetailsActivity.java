@@ -66,11 +66,14 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
     ImageView mBtnBack;
     Dialog mNoConnectionDialog;
 
+    String dataType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         getSupportActionBar().hide();
+
 
         mVolleyRequest = Volley.newRequestQueue(DetailsActivity.this);
         ActivityCompat.requestPermissions(DetailsActivity.this,
@@ -85,9 +88,21 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         longitude=intent.getStringExtra(Constants.LONGITUDE);
         contact_number=intent.getStringExtra(Constants.MOBILE_NUMBER);
         contact_person=intent.getStringExtra(Constants.CONTACT_PERSON);
+        dataType=intent.getStringExtra(Constants.TYPE);
 
         init();
-        GetData();
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.ID,id);
+
+        if(dataType.equals(Constants.TYPE_DHARMSHALA)) {
+            String url = SupportFunctions.appendParam(EndPoints.GET_DATA, param);
+            GetData(url);
+        }
+        if(dataType.equals(Constants.TYPE_BHOJANALAYA)) {
+            String url = SupportFunctions.appendParam(EndPoints.GET_BHOJANALAY_DATA, param);
+            GetBhojanalayData(url);
+        }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -193,18 +208,13 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         }
     }
 
-    private void GetData() {
+    private void GetData(String url) {
         final ProgressDialog dialog = new ProgressDialog(DetailsActivity.this);
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
         dialog.show();
 
         Gson gson=new Gson();
-        HashMap<String,String> param = new HashMap();
-        param.put(Constants.ID,id);
-
-        //url with params
-        String url= SupportFunctions.appendParam(EndPoints.GET_DATA,param);
 
         Log.e("Login url",url);
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
@@ -221,14 +231,15 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             Log.e("Login Json_string",response.toString());
                             Gson gson = new Gson();
 
-                            DetailedItemResponse detailedItemResponse=gson.fromJson(response.toString(),DetailedItemResponse.class);
-                            DetailedItem[] rooms=detailedItemResponse.getRoom();
-                            for(DetailedItem roomItem:rooms)
-                            {
-                                mRoomList.add(roomItem);
-                            }
-                            pagerAdapter.addFragment(RoomsFragment.newInstance(mRoomList,"Rooms"),"Rooms");
-                            pagerAdapter.notifyDataSetChanged();
+                            DetailedItemResponse detailedItemResponse = gson.fromJson(response.toString(), DetailedItemResponse.class);
+
+                                DetailedItem[] rooms = detailedItemResponse.getRoom();
+                                for (DetailedItem roomItem : rooms) {
+                                    mRoomList.add(roomItem);
+                                }
+                                pagerAdapter.addFragment(RoomsFragment.newInstance(mRoomList, "Rooms"), "Rooms");
+                                pagerAdapter.notifyDataSetChanged();
+
 
                             DetailedItem[] rules=detailedItemResponse.getRules();
                             for(DetailedItem ruleItem:rules)
@@ -238,12 +249,97 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
                             pagerAdapter.addFragment(RulesFragment.newInstance(mRuleList,"Rules"),"Rules");
                             pagerAdapter.notifyDataSetChanged();
 
-                            DetailedItem[] bhojan=detailedItemResponse.getBhojanshala();
-                            for(DetailedItem bhojanItem:bhojan)
+                                DetailedItem[] bhojan = detailedItemResponse.getBhojanshala();
+                                for (DetailedItem bhojanItem : bhojan) {
+                                    mBhojanList.add(bhojanItem);
+                                }
+                                pagerAdapter.addFragment(BhojanshalaFragment.newInstance(mBhojanList, "Bhojan"), "Bhojan");
+                                pagerAdapter.notifyDataSetChanged();
+
+                            DetailedItem[] facilities=detailedItemResponse.getFacility();
+                            for(DetailedItem factem:facilities)
                             {
+                                if(factem.getImg().equals(""))
+                                {
+                                    /*DetailedItem single=new DetailedItem(factem.getItem(),"empty");
+                                    mFacilityList.add(single);*/
+                                }
+                                else {
+                                    DetailedItem single=new DetailedItem(factem.getItem(),factem.getImg());
+                                    mFacilityList.add(single);
+                                }
+                            }
+                            pagerAdapter.addFragment(FacilitiesFragment.newInstance(mFacilityList,"Facilities"),"Facilities");
+                            pagerAdapter.notifyDataSetChanged();
+
+                            mViewPager.setOffscreenPageLimit(4);
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
+                        dialog.dismiss();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
+    private void GetBhojanalayData(String url) {
+        final ProgressDialog dialog = new ProgressDialog(DetailsActivity.this);
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Gson gson=new Gson();
+
+        Log.e("Login url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+
+                            Log.e("Login Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            DetailedItemResponse detailedItemResponse = gson.fromJson(response.toString(), DetailedItemResponse.class);
+
+                            DetailedItem[] rules=detailedItemResponse.getRules();
+                            for(DetailedItem ruleItem:rules)
+                            {
+                                mRuleList.add(ruleItem);
+                            }
+                            pagerAdapter.addFragment(RulesFragment.newInstance(mRuleList,"Rules"),"Rules");
+                            pagerAdapter.notifyDataSetChanged();
+
+
+                            DetailedItem[] bhojan = detailedItemResponse.getBhojanshala();
+                            for (DetailedItem bhojanItem : bhojan) {
                                 mBhojanList.add(bhojanItem);
                             }
-                            pagerAdapter.addFragment(BhojanshalaFragment.newInstance(mBhojanList,"Bhojan"),"Bhojan");
+                            pagerAdapter.addFragment(BhojanshalaFragment.newInstance(mBhojanList, "Bhojan"), "Timings");
                             pagerAdapter.notifyDataSetChanged();
 
                             DetailedItem[] facilities=detailedItemResponse.getFacility();
@@ -301,8 +397,16 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         tryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetData();
-            }
+                HashMap<String,String> param = new HashMap();
+                param.put(Constants.ID,id);
+                if(dataType.equals(Constants.TYPE_DHARMSHALA)) {
+                    String url = SupportFunctions.appendParam(EndPoints.GET_DATA, param);
+                    GetData(url);
+                }
+                if(dataType.equals(Constants.TYPE_BHOJANALAYA)) {
+                    String url = SupportFunctions.appendParam(EndPoints.GET_BHOJANALAY_DATA, param);
+                    GetBhojanalayData(url);
+                }            }
         });
     }
 

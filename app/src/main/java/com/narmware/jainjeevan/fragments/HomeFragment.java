@@ -32,6 +32,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.BhojanalayActivity;
 import com.narmware.jainjeevan.activity.ComingSoonActivity;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.activity.FoodVendorActivity;
@@ -259,8 +260,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId())
         {
             case R.id.home_bhojanalay:
-               Intent i1=new Intent(getContext(), ComingSoonActivity.class);
-               startActivity(i1);
+                Intent intentBhojan=new Intent(getContext(), BhojanalayActivity.class);
+               startActivity(intentBhojan);
                 /*Toast.makeText(getContext(), "Coming soon !", Toast.LENGTH_SHORT).show();*/
                 break;
 

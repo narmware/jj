@@ -71,13 +71,13 @@ public class DetailedItemAdapter extends RecyclerView.Adapter<DetailedItemAdapte
 
     @Override
     public int getItemCount() {
-        if(detailedItems.size()==0)
+       /* if(detailedItems.size()==0)
         {
             RoomsFragment.mLinEmpty.setVisibility(View.VISIBLE);
         }
         else{
             RoomsFragment.mLinEmpty.setVisibility(View.INVISIBLE);
-        }
+        }*/
         return detailedItems.size();
     }
 

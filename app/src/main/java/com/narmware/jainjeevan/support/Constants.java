@@ -42,4 +42,8 @@ public class Constants {
     public static final String MALE="Male";
     public static final String FEMALE="Female";
 
+    public static final String TYPE_DHARMSHALA="DHARMSHALA";
+    public static final String TYPE_BHOJANALAYA="BHOJANALAYA";
+    public static final String TYPE="type";
+
 }

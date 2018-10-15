@@ -69,6 +69,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     public static boolean loading = true;
     int temp_id;
     public static ProgressBar mProgressWheel;
+    String dataType=null;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     @Override
@@ -77,6 +78,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_dharamshala);
         getSupportActionBar().hide();
         context=DharamshalaActivity2.this;
+
         init();
         setDharamshalaAdapter();
 

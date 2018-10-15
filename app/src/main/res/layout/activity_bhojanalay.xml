@@ -14,7 +14,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_below="@+id/toolbar"
-        android:id="@+id/recycler_bhojan"
+        android:id="@+id/recycler_dharamshala"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -28,15 +28,25 @@
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/empty_layout"></include>
+       <include layout="@layout/empty_layout"></include>
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressWheel"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+   <ProgressBar
+       android:id="@+id/progressWheel"
+       android:visibility="gone"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_filter"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/filter" />
 
 </RelativeLayout>
