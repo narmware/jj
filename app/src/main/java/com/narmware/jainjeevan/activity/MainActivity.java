@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener
@@ -150,6 +151,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             startActivity(Intent.createChooser(sharingIntent,"Share Using"));
                             break;
 
+                        case Constants.LOGOUT:
+                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Are you sure")
+                                    .setContentText("Your want to Logout")
+                                    .setConfirmText("Yes")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+
+                                            SharedPreferencesHelper.setIsLogin(false,MainActivity.this);
+                                            SharedPreferencesHelper.setFilteredCity(null,MainActivity.this);
+                                            SharedPreferencesHelper.setFilteredFacilities(null,MainActivity.this);
+                                            SharedPreferencesHelper.setUserLocation(null,MainActivity.this);
+
+                                            Intent intent=new Intent(MainActivity.this,OtpLoginActivity.class);
+                                            MainActivity.this.startActivity(intent);
+                                            finish();
+                                        }
+                                    })
+                                    .showCancelButton(true)
+                                    .setCancelText("Cancel")
+                                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            sweetAlertDialog.dismissWithAnimation();
+                                        }
+                                    })
+                                    .show();
+                            break;
+
                     }
                 }
 
@@ -164,12 +195,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         navMenus=new ArrayList<>();
         navMenus.add(new NavMenu(Constants.HOME,R.drawable.ic_home));
+        navMenus.add(new NavMenu(Constants.PROFILE,R.drawable.ic_person_profile));
         navMenus.add(new NavMenu(Constants.ADD_VENDOR,R.drawable.ic_person_black));
         navMenus.add(new NavMenu(Constants.ADD_DHARAMSHALA,R.drawable.ic_account));
-        navMenus.add(new NavMenu(Constants.PROFILE,R.drawable.ic_person_profile));
         navMenus.add(new NavMenu(Constants.ABOUT,R.drawable.ic_info));
         navMenus.add(new NavMenu(Constants.SHARE,R.drawable.ic_share));
-
+        navMenus.add(new NavMenu(Constants.LOGOUT,R.drawable.ic_logout));
     }
     @Override
     public void onBackPressed() {

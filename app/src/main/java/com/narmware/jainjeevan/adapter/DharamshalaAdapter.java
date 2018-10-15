@@ -56,8 +56,8 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
         holder.mTxtCharges.setText("Rooms availabe from Rs."+dharamshalaItem.getMinamount()+" onwards");
 
         Picasso.with(mContext)
-                .load(dharamshalaItem.getIMG())
-                .placeholder(R.drawable.placeholder)
+                //.load(recommendedItem.getIMG())
+                .load(R.drawable.placeholder)
                 .into(holder.mImgDharam);
 
         holder.mItem=dharamshalaItem;

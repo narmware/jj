@@ -15,6 +15,7 @@
         <ImageView
             android:id="@+id/recomm_image"
             android:src="@drawable/hotel"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"/>

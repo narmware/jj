@@ -5,4 +5,6 @@
     <color name="colorAccent">#FCD02D</color>
 
     <color name="jain_green">#169536</color>
+    <color name="menu_logo">@color/colorPrimary</color>
+
 </resources>

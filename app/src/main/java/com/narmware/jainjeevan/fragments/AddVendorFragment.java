@@ -5,6 +5,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +17,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,17 +31,22 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.adapter.FilterAdapter;
 import com.narmware.jainjeevan.pojo.AddVendor;
 import com.narmware.jainjeevan.pojo.ApiResponse;
+import com.narmware.jainjeevan.pojo.Facility;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
+import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 import com.narmware.jainjeevan.support.SupportFunctions;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -56,12 +69,23 @@ public class AddVendorFragment extends Fragment {
     private String mParam2;
     protected View mRoot;
     protected Spinner mServiceType;
-    EditText mEdtName,mEdtProdName,mEdtContactPerson,mEdtMail,mEdtMobile,mEdtCity,mEdtAddress,mEdtPincode;
+    CheckBox mChkDelAvail;
+
+    EditText mEdtName,mEdtContactPerson,mEdtMail,mEdtMobile,mEdtCity,mEdtAddress,mEdtPincode,mEdtKm,mEdtSpecialFood;
     Button mBtnSubmitForm;
     RequestQueue mVolleyRequest;
     int validFlag=0;
+    public static Context mContext;
 
-    String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mCity,mAddress;
+    String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mCity,mAddress,mKm,mSpecialFood;
+
+    RecyclerView mRecyclerFoodType;
+    ArrayList<Facility> foodTypes;
+    FilterAdapter foodTypesAdapter;
+
+
+    public static ArrayList<String> selected_food_items;
+    public static Set<String> foodTypesSet;
 
     private OnFragmentInteractionListener mListener;
 
@@ -98,16 +122,24 @@ public class AddVendorFragment extends Fragment {
 
     private void init() {
 
+        foodTypesSet = new HashSet<>();
+        selected_food_items=new ArrayList<>();
+
         mVolleyRequest = Volley.newRequestQueue(getContext());
         //mServiceType = mRoot.findViewById(R.id.form_spinner);
         mEdtName=mRoot.findViewById(R.id.edt_name);
-        mEdtProdName=mRoot.findViewById(R.id.edt_prod_name);
+        //mEdtProdName=mRoot.findViewById(R.id.edt_prod_name);
         mEdtContactPerson=mRoot.findViewById(R.id.edt_contact_person);
         mEdtMail=mRoot.findViewById(R.id.edt_mail);
         mEdtMobile=mRoot.findViewById(R.id.edt_mobile);
         mEdtCity=mRoot.findViewById(R.id.edt_city);
         mEdtAddress=mRoot.findViewById(R.id.edt_address);
         mEdtPincode=mRoot.findViewById(R.id.edt_pincode);
+        mEdtKm=mRoot.findViewById(R.id.edt_km);
+        mEdtSpecialFood=mRoot.findViewById(R.id.edt_special_food);
+
+        mRecyclerFoodType=mRoot.findViewById(R.id.recycler_food_type);
+        mChkDelAvail=mRoot.findViewById(R.id.chk_del_avail);
 
         mBtnSubmitForm=mRoot.findViewById(R.id.btn_submit_form);
         mBtnSubmitForm.setOnClickListener(new View.OnClickListener() {
@@ -116,13 +148,38 @@ public class AddVendorFragment extends Fragment {
                 validFlag=0;
                 String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 mName=mEdtName.getText().toString().trim();
-                mProdName=mEdtProdName.getText().toString().trim();
+               // mProdName=mEdtProdName.getText().toString().trim();
                 mContactPerson=mEdtContactPerson.getText().toString().trim();
                 mMail=mEdtMail.getText().toString().trim();
                 mMobile=mEdtMobile.getText().toString().trim();
                 mCity=mEdtCity.getText().toString().trim();
                 mAddress=mEdtAddress.getText().toString().trim();
                 mPincode=mEdtPincode.getText().toString().trim();
+                mSpecialFood=mEdtSpecialFood.getText().toString().trim();
+
+                if(mChkDelAvail.isChecked()==true)
+                {
+                    mKm=mEdtKm.getText().toString().trim();
+
+                    if(!mKm.equals("")) {
+                        int tempKm= Integer.parseInt(mKm);
+                        if (tempKm == 0 || tempKm < 0) {
+                            validFlag = 1;
+                            mEdtKm.setError("Kilometers should not be 0");
+                        }
+                    }
+
+                    if(mKm.equals(""))
+                    {
+                        validFlag=1;
+                        mEdtKm.setError("Kilometers should not be blank");
+                    }
+                }
+
+                if(mChkDelAvail.isChecked()==false)
+                {
+                    mKm="-1";
+                }
 
                 if(mPincode.length()<6)
                 {
@@ -150,52 +207,98 @@ public class AddVendorFragment extends Fragment {
                     validFlag=1;
                     mEdtMail.setError("Enter valid email");
                 }
-                if(mContactPerson.equals(""))
+                //as per requirnment
+                /* if(mContactPerson.equals(""))
                 {
                     validFlag=1;
                     mEdtContactPerson.setError("Enter contact person");
                 }
-                if(mProdName.equals(""))
+               if(mProdName.equals(""))
                 {
                     validFlag=1;
                     mEdtProdName.setError("Enter product name");
-                }
+                }*/
+
                 if(mName.equals(""))
                 {
                     validFlag=1;
                     mEdtName.setError("Enter name");
                 }
 
+                setFoodFilter();
 
                     if(validFlag==0) {
-                    setVendor();
+                        setVendor();
+                }
+
+
+            }
+        });
+
+        mChkDelAvail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b==false)
+                {
+                    mEdtKm.setEnabled(false);
+                }
+                else {
+                    mEdtKm.setEnabled(true);
                 }
             }
         });
-       // setSpinner();
+
+        setFoodTypesAdapter(new GridLayoutManager(getContext(),2));
+
+        // setSpinner();
     }
 
-    private void setSpinner() {
-        List<String> categories = new ArrayList<String>();
-        categories.add("Dharamshala");
-        categories.add("Bhojanalaya");
-        categories.add("Food Vendor");
+    public void setFoodTypesAdapter(RecyclerView.LayoutManager mLayoutManager) {
+        foodTypes = new ArrayList<>();
+        foodTypes.add(new Facility("1","Lunch","",false));
+        foodTypes.add(new Facility("2","Breakfast","",false));
+        foodTypes.add(new Facility("3","Dinner","",false));
+        foodTypes.add(new Facility("4","Snacks","",false));
+        foodTypes.add(new Facility("5","Jain Cake","",false));
+        foodTypes.add(new Facility("6","Others","",false));
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mServiceType.setAdapter(dataAdapter);
 
-        mServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+        for(int i=0;i<foodTypes.size();i++)
+        {
+            if(SharedPreferencesHelper.getFoodTypes(getContext())!=null)
+            {
+                foodTypesSet=SharedPreferencesHelper.getFoodTypes(getContext());
+                if(foodTypesSet.contains(foodTypes.get(i).getFacility_name()))
+                {
+                    Log.e("food type size set",foodTypesSet.size()+"");
+                    foodTypes.get(i).setSelected(true);
+                }
             }
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        SnapHelper snapHelper = new LinearSnapHelper();
 
-            }
-        });
+        foodTypesAdapter = new FilterAdapter(getContext(), foodTypes,Constants.ADD_VENDOR);
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(GalleryActivity.this,2);
+        mRecyclerFoodType.setLayoutManager(mLayoutManager);
+        mRecyclerFoodType.setItemAnimator(new DefaultItemAnimator());
+        //snapHelper.attachToRecyclerView(mRecyclerView);
+        mRecyclerFoodType.setAdapter(foodTypesAdapter);
+        mRecyclerFoodType.setNestedScrollingEnabled(false);
+        mRecyclerFoodType.setFocusable(false);
+
+        foodTypesAdapter.notifyDataSetChanged();
+    }
+
+    public static void setFoodFilter() {
+
+        foodTypesSet.clear();
+        for(int i=0;i<selected_food_items.size();i++) {
+            foodTypesSet.add(selected_food_items.get(i));
+        }
+         Toast.makeText(mContext, "Size: "+foodTypesSet.size(), Toast.LENGTH_SHORT).show();
+        SharedPreferencesHelper.setFoodTypes(null,mContext);
+        SharedPreferencesHelper.setFoodTypes(foodTypesSet,mContext);
     }
 
     @Override
@@ -203,6 +306,7 @@ public class AddVendorFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRoot = inflater.inflate(R.layout.fragment_add_vendor, container, false);
+        mContext=getContext();
         init();
         return mRoot;
     }
@@ -244,7 +348,8 @@ public class AddVendorFragment extends Fragment {
         dialog.show();
 
         Gson gson=new Gson();
-        AddVendor addVendor=new AddVendor(mName,mProdName,mContactPerson,mMail,mMobile,mCity,mPincode,mAddress);
+        AddVendor addVendor=new AddVendor(mName,mProdName,mContactPerson,mMail,mMobile,mCity,mPincode,mAddress,mKm,mSpecialFood);
+        //addVendor.setFood_types(selected_food_items);
         String json_string=gson.toJson(addVendor);
 
         HashMap<String,String> param = new HashMap();
@@ -277,6 +382,7 @@ public class AddVendorFragment extends Fragment {
                                             @Override
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.dismissWithAnimation();
+                                                getActivity().onBackPressed();
                                             }
                                         })
                                         .show();

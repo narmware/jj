@@ -48,8 +48,8 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
 
         holder.mTxtRecomm.setText(recommendedItem.getName());
         Picasso.with(mContext)
-                .load(recommendedItem.getIMG())
-                .placeholder(R.drawable.placeholder)
+                //.load(recommendedItem.getIMG())
+                .load(R.drawable.placeholder)
                 .into(holder.mImgRecomm);
     }
 

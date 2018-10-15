@@ -265,6 +265,7 @@
 
     <Button
         android:layout_below="@+id/profile_update"
+        android:visibility="gone"
         android:foreground="?attr/selectableItemBackground"
         android:id="@+id/btn_logout"
         android:textColor="@color/colorPrimary"

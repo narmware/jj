@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.FilterActivity;
 import com.narmware.jainjeevan.fragments.AddDharamshalaFragment;
+import com.narmware.jainjeevan.fragments.AddVendorFragment;
 import com.narmware.jainjeevan.pojo.BhojanItems;
 import com.narmware.jainjeevan.pojo.Facility;
 import com.narmware.jainjeevan.pojo.Filter;
@@ -116,6 +117,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                             AddDharamshalaFragment.selected_bhojan_filters.add(mItem.getFacility_name());
                            // Toast.makeText(mContext, mItem.getFacility_name(), Toast.LENGTH_SHORT).show();
                         }
+
+                        if(callFrom.equals(Constants.ADD_VENDOR))
+                        {
+                            AddVendorFragment.selected_food_items.add(mItem.getFacility_name());
+                            // Toast.makeText(mContext, mItem.getFacility_name(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     if(b==false)
@@ -134,6 +141,13 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                         if(callFrom.equals(Constants.BHOJANMSHALA))
                         {
                             AddDharamshalaFragment.selected_bhojan_filters.remove(mItem.getFacility_name());
+                            //Toast.makeText(mContext, mItem.getFacility_name(), Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        if(callFrom.equals(Constants.ADD_VENDOR))
+                        {
+                            AddVendorFragment.selected_food_items.remove(mItem.getFacility_name());
                             //Toast.makeText(mContext, mItem.getFacility_name(), Toast.LENGTH_SHORT).show();
                         }
                     }

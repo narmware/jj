@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.narmware.jainjeevan.activity.BhojanalayActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/custom_toolbar"></include>
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/toolbar"
         android:id="@+id/recycler_bhojan"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,13 +21,22 @@
     </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
+        android:id="@+id/lin_empty"
+        android:visibility="invisible"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Coming Soon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <include layout="@layout/empty_layout"></include>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressWheel"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

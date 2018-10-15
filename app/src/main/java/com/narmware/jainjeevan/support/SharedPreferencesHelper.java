@@ -27,8 +27,24 @@ public class SharedPreferencesHelper {
     private static final String FILTERED_FACILITIES="filters";
     private static final String DHARAMSHALA_FACILITIES="dharam_facilities";
     private static final String BHOJAN_FACILITIES="bhojan_facilities";
+    private static final String FOOD_TYPES="food_types";
     private static final String FILTERED_CITY="city";
     private static final String USER_LOCATION="loc";
+
+    public static void setFoodTypes(Set<String> food, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+        edit.putStringSet(FOOD_TYPES,food);
+        edit.commit();
+    }
+
+    public static Set<String> getFoodTypes(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> food=pref.getStringSet(FOOD_TYPES,null);
+        return food;
+    }
 
     public static void setBhojanFacilities(Set<String> facilities1, Context context)
     {
