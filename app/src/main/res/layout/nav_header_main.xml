@@ -15,10 +15,9 @@
 
 
 <LinearLayout
-
+    android:background="#45ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/jain_sculptures"
     android:gravity="bottom|center"
     android:orientation="vertical">
 
@@ -39,7 +38,7 @@
         android:text="Android Studio"
         android:textStyle="bold"
         android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/red_800"/>
 
 
     <TextView

@@ -149,7 +149,7 @@ public class FilterActivity extends AppCompatActivity {
         mBtnClearFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(FilterActivity.this, filters.size()+"", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(FilterActivity.this, filters.size()+"", Toast.LENGTH_SHORT).show();
 
                 for(int i=0;i<filters.size();i++)
                 {

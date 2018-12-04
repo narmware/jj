@@ -43,6 +43,7 @@ public class FoodVendorActivity extends AppCompatActivity {
     ImageView mBtnBack;
     public static LinearLayout mLinEmpty;
     Dialog mNoConnectionDialog;
+    public static TextView mTxtCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,9 @@ public class FoodVendorActivity extends AppCompatActivity {
         mTxtTitle=findViewById(R.id.txt_title);
         mBtnBack=findViewById(R.id.btn_back);
         mLinEmpty=findViewById(R.id.lin_empty);
+        mTxtCounter=findViewById(R.id.txt_counter);
+        mTxtCounter.setVisibility(View.VISIBLE);
+
         mNoConnectionDialog = new Dialog(FoodVendorActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mTxtTitle.setText("Food Vendor");
@@ -124,6 +128,8 @@ public class FoodVendorActivity extends AppCompatActivity {
                             {
                                 restoItems.add(item);
                             }
+                            mTxtCounter.setText("Total Count : "+restoItems.size()+"");
+
                             restoAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
 
