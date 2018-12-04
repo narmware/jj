@@ -252,7 +252,7 @@
 
     <Button
         android:id="@+id/profile_update"
-        android:foreground="?attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_below="@+id/card_profile"
         android:layout_centerHorizontal="true"
         android:text="Update Profile"
@@ -266,7 +266,7 @@
     <Button
         android:layout_below="@+id/profile_update"
         android:visibility="gone"
-        android:foreground="?attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/btn_logout"
         android:textColor="@color/colorPrimary"
         android:background="@android:color/transparent"

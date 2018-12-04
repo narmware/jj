@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#362971</color>
     <color name="colorPrimaryDark">#2d2164</color>
-    <color name="colorAccent">#FCD02D</color>
+    <color name="colorAccent">#362971</color>
 
     <color name="jain_green">#169536</color>
     <color name="menu_logo">@color/colorPrimary</color>

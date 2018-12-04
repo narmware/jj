@@ -14,6 +14,8 @@
     <string name="no_internet">Server not reachable at this moment.\n Please check your internet connection or try again later</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="about_us">JainJeevan, an informative platform, where you can get information for Dharamshalas, Bhojanshalas and Jain Food providers. With several efforts and research, we\'re providing a user friendly Android app, where it's very easy to get the information you're looking for and you can connect to them fairly easily.</string>
+
     <!--  1 Air Conditioner
     2 AttachedWC
     3 Attached Indian Toilet

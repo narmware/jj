@@ -83,6 +83,7 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
                     intent.putExtra(Constants.LONGITUDE,mItem.getLongitude());
                     intent.putExtra(Constants.MOBILE_NUMBER,mItem.getMobile());
                     intent.putExtra(Constants.CONTACT_PERSON,mItem.getManager());
+                    intent.putExtra(Constants.TYPE,Constants.TYPE_DHARMSHALA);
                     mContext.startActivity(intent);
                 }
             });

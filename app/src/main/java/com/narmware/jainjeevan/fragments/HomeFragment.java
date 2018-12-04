@@ -36,6 +36,7 @@ import com.narmware.jainjeevan.activity.BhojanalayActivity;
 import com.narmware.jainjeevan.activity.ComingSoonActivity;
 import com.narmware.jainjeevan.activity.DharamshalaActivity2;
 import com.narmware.jainjeevan.activity.FoodVendorActivity;
+import com.narmware.jainjeevan.activity.MainActivity;
 import com.narmware.jainjeevan.adapter.RecommendedAdapter;
 import com.narmware.jainjeevan.pojo.BannerImages;
 import com.narmware.jainjeevan.pojo.BannerResponse;
@@ -167,6 +168,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             textSliderView.getBundle()
                     .putString("extra",name);
 
+           textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+               @Override
+               public void onSliderClick(BaseSliderView slider) {
+
+                   if(bannerImages.get(mSlider.getCurrentPosition()).getBanner_title().equals("Register")) {
+                       MainActivity.fragment_call = 1;
+                       MainActivity.setFragment(new AddDharamshalaFragment(), "Dharamshala");
+                   }
+
+                   }
+           });
             mSlider.addSlider(textSliderView);
         }
         mSlider.setPresetTransformer(SliderLayout.Transformer.Default);
@@ -201,6 +213,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle()
                     .putString("extra",name);
+
+            textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                @Override
+                public void onSliderClick(BaseSliderView slider) {
+
+                    if(bottomBannerImages.get(mBottomSlider.getCurrentPosition()).getBanner_title().equals("Register")) {
+                        MainActivity.fragment_call = 1;
+                        MainActivity.setFragment(new AddVendorFragment(),"Vendor");
+                    }
+
+                }
+            });
 
             mBottomSlider.addSlider(textSliderView);
         }
@@ -271,7 +295,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.home_restaurant:
-                Intent i2=new Intent(getContext(), ComingSoonActivity.class);
+                Intent i2=new Intent(getContext(), FoodVendorActivity.class);
                 startActivity(i2);
             break;
         }

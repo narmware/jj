@@ -53,13 +53,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 ,AddVendorFragment.OnFragmentInteractionListener,ProfileFragment.OnFragmentInteractionListener,
         AddDharamshalaFragment.OnFragmentInteractionListener, SingleUploadBroadcastReceiver.Delegate,PrivacyFragment.OnFragmentInteractionListener{
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    public static FragmentManager fragmentManager;
+    public static FragmentManager fm;
+    public static FragmentTransaction fragmentTransaction;
     private final SingleUploadBroadcastReceiver uploadReceiver =
             new SingleUploadBroadcastReceiver();
     public static NavigationView navigationView;
-    ProgressDialog dialog;
-    int fragment_call=0;
+    //ProgressDialog dialog;
+    public static  int fragment_call=0;
 
     ListView mListNav;
     NavAdapter navAdapter;
@@ -94,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        fragmentManager=getSupportFragmentManager();
+        fm = getSupportFragmentManager();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -219,16 +223,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setFragment(Fragment fragment,String tag)
+    public static void setFragment(Fragment fragment,String tag)
     {
         if(fragment_call==1) {
 
-            FragmentManager fm = getSupportFragmentManager();
             for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                 fm.popBackStack();
             }}
 
-        fragmentManager=getSupportFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         if(fragment_call==1) {
             fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
@@ -376,10 +378,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onProgress(int progress) {
-        dialog = new ProgressDialog(MainActivity.this);
+        /*dialog = new ProgressDialog(MainActivity.this);
         dialog.setMessage("Uploading...");
         dialog.setCancelable(false);
-        dialog.show();
+        dialog.show();*/
         Log.e("Progress",""+progress);
     }
 
@@ -396,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onCompleted(int serverResponseCode, byte[] serverResponseBody) {
-        dialog.dismiss();
+        //dialog.dismiss();
         Log.e("ServerResponse", new String(serverResponseBody) + "   " + serverResponseCode);
         Gson gson=new Gson();
         ImageUploadResponse imageUploadResponse=gson.fromJson(new String(serverResponseBody),ImageUploadResponse.class);

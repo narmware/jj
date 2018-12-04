@@ -54,6 +54,7 @@ public class BhojanalayActivity extends AppCompatActivity {
     public static TextView mTxtNoData;
     public static LinearLayout mLinEmpty;
     public static Dialog mNoConnectionDialog;
+    public static TextView mTxtCounter;
 
     public static ArrayList<String> selected_filters;
     public static String selected_city_id;
@@ -76,13 +77,12 @@ public class BhojanalayActivity extends AppCompatActivity {
 
         init();
         setDharamshalaAdapter();
-/*
-        if(SharedPreferencesHelper.getFilteredFacilities(BhojanalayActivity.this)!=null)
+        if(SharedPreferencesHelper.getBhojanFacilities(BhojanalayActivity.this)!=null)
         {
             selected_filters=new ArrayList<>();
             SendFilters sendFilters=new SendFilters();
             sendFilters.setCity_id(SharedPreferencesHelper.getFilteredCity(BhojanalayActivity.this));
-            facilitySet=SharedPreferencesHelper.getFilteredFacilities(BhojanalayActivity.this);
+            facilitySet=SharedPreferencesHelper.getBhojanFacilities(BhojanalayActivity.this);
             //Toast.makeText(context, "Size: "+facilitySet.size(), Toast.LENGTH_SHORT).show();
 
             selected_filters.addAll(facilitySet);
@@ -94,18 +94,19 @@ public class BhojanalayActivity extends AppCompatActivity {
 
             HashMap<String,String> param = new HashMap();
             param.put(Constants.JSON_STRING,json_string);
+            param.put(Constants.TYPE, Constants.TYPE_BHOJANALAYA);
 
             //url with params
             String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
             dharamshalaItems.clear();
             GetDharamshalas(url);
-        }else{*/
+        }else{
             HashMap<String,String> param = new HashMap();
             param.put(Constants.IS_FIRST,"1");
             String url= SupportFunctions.appendParam(EndPoints.GET_BHOJANALAY,param);
             dharamshalaItems.clear();
             GetDharamshalas(url);
-      //  }
+       }
     }
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(BhojanalayActivity.this);
@@ -116,15 +117,18 @@ public class BhojanalayActivity extends AppCompatActivity {
         mTxtNoData=findViewById(R.id.txt_no_data);
         mProgressWheel=findViewById(R.id.progressWheel);
         mNoConnectionDialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        mTxtCounter=findViewById(R.id.txt_counter);
+        mTxtCounter.setVisibility(View.VISIBLE);
 
         mFabFilter=findViewById(R.id.fab_filter);
 
-        mTxtTitle.setText("Dharamshala");
+        mTxtTitle.setText("Bhojanalay");
 
         mFabFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(BhojanalayActivity.this,FilterActivity.class);
+                intent.putExtra(Constants.TYPE,Constants.TYPE_BHOJANALAYA);
                 startActivity(intent);
             }
         });
@@ -228,6 +232,7 @@ public class BhojanalayActivity extends AppCompatActivity {
                             for(DharamshalaItem item:mlist){
                                 dharamshalaItems.add(item);
                             }
+                            mTxtCounter.setText("Total Count : "+dharamshalaItems.size()+"");
                             dharamshalaAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
 

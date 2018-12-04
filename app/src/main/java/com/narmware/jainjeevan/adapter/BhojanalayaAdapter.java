@@ -98,6 +98,8 @@ public class BhojanalayaAdapter extends RecyclerView.Adapter<BhojanalayaAdapter.
             mTxtCharges=itemView.findViewById(R.id.txt_room_charge);
             mBtnCall=itemView.findViewById(R.id.btn_call);
 
+            mTxtCharges.setVisibility(View.GONE);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -56,6 +56,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
     public static RequestQueue mVolleyRequest;
     TextView mTxtTitle;
     ImageView mBtnBack;
+    public static TextView mTxtCounter;
     public static TextView mTxtNoData;
     public static LinearLayout mLinEmpty;
     public static Dialog mNoConnectionDialog;
@@ -99,6 +100,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
 
             HashMap<String,String> param = new HashMap();
             param.put(Constants.JSON_STRING,json_string);
+            param.put(Constants.TYPE, Constants.TYPE_DHARMSHALA);
 
             //url with params
             String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
@@ -121,7 +123,8 @@ public class DharamshalaActivity2 extends AppCompatActivity {
         mTxtNoData=findViewById(R.id.txt_no_data);
         mProgressWheel=findViewById(R.id.progressWheel);
         mNoConnectionDialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
-
+        mTxtCounter=findViewById(R.id.txt_counter);
+        mTxtCounter.setVisibility(View.VISIBLE);
         mFabFilter=findViewById(R.id.fab_filter);
 
         mTxtTitle.setText("Dharamshala");
@@ -130,6 +133,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(DharamshalaActivity2.this,FilterActivity.class);
+                intent.putExtra(Constants.TYPE,Constants.TYPE_DHARMSHALA);
                 startActivity(intent);
             }
         });
@@ -233,6 +237,7 @@ public class DharamshalaActivity2 extends AppCompatActivity {
                             for(DharamshalaItem item:mlist){
                                 dharamshalaItems.add(item);
                             }
+                            mTxtCounter.setText("Total Count : "+dharamshalaItems.size()+"");
                             dharamshalaAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
 

@@ -189,7 +189,8 @@ public class AddDharamshalaFragment extends Fragment {
         setFacilityAdapter(new GridLayoutManager(getContext(),2));
         setBhojanFacilityAdapter(new GridLayoutManager(getContext(),2));
 
-        GetFacilities();
+        GetFacilities(Constants.TYPE_DHARMSHALA);
+        GetBhojanFacilities(Constants.TYPE_BHOJANALAYA);
     }
 
     public void validateData()
@@ -262,7 +263,7 @@ public class AddDharamshalaFragment extends Fragment {
 
     public void setBhojanFacilityAdapter(RecyclerView.LayoutManager mLayoutManager) {
         bhojanFacilities = new ArrayList<>();
-        bhojanFacilities.add(new Facility("1","Chauvihar","",false));
+    /*    bhojanFacilities.add(new Facility("1","Chauvihar","",false));
         bhojanFacilities.add(new Facility("2","Weekend open","",false));
         bhojanFacilities.add(new Facility("3","Ambil Khata","",false));
         bhojanFacilities.add(new Facility("4","Breakfast","",false));
@@ -280,7 +281,7 @@ public class AddDharamshalaFragment extends Fragment {
                 bhojanFacilities.get(i).setSelected(true);
             }
         }
-        }
+        }*/
 
         SnapHelper snapHelper = new LinearSnapHelper();
 
@@ -453,14 +454,18 @@ public void registerData()
     mVolleyRequest.add(obreq);
 }
 
-    private void GetFacilities() {
+    private void GetFacilities(String filterType) {
         final ProgressDialog dialog = new ProgressDialog(getContext());
         dialog.setMessage("Getting Details...");
         dialog.setCancelable(false);
         dialog.show();
 
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.TYPE, filterType);
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_FILTERS,param);
         //url without params
-        String url= EndPoints.GET_FILTERS;
+       // String url= EndPoints.GET_FILTERS;
 
         Log.e("Filter url",url);
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
@@ -524,6 +529,81 @@ public void registerData()
         mVolleyRequest.add(obreq);
     }
 
+
+    private void GetBhojanFacilities(String filterType) {
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.TYPE, filterType);
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_FILTERS,param);
+        //url without params
+        // String url= EndPoints.GET_FILTERS;
+
+        Log.e("Filter url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            Log.e("Filter Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            FilterResponse filterResponse=gson.fromJson(response.toString(),FilterResponse.class);
+                            Facility[] facility=filterResponse.getFacility();
+
+                            for(Facility itemFac:facility){
+
+                                //filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+
+                                if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())!=null)
+                                {
+                                    bhojanFacilitySet=SharedPreferencesHelper.getDharamshalaFacilities(getContext());
+                                    if(bhojanFacilitySet.contains(itemFac.getFacility_name()))
+                                    {
+                                        bhojanFacilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),true));
+                                    }
+                                    else{
+                                        bhojanFacilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+                                    }
+                                }
+                                if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())==null)
+                                {
+                                    bhojanFacilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+                                }
+
+                            }
+                            bhojanFacilityAdapter.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        dialog.dismiss();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

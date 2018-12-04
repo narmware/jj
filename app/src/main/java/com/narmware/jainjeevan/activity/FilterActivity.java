@@ -3,6 +3,7 @@ package com.narmware.jainjeevan.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import java.util.Set;
 
 public class FilterActivity extends AppCompatActivity {
     RecyclerView mRecyclerFilter;
+    String filterType=null;
 
     ArrayList<Facility> filters;
     FilterAdapter filterAdapter;
@@ -76,6 +78,12 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
         getSupportActionBar().hide();
         context=FilterActivity.this;
+
+        Intent intent=getIntent();
+
+        if(intent!=null) {
+            filterType=intent.getStringExtra(Constants.TYPE);
+        }
         init();
     }
 
@@ -123,7 +131,14 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SetFilters();
+                if(filterType.equals(Constants.TYPE_DHARMSHALA))
+                {
+                    SetFilters();
+                }
+                if(filterType.equals(Constants.TYPE_BHOJANALAYA))
+                {
+                    SetBhojanFilters();
+                }
                 finish();
             }
         });
@@ -142,11 +157,37 @@ public class FilterActivity extends AppCompatActivity {
                     filterAdapter.notifyDataSetChanged();
                     selected_filters.clear();
                     facilitySet.clear();
+                }
+
+                if(filterType.equals(Constants.TYPE_DHARMSHALA))
+                {
                     SharedPreferencesHelper.setFilteredFacilities(null,context);
+                }
+                if(filterType.equals(Constants.TYPE_BHOJANALAYA))
+                {
+                    SharedPreferencesHelper.setBhojanFacilities(null,context);
                 }
             }
         });
         selected_filters=new ArrayList<>();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if(filterType.equals(Constants.TYPE_DHARMSHALA))
+        {
+            Intent intentDharam=new Intent(FilterActivity.this, DharamshalaActivity2.class);
+            intentDharam.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentDharam);
+        }
+        if(filterType.equals(Constants.TYPE_BHOJANALAYA))
+        {
+            Intent intentBhojan=new Intent(FilterActivity.this, BhojanalayActivity.class);
+            intentBhojan.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentBhojan);
+        }
     }
 
     public void setFilterAdapter(RecyclerView.LayoutManager mLayoutManager) {
@@ -174,7 +215,20 @@ public class FilterActivity extends AppCompatActivity {
         Gson gson=new Gson();
 
         //url without params
-        String url= EndPoints.GET_FILTERS;
+        //String url= EndPoints.GET_FILTERS;
+        HashMap<String,String> param = new HashMap();
+
+        if(filterType.equals(Constants.TYPE_DHARMSHALA))
+        {
+            param.put(Constants.TYPE, Constants.TYPE_DHARMSHALA);
+        }
+
+        if(filterType.equals(Constants.TYPE_BHOJANALAYA))
+        {
+            param.put(Constants.TYPE, Constants.TYPE_BHOJANALAYA);
+        }
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_FILTERS,param);
 
         Log.e("Filter url",url);
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
@@ -206,14 +260,23 @@ public class FilterActivity extends AppCompatActivity {
 
 
                             Facility[] facility=filterResponse.getFacility();
+                            if(filterType.equals(Constants.TYPE_DHARMSHALA))
+                            {
+                                if(SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this)!=null) {
+                                    facilitySet = SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this);
+                                }
+                            }
 
+                            if(filterType.equals(Constants.TYPE_BHOJANALAYA))
+                            {
+                                if(SharedPreferencesHelper.getBhojanFacilities(FilterActivity.this)!=null) {
+                                    facilitySet = SharedPreferencesHelper.getBhojanFacilities(FilterActivity.this);
+                                }
+                            }
                             for(Facility itemFac:facility){
 
                                 //filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
 
-                                if(SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this)!=null)
-                                {
-                                    facilitySet=SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this);
                                     if(facilitySet.contains(itemFac.getFacility_id()))
                                     {
                                         filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),true));
@@ -221,11 +284,6 @@ public class FilterActivity extends AppCompatActivity {
                                     else{
                                         filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
                                     }
-                                }
-                                if(SharedPreferencesHelper.getFilteredFacilities(FilterActivity.this)==null)
-                                {
-                                    filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
-                                }
 
                             }
                             filterAdapter.notifyDataSetChanged();
@@ -276,11 +334,40 @@ public class FilterActivity extends AppCompatActivity {
 
         HashMap<String,String> param = new HashMap();
         param.put(Constants.JSON_STRING,json_string);
+        param.put(Constants.TYPE, Constants.TYPE_DHARMSHALA);
 
         //url with params
         String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
         DharamshalaActivity2.dharamshalaItems.clear();
         DharamshalaActivity2.GetDharamshalas(url);
+    }
+
+
+    public static void SetBhojanFilters() {
+
+        SendFilters sendFilters=new SendFilters();
+        sendFilters.setCity_id(selected_city_id);
+        sendFilters.setFacilities(selected_filters);
+        facilitySet.clear();
+        for(int i=0;i<selected_filters.size();i++) {
+            facilitySet.add(selected_filters.get(i));
+        }
+        // Toast.makeText(context, "Size: "+facilitySet.size(), Toast.LENGTH_SHORT).show();
+        SharedPreferencesHelper.setBhojanFacilities(null,context);
+        SharedPreferencesHelper.setBhojanFacilities(facilitySet,context);
+
+        Gson gson=new Gson();
+        String json_string=gson.toJson(sendFilters);
+        Log.e("Filter json_string",json_string);
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.JSON_STRING,json_string);
+        param.put(Constants.TYPE, Constants.TYPE_BHOJANALAYA);
+
+        //url with params
+        String url= SupportFunctions.appendParam(EndPoints.GET_FILTERED_DATA,param);
+        BhojanalayActivity.dharamshalaItems.clear();
+        BhojanalayActivity.GetDharamshalas(url);
     }
 
     private void showNoConnectionDialog() {
