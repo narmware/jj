@@ -30,6 +30,7 @@ public class SharedPreferencesHelper {
     private static final String FOOD_TYPES="food_types";
     private static final String FILTERED_CITY="city";
     private static final String USER_LOCATION="loc";
+    private static final String FILTERED_AREA="area";
 
     public static void setFoodTypes(Set<String> food, Context context)
     {
@@ -233,6 +234,21 @@ public class SharedPreferencesHelper {
         String user_img=pref.getString(USER_PROF_IMG,null);
         return user_img;
     }*/
+
+    public static void setFilteredArea(String area, Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit=pref.edit();
+        edit.putString(FILTERED_AREA,area);
+        edit.commit();
+    }
+
+    public static String getFilteredArea(Context context)
+    {
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(context);
+        String area=pref.getString(FILTERED_AREA,null);
+        return area;
+    }
 
 
 }

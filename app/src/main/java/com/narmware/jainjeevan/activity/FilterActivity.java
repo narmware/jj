@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -28,9 +29,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.adapter.AreaAdapter;
 import com.narmware.jainjeevan.adapter.CityAdapter;
 import com.narmware.jainjeevan.adapter.DharamshalaAdapter;
 import com.narmware.jainjeevan.adapter.FilterAdapter;
+import com.narmware.jainjeevan.pojo.Area;
+import com.narmware.jainjeevan.pojo.AreaResponse;
 import com.narmware.jainjeevan.pojo.City;
 import com.narmware.jainjeevan.pojo.DharamshalaItem;
 import com.narmware.jainjeevan.pojo.DharamshalaResponse;
@@ -63,14 +67,20 @@ public class FilterActivity extends AppCompatActivity {
     ArrayList<City> cities;
     CityAdapter cityAdapter;
 
+    Spinner mAreaSpinner;
+    ArrayList<Area> areas;
+    AreaAdapter areaAdapter;
+
     public static ArrayList<String> selected_filters;
     public static String selected_city_id;
+    public static String selected_area_id;
     public static Set<String> facilitySet;
 
     Button mBtnApply,mBtnClearFilter;
     Dialog mNoConnectionDialog;
 
     public static Context context;
+    CardView mCardFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +88,26 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
         getSupportActionBar().hide();
         context=FilterActivity.this;
+        mCardFilter=findViewById(R.id.card_filter);
 
         Intent intent=getIntent();
-
         if(intent!=null) {
             filterType=intent.getStringExtra(Constants.TYPE);
+
+            if(filterType.equals(Constants.TYPE_FOOD_VENDOR))
+            {
+                mCardFilter.setVisibility(View.GONE);
+            }
         }
         init();
+
+
     }
 
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(FilterActivity.this);
         facilitySet = new HashSet<>();
         mNoConnectionDialog = new Dialog(FilterActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
-
         mBtnApply=findViewById(R.id.btn_apply_filter);
         mRecyclerFilter=findViewById(R.id.recycler_filter);
         setFilterAdapter(new GridLayoutManager(FilterActivity.this,2));
@@ -106,6 +122,7 @@ public class FilterActivity extends AppCompatActivity {
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
               selected_city_id=cities.get(position).getCity_id();
+              GetAreas(selected_city_id);
               SharedPreferencesHelper.setUserLocation(cities.get(position).getCity_name(),FilterActivity.this);
               SharedPreferencesHelper.setFilteredCity(cities.get(position).getCity_id(),FilterActivity.this);
               //Toast.makeText(FilterActivity.this, cities.get(position).getCity_id(), Toast.LENGTH_SHORT).show();
@@ -117,7 +134,7 @@ public class FilterActivity extends AppCompatActivity {
           }
 
       });
-               // Toast.makeText(FilterActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+
 
         mBtnBack=findViewById(R.id.btn_back);
         mBtnBack.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +155,10 @@ public class FilterActivity extends AppCompatActivity {
                 if(filterType.equals(Constants.TYPE_BHOJANALAYA))
                 {
                     SetBhojanFilters();
+                }
+                if(filterType.equals(Constants.TYPE_FOOD_VENDOR))
+                {
+                    setFoodFilters();
                 }
                 finish();
             }
@@ -167,9 +188,36 @@ public class FilterActivity extends AppCompatActivity {
                 {
                     SharedPreferencesHelper.setBhojanFacilities(null,context);
                 }
+                if(filterType.equals(Constants.TYPE_FOOD_VENDOR))
+                {
+                    SharedPreferencesHelper.setFilteredArea(null,context);
+                    GetAreas(SharedPreferencesHelper.getFilteredCity(FilterActivity.this));
+                }
+
+                Toast.makeText(FilterActivity.this, "Filters cleared", Toast.LENGTH_SHORT).show();
+
             }
         });
         selected_filters=new ArrayList<>();
+
+        if(filterType.equals(Constants.TYPE_FOOD_VENDOR)) {
+            mAreaSpinner = findViewById(R.id.spinn_area);
+            areas = new ArrayList<>();
+            areaAdapter = new AreaAdapter(FilterActivity.this, areas);
+            mAreaSpinner.setAdapter(areaAdapter);
+
+            mAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    selected_area_id = areas.get(position).getArea_id();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -187,6 +235,12 @@ public class FilterActivity extends AppCompatActivity {
             Intent intentBhojan=new Intent(FilterActivity.this, BhojanalayActivity.class);
             intentBhojan.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intentBhojan);
+        }
+        if(filterType.equals(Constants.TYPE_FOOD_VENDOR))
+        {
+            Intent intentFood=new Intent(FilterActivity.this, FoodVendorActivity.class);
+            intentFood.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentFood);
         }
     }
 
@@ -370,6 +424,16 @@ public class FilterActivity extends AppCompatActivity {
         BhojanalayActivity.GetDharamshalas(url);
     }
 
+    public void setFoodFilters()
+    {
+        SharedPreferencesHelper.setFilteredArea(selected_area_id, FilterActivity.this);
+        FoodVendorActivity.restoItems.clear();
+        FoodVendorActivity.GetRestos();
+       /* Intent intentFood=new Intent(FilterActivity.this, FoodVendorActivity.class);
+        intentFood.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intentFood);*/
+    }
+
     private void showNoConnectionDialog() {
         mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
         mNoConnectionDialog.setCancelable(false);
@@ -383,4 +447,83 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void GetAreas(String selected_city_id) {
+        final ProgressDialog dialog = new ProgressDialog(FilterActivity.this);
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Gson gson=new Gson();
+
+        //url without params
+        //String url= EndPoints.GET_FILTERS;
+        HashMap<String,String> param = new HashMap();
+        param.put("city_id",selected_city_id);
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_AREA,param);
+
+        Log.e("Area url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            Log.e("Filter Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            AreaResponse filterResponse=gson.fromJson(response.toString(),AreaResponse.class);
+                            Area[] area=filterResponse.getData();
+                            areas.clear();
+                            for(Area item:area){
+                                areas.add(item);
+                            }
+                            areaAdapter.notifyDataSetChanged();
+
+                            for(int i=0;i<areas.size();i++)
+                            {
+                                if(SharedPreferencesHelper.getFilteredArea(FilterActivity.this)==null) {
+
+                                }
+                                if(SharedPreferencesHelper.getFilteredArea(FilterActivity.this)!=null) {
+                                    if (SharedPreferencesHelper.getFilteredArea(FilterActivity.this).equals(areas.get(i).getArea_id())) {
+                                        mAreaSpinner.setSelection(i);
+                                    }
+                                }
+                            }
+                            areaAdapter.notifyDataSetChanged();
+
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
+                        dialog.dismiss();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
+
 }

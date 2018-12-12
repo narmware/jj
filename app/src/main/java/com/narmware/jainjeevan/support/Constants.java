@@ -44,6 +44,7 @@ public class Constants {
 
     public static final String TYPE_DHARMSHALA="DHARMSHALA";
     public static final String TYPE_BHOJANALAYA="BHOJANALAYA";
+    public static final String TYPE_FOOD_VENDOR="FOODVENDOR";
     public static final String TYPE="type";
 
 }
