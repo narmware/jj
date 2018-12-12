@@ -24,7 +24,6 @@
             />
 
     <ImageView
-        android:scaleType="fitXY"
         android:background="@color/amber_50"
         android:id="@+id/img_dharam"
         android:layout_width="match_parent"

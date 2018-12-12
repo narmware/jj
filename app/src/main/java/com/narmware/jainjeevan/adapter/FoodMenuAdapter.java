@@ -54,7 +54,7 @@ public class FoodMenuAdapter extends RecyclerView.Adapter<FoodMenuAdapter.MyView
         holder.mTxtRate.setText("Rs."+restoItem.getRate());
         Picasso.with(mContext)
                 .load(restoItem.getIMG())
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.logo)
                 .into(holder.mImgResto);
 
         holder.mItem=restoItem;

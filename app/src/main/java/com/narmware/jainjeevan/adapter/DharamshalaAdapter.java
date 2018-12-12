@@ -57,7 +57,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
 
         Picasso.with(mContext)
                 //.load(recommendedItem.getIMG())
-                .load(R.drawable.placeholder)
+                .load(R.drawable.logo)
                 .into(holder.mImgDharam);
 
         holder.mItem=dharamshalaItem;

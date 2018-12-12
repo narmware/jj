@@ -419,7 +419,7 @@ public void registerData()
                         ApiResponse vendorResponse=gson.fromJson(response.toString(),ApiResponse.class);
                         if(vendorResponse.getResponse().equals("100")) {
                             new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Registeration Successfull !")
+                                    .setTitleText("Registration Successfull !")
                                     //.setContentText("Your want to Logout")
                                     .setConfirmText("OK")
                                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {

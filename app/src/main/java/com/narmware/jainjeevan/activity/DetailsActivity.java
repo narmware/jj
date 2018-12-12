@@ -147,7 +147,7 @@ public class DetailsActivity extends AppCompatActivity implements ProfileFragmen
         //mTxtAddress.setText(address);
         Picasso.with(DetailsActivity.this)
                 //.load(img)
-                .load(R.drawable.placeholder)
+                .load(R.drawable.logo)
                 .into(mImgDharam);
         mViewPager=findViewById(R.id.view_pager);
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());

@@ -56,7 +56,7 @@ public class BhojanalayaAdapter extends RecyclerView.Adapter<BhojanalayaAdapter.
 
         Picasso.with(mContext)
                 //.load(recommendedItem.getIMG())
-                .load(R.drawable.placeholder)
+                .load(R.drawable.logo)
                 .into(holder.mImgDharam);
 
         holder.mItem=dharamshalaItem;

@@ -53,7 +53,7 @@ public class FoodVendorAdapter extends RecyclerView.Adapter<FoodVendorAdapter.My
         holder.mTxtAddress.setText(restoItem.getAddress());
         Picasso.with(mContext)
                 .load(restoItem.getIMG())
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.logo)
                 .into(holder.mImgResto);
 
         holder.mItem=restoItem;

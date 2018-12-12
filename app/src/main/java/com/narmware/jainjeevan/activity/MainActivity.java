@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(),MainActivity.this);
         Picasso.with(MainActivity.this)
                 .load(imageUploadResponse.getUrl())
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.logo)
                 .into(ProfileFragment.mImgProf);
     }
 
