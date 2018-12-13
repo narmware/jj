@@ -77,7 +77,7 @@ public class PrivacyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_privacy, container, false);
         mWebView=view.findViewById(R.id.webview);
-        mWebView.loadUrl("http://jainjeevan.com/privacy.html");
+        mWebView.loadUrl("http://jainjeevan.com/privacy2.html");
 
         setWebView();
         return view;

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -81,6 +82,7 @@ public class FilterActivity extends AppCompatActivity {
 
     public static Context context;
     CardView mCardFilter;
+    LinearLayout mLinearArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +112,22 @@ public class FilterActivity extends AppCompatActivity {
         mNoConnectionDialog = new Dialog(FilterActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         mBtnApply=findViewById(R.id.btn_apply_filter);
         mRecyclerFilter=findViewById(R.id.recycler_filter);
+        mLinearArea=findViewById(R.id.lin_area);
+
         setFilterAdapter(new GridLayoutManager(FilterActivity.this,2));
-        GetFilters();
+        cities=new ArrayList<>();
+
+        if(filterType.equals(Constants.TYPE_FOOD_VENDOR))
+        {
+            mLinearArea.setVisibility(View.VISIBLE);
+            City city=new City("Pune","2");
+            cities.add(city);
+        }
+        else {
+            GetFilters();
+        }
 
         mCitySpinner=findViewById(R.id.spinn_city);
-        cities=new ArrayList<>();
         cityAdapter=new CityAdapter(FilterActivity.this,cities);
         mCitySpinner.setAdapter(cityAdapter);
 

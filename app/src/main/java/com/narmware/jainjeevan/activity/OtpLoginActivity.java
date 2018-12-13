@@ -270,6 +270,8 @@ public class OtpLoginActivity extends AppCompatActivity {
 
         HashMap<String,String> param = new HashMap();
         param.put(Constants.MOBILE_NUMBER,mobile);
+        param.put(Constants.NAME,name);
+        param.put(Constants.EMAIL,email);
 
         //url with params
         String url= SupportFunctions.appendParam(EndPoints.LOGIN_USER,param);
