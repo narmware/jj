@@ -293,7 +293,6 @@ public class AddVendorFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mCity=cities.get(position).getCity_name();
-                Toast.makeText(getContext(), mCity, Toast.LENGTH_SHORT).show();
                 selected_city_id=cities.get(position).getCity_id();
                 if(selected_city_id=="2") {
                     GetAreas(selected_city_id);
