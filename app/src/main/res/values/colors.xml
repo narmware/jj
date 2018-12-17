@@ -7,4 +7,7 @@
     <color name="jain_green">#169536</color>
     <color name="menu_logo">@color/colorPrimary</color>
 
+    <color name="screen_bg">#0e00f5ff</color>
+
+
 </resources>

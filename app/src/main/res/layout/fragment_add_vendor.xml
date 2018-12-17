@@ -104,6 +104,7 @@
 
     <EditText
         android:id="@+id/edt_city"
+        android:visibility="gone"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:background="@drawable/custom_et_form"
         android:hint="City"
@@ -118,6 +119,43 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/lin_city"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Select City"
+            android:textSize="16sp"
+            android:textColor="@color/grey_900"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/spinn_city"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"></Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Select Area"
+            android:textSize="16sp"
+            android:textColor="@color/grey_900"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/spinn_area"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"></Spinner>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/edt_pincode"

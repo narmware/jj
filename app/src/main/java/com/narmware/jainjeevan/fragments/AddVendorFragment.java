@@ -1,5 +1,6 @@
 package com.narmware.jainjeevan.fragments;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -31,10 +32,17 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.FilterActivity;
+import com.narmware.jainjeevan.adapter.AreaAdapter;
+import com.narmware.jainjeevan.adapter.CityAdapter;
 import com.narmware.jainjeevan.adapter.FilterAdapter;
 import com.narmware.jainjeevan.pojo.AddVendor;
 import com.narmware.jainjeevan.pojo.ApiResponse;
+import com.narmware.jainjeevan.pojo.Area;
+import com.narmware.jainjeevan.pojo.AreaResponse;
+import com.narmware.jainjeevan.pojo.City;
 import com.narmware.jainjeevan.pojo.Facility;
+import com.narmware.jainjeevan.pojo.FilterResponse;
 import com.narmware.jainjeevan.support.Constants;
 import com.narmware.jainjeevan.support.EndPoints;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
@@ -70,6 +78,7 @@ public class AddVendorFragment extends Fragment {
     protected View mRoot;
     protected Spinner mServiceType;
     CheckBox mChkDelAvail;
+    Dialog mNoConnectionDialog;
 
     EditText mEdtName,mEdtContactPerson,mEdtMail,mEdtMobile,mEdtCity,mEdtAddress,mEdtPincode,mEdtKm,mEdtSpecialFood;
     Button mBtnSubmitForm;
@@ -77,12 +86,23 @@ public class AddVendorFragment extends Fragment {
     int validFlag=0;
     public static Context mContext;
 
-    String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mCity,mAddress,mKm,mSpecialFood;
-
+    String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mAddress,mKm,mSpecialFood;
+    String mCity="";
+    String mArea="";
     RecyclerView mRecyclerFoodType;
     ArrayList<Facility> foodTypes;
     FilterAdapter foodTypesAdapter;
 
+
+    Spinner mCitySpinner;
+    ArrayList<City> cities;
+    CityAdapter cityAdapter;
+
+    Spinner mAreaSpinner;
+    ArrayList<Area> areas;
+    AreaAdapter areaAdapter;
+    public static String selected_city_id;
+    public static String selected_area_id;
 
     public static ArrayList<String> selected_food_items;
     public static Set<String> foodTypesSet;
@@ -120,10 +140,11 @@ public class AddVendorFragment extends Fragment {
         }
     }
 
-    private void init() {
+    private void init(View view) {
 
         foodTypesSet = new HashSet<>();
         selected_food_items=new ArrayList<>();
+        mNoConnectionDialog = new Dialog(getContext(), android.R.style.Theme_Light_NoTitleBar_Fullscreen);
 
         mVolleyRequest = Volley.newRequestQueue(getContext());
         //mServiceType = mRoot.findViewById(R.id.form_spinner);
@@ -152,7 +173,7 @@ public class AddVendorFragment extends Fragment {
                 mContactPerson=mEdtContactPerson.getText().toString().trim();
                 mMail=mEdtMail.getText().toString().trim();
                 mMobile=mEdtMobile.getText().toString().trim();
-                mCity=mEdtCity.getText().toString().trim();
+               // mCity=mEdtCity.getText().toString().trim();
                 mAddress=mEdtAddress.getText().toString().trim();
                 mPincode=mEdtPincode.getText().toString().trim();
                 mSpecialFood=mEdtSpecialFood.getText().toString().trim();
@@ -195,7 +216,12 @@ public class AddVendorFragment extends Fragment {
                 if(mCity.equals(""))
                 {
                     validFlag=1;
-                    mEdtCity.setError("Enter city");
+                    Toast.makeText(getContext(), "Please select city", Toast.LENGTH_SHORT).show();
+                }
+                if(mArea.equals(""))
+                {
+                    validFlag=1;
+                    Toast.makeText(getContext(), "Please select area", Toast.LENGTH_SHORT).show();
                 }
                 if(mMobile.length()<10)
                 {
@@ -251,6 +277,62 @@ public class AddVendorFragment extends Fragment {
         setFoodTypesAdapter(new GridLayoutManager(getContext(),2));
 
         // setSpinner();
+
+        areas = new ArrayList<>();
+        cities=new ArrayList<>();
+        City city=new City("Pune","2");
+        City city1=new City("Other","0");
+        cities.add(city);
+        cities.add(city1);
+
+        mCitySpinner=view.findViewById(R.id.spinn_city);
+        cityAdapter=new CityAdapter(getContext(),cities);
+        mCitySpinner.setAdapter(cityAdapter);
+
+        mCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mCity=cities.get(position).getCity_name();
+                Toast.makeText(getContext(), mCity, Toast.LENGTH_SHORT).show();
+                selected_city_id=cities.get(position).getCity_id();
+                if(selected_city_id=="2") {
+                    GetAreas(selected_city_id);
+                }
+
+                if(selected_city_id=="0") {
+                    areas.clear();
+                    Area area=new Area();
+                    area.setArea_id("0");
+                    area.setArea_name("Other");
+                    areas.add(area);
+                    areaAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
+        mAreaSpinner = view.findViewById(R.id.spinn_area);
+        areaAdapter = new AreaAdapter(getContext(), areas);
+        mAreaSpinner.setAdapter(areaAdapter);
+
+        mAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                mArea=areas.get(position).getArea_name();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        //GetFilters();
     }
 
     public void setFoodTypesAdapter(RecyclerView.LayoutManager mLayoutManager) {
@@ -296,7 +378,7 @@ public class AddVendorFragment extends Fragment {
         for(int i=0;i<selected_food_items.size();i++) {
             foodTypesSet.add(selected_food_items.get(i));
         }
-         Toast.makeText(mContext, "Size: "+foodTypesSet.size(), Toast.LENGTH_SHORT).show();
+         //Toast.makeText(mContext, "Size: "+foodTypesSet.size(), Toast.LENGTH_SHORT).show();
         SharedPreferencesHelper.setFoodTypes(null,mContext);
         SharedPreferencesHelper.setFoodTypes(foodTypesSet,mContext);
     }
@@ -307,7 +389,7 @@ public class AddVendorFragment extends Fragment {
         // Inflate the layout for this fragment
         mRoot = inflater.inflate(R.layout.fragment_add_vendor, container, false);
         mContext=getContext();
-        init();
+        init(mRoot);
         return mRoot;
     }
 
@@ -348,7 +430,7 @@ public class AddVendorFragment extends Fragment {
         dialog.show();
 
         Gson gson=new Gson();
-        AddVendor addVendor=new AddVendor(mName,mProdName,mContactPerson,mMail,mMobile,mCity,mPincode,mAddress,mKm,mSpecialFood);
+        AddVendor addVendor=new AddVendor(mName,mProdName,mContactPerson,mMail,mMobile,mCity,mPincode,mAddress,mKm,mSpecialFood,mArea);
         //addVendor.setFood_types(selected_food_items);
         String json_string=gson.toJson(addVendor);
 
@@ -409,6 +491,146 @@ public class AddVendorFragment extends Fragment {
                 }
         );
         mVolleyRequest.add(obreq);
+    }
+
+    private void GetFilters() {
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Gson gson=new Gson();
+
+        //url without params
+        //String url= EndPoints.GET_FILTERS;
+        HashMap<String,String> param = new HashMap();
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_FILTERS,param);
+
+        Log.e("Filter url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                          //  Log.e("Filter Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            FilterResponse filterResponse=gson.fromJson(response.toString(),FilterResponse.class);
+                            City[] city=filterResponse.getCity();
+                            for(City item:city){
+                                cities.add(item);
+                            }
+
+                            cityAdapter.notifyDataSetChanged();
+                            areas.clear();
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
+                        dialog.dismiss();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
+    private void GetAreas(String selected_city_id) {
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Gson gson=new Gson();
+
+        //url without params
+        //String url= EndPoints.GET_FILTERS;
+        HashMap<String,String> param = new HashMap();
+        param.put("city_id",selected_city_id);
+
+        String url= SupportFunctions.appendParam(EndPoints.GET_AREA,param);
+
+        Log.e("Area url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            //Log.e("Filter Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            AreaResponse filterResponse=gson.fromJson(response.toString(),AreaResponse.class);
+                            Area[] area=filterResponse.getData();
+                            areas.clear();
+
+                            for(Area item:area){
+                                areas.add(item);
+                            }
+                           areaAdapter.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+                        if(mNoConnectionDialog.isShowing()==true)
+                        {
+                            mNoConnectionDialog.dismiss();
+                        }
+                        dialog.dismiss();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        showNoConnectionDialog();
+                        dialog.dismiss();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
+    private void showNoConnectionDialog() {
+        mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);
+        mNoConnectionDialog.setCancelable(false);
+        mNoConnectionDialog.show();
+
+        Button tryAgain = mNoConnectionDialog.findViewById(R.id.txt_retry);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
 }

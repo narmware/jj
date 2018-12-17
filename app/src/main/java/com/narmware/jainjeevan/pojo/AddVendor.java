@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class AddVendor {
     String business_name,product_name,contact_person,email,contact_no,city,pincode,detailes_address,kilometeres,special_desc;
     ArrayList<String> food_types;
+    String area;
 
-    public AddVendor(String business_name, String product_name, String contact_person, String email, String contact_no, String city, String pincode, String detailes_address,String kilometeres,String special_desc) {
+    public AddVendor(String business_name, String product_name, String contact_person, String email, String contact_no, String city, String pincode, String detailes_address,String kilometeres,String special_desc,String area) {
         this.business_name = business_name;
         this.product_name = product_name;
         this.contact_person = contact_person;
@@ -17,6 +18,7 @@ public class AddVendor {
         this.detailes_address = detailes_address;
         this.kilometeres=kilometeres;
         this.special_desc=special_desc;
+        this.area=area;
     }
 
     public String getSpecial_desc() {
