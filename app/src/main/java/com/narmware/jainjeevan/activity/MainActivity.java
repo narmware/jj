@@ -220,8 +220,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
 
             new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Are you sure")
-                    .setContentText("Your want to exit app")
+                    .setTitleText("Exit JainJeevan")
+                    .setContentText("Are you sure you want to exit app?")
                     .setConfirmText("Yes")
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override

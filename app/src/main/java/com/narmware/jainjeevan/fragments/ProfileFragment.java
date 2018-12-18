@@ -3,6 +3,7 @@ package com.narmware.jainjeevan.fragments;
 import android.Manifest;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -67,7 +69,7 @@ public class ProfileFragment extends Fragment{
     private String mParam1;
     private String mParam2;
     protected View mRoot;
-    ImageButton mImgBtnProfChange;
+    ImageButton mImgBtnProfChange,mBtnEditMail;
     RadioGroup radioGroup;
     RadioButton radBtnMale,radBtnFemale;
 
@@ -75,9 +77,10 @@ public class ProfileFragment extends Fragment{
     ImageView imgBlurredBack;
 
     Button mBtnProfileUpdate;
+    EditText mEdtemail;
     public static Button mBtnDob;
     EditText mEdtCity,mEdtState,mEdtPincode,mEdtAddress;
-    String mDob,mState,mPincode,mCity,mAddress,mGender;
+    String mDob,mState,mPincode,mCity,mAddress,mGender,mMail;
     RequestQueue mVolleyRequest;
     Bitmap bitmap;
     int validData=0;
@@ -91,7 +94,7 @@ public class ProfileFragment extends Fragment{
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(getContext());
         TextView name = mRoot.findViewById(R.id.profile_name);
-        TextView email = mRoot.findViewById(R.id.profile_email);
+        mEdtemail = mRoot.findViewById(R.id.profile_email);
         TextView mobile = mRoot.findViewById(R.id.profile_mobile);
         Button mBtnLogout=mRoot.findViewById(R.id.btn_logout);
         mEdtCity=mRoot.findViewById(R.id.profile_city);
@@ -135,9 +138,17 @@ public class ProfileFragment extends Fragment{
                 mAddress=mEdtAddress.getText().toString().trim();
                 mPincode=mEdtPincode.getText().toString().trim();
                 mDob=mBtnDob.getText().toString().trim();
+                mMail=mEdtemail.getText().toString().trim();
 
+                if(mMail.equals("") || mMail==null)
+                {
+                    Toast.makeText(getContext(), "Email should not be blank", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    SharedPreferencesHelper.setUserEmail(mMail,getContext());
+                    updateProfile();
+                }
 
-                updateProfile();
             }
         });
 
@@ -207,8 +218,21 @@ public class ProfileFragment extends Fragment{
             }
         });
         name.setText(SharedPreferencesHelper.getUserName(getActivity()));
-        email.setText(SharedPreferencesHelper.getUserEmail(getActivity()));
+        mEdtemail.setText(SharedPreferencesHelper.getUserEmail(getActivity()));
         mobile.setText(SharedPreferencesHelper.getUserMobile(getActivity()));
+
+        mBtnEditMail=mRoot.findViewById(R.id.btn_edit_mail);
+        mBtnEditMail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEdtemail.setFocusable(true);
+                mEdtemail.setFocusableInTouchMode(true);
+                mEdtemail.requestFocus();
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+                imm.showSoftInput( mEdtemail, 0);
+
+            }
+        });
     }
 
     /**
@@ -320,7 +344,7 @@ public class ProfileFragment extends Fragment{
         dialog.show();
 
         Gson gson=new Gson();
-        Profile updateProfile=new Profile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob,mGender) ;
+        Profile updateProfile=new Profile(SharedPreferencesHelper.getUserId(getContext()),mCity,mState,mPincode,mAddress,mDob,mGender,mMail) ;
         String json_string=gson.toJson(updateProfile);
 
         HashMap<String,String> param = new HashMap();

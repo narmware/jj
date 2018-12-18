@@ -87,13 +87,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <EditText
                 android:id="@+id/profile_email"
+                android:focusable="false"
+                android:background="@android:color/transparent"
                 android:text="savantrohit8@gmail.com"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+                <ImageButton
+                    android:id="@+id/btn_edit_mail"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingLeft="10dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_create_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
