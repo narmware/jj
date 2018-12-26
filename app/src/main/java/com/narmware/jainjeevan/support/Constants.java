@@ -13,6 +13,8 @@ public class Constants {
     public static final String NAME="name";
     public static final String EMAIL="email";
     public static final String MOBILE_NUMBER="mobile";
+    public static final String PASSWORD ="password";
+    public static final String OTP ="otp";
 
     public static final String BANNER_UP="UP";
     public static final String BANNER_BOTTOM="BOTTOM";
@@ -46,5 +48,10 @@ public class Constants {
     public static final String TYPE_BHOJANALAYA="BHOJANALAYA";
     public static final String TYPE_FOOD_VENDOR="FOODVENDOR";
     public static final String TYPE="type";
+
+    public static final String SUCCESS="100";
+    public static final String ALREADY_EXIST="200";
+    public static final String ERROR="300";
+    public static final String INVALID_OTP="400";
 
 }

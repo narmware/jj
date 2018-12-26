@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             SharedPreferencesHelper.setFilteredFacilities(null,MainActivity.this);
                                             SharedPreferencesHelper.setUserLocation(null,MainActivity.this);
 
-                                            Intent intent=new Intent(MainActivity.this,OtpLoginActivity.class);
+                                            Intent intent=new Intent(MainActivity.this,LoginActivity.class);
                                             MainActivity.this.startActivity(intent);
                                             finish();
                                         }
@@ -208,44 +208,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public void onBackPressed() {
-/*
         int size = navigationView.getMenu().size();
         for (int i = 0; i < size; i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
-        }*/
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
 
-            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Exit JainJeevan")
-                    .setContentText("Are you sure you want to exit app?")
-                    .setConfirmText("Yes")
-                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+            if(fragment_call==0) {
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Exit JainJeevan")
+                        .setContentText("Are you sure you want to exit app?")
+                        .setConfirmText("Yes")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
 
-                            finish();
-                        }
-                    })
-                    .showCancelButton(true)
-                    .setCancelText("No")
-                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            sweetAlertDialog.dismissWithAnimation();
-                        }
-                    })
-                    .show();
+                                finish();
+                            }
+                        })
+                        .showCancelButton(true)
+                        .setCancelText("No")
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
+            }else{
+                fragment_call=0;
+                super.onBackPressed();
+            }
+
             }
     }
 
 
     public static void setFragment(Fragment fragment,String tag)
     {
-       /* if(fragment_call==1) {
+        if(fragment_call==1) {
 
             for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                 fm.popBackStack();
@@ -259,9 +264,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(fragment_call==0) {
             fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
         }
-*/
-        fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
+
+       /* fragmentTransaction=fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,fragment,tag);*/
 
         fragmentTransaction.commit();
     }

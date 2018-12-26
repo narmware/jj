@@ -1,6 +1,7 @@
 package com.narmware.jainjeevan.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,7 +49,7 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
     Double latitude,longitude;
     String mAddr,mDharamName,mContactName,mContactNumber;
 
-    TextView mTxtAddr,mTxtContactPerson,mTxtContactNo;
+    TextView mTxtAddr,mTxtContactPerson,mTxtContactNo,mTxtContactTitle;
 
     public AddressFragment() {
         // Required empty public constructor
@@ -95,6 +97,7 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
         mTxtAddr=view.findViewById(R.id.txt_address);
         mTxtContactPerson=view.findViewById(R.id.txt_contact_person);
         mTxtContactNo=view.findViewById(R.id.txt_contact_no);
+        mTxtContactTitle=view.findViewById(R.id.txt_contact_title);
 
         mTxtAddr.setText(mAddr);
         mTxtContactNo.setText(mContactNumber);
@@ -103,9 +106,38 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
         {
             mTxtContactPerson.setText("No contact person name available");
         }
+
+        mTxtContactTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(mContactNumber==null || mContactNumber.equals(""))
+                {
+                }else{
+                    makeCall(mContactNumber);
+                }
+            }
+        });
+
+        mTxtContactNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(mContactNumber==null || mContactNumber.equals(""))
+                {
+                }else{
+                    makeCall(mContactNumber);
+                }
+            }
+        });
         return view;
     }
 
+    public void makeCall(String phone)
+    {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+        startActivity(intent);
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

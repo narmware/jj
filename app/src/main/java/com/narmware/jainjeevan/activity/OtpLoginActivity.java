@@ -1,6 +1,7 @@
 package com.narmware.jainjeevan.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -51,9 +52,9 @@ public class OtpLoginActivity extends AppCompatActivity {
     //@BindView(R.id.otp_card)
     CardView mCardOtp;
 
-    public static EditText mEdtOtp,mEdtName,mEdtMobile,mEdtMail;
+    public static EditText mEdtOtp,mEdtName,mEdtMobile,mEdtMail,mEdtPass;
     RequestQueue mVolleyRequest;
-    String name,mobile,otp,server_otp,user_id,email;
+    String name,mobile,otp,server_otp,user_id,email,password;
     int validFlag=0;
 
     @Override
@@ -72,6 +73,7 @@ public class OtpLoginActivity extends AppCompatActivity {
         mEdtName=findViewById(R.id.edt_name);
         mEdtMobile=findViewById(R.id.edt_mobile);
         mEdtMail=findViewById(R.id.edt_mail);
+        mEdtPass=findViewById(R.id.edt_pass);
 
         mbtnSignIn=findViewById(R.id.btn_signin);
         mbtnSubmitOtp=findViewById(R.id.btn_submit_otp);
@@ -89,6 +91,7 @@ public class OtpLoginActivity extends AppCompatActivity {
                 name=mEdtName.getText().toString().trim();
                 mobile=mEdtMobile.getText().toString().trim();
                 email=mEdtMail.getText().toString().trim();
+                password=mEdtPass.getText().toString().trim();
 
                 if(name.equals(""))
                 {
@@ -105,16 +108,15 @@ public class OtpLoginActivity extends AppCompatActivity {
                     validFlag=1;
                     mEdtMail.setError("Enter email id");
                 }
+                if(password.equals(""))
+                {
+                    validFlag=1;
+                    mEdtPass.setError("Enter password");
+                }
                 if(validFlag==0)
                 {
-                    mCardLogin.setVisibility(View.GONE);
-                    mCardOtp.setVisibility(View.VISIBLE);
 
-                    YoYo.with(Techniques.SlideInRight)
-                            .duration(400)
-                            .playOn(mCardOtp);
-
-                    LoginUser();
+                    RegisterUser();
                 }
             }
         });
@@ -129,6 +131,9 @@ public class OtpLoginActivity extends AppCompatActivity {
                     mEdtOtp.setError("Enter OTP");
                 }
                 else{
+
+                    validateOTP();
+
                     if(otp.equals(server_otp))
                     {
                         SharedPreferencesHelper.setUserId(user_id,OtpLoginActivity.this);
@@ -198,18 +203,20 @@ public class OtpLoginActivity extends AppCompatActivity {
     }
 
 
-    private void LoginUser() {
+    private void RegisterUser() {
 
+        final ProgressDialog dialog = new ProgressDialog(OtpLoginActivity.this);
+        dialog.setMessage("Registering...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         Gson gson=new Gson();
 
         HashMap<String,String> param = new HashMap();
         param.put(Constants.MOBILE_NUMBER,mobile);
-        param.put(Constants.NAME,name);
-        param.put(Constants.EMAIL,email);
 
         //url with params
-        String url= SupportFunctions.appendParam(EndPoints.LOGIN_USER,param);
+        String url= SupportFunctions.appendParam(EndPoints.REGISTER_USER,param);
 
         //url without params
         //String url= MyApplication.GET_CATEGORIES;
@@ -233,17 +240,30 @@ public class OtpLoginActivity extends AppCompatActivity {
                             Gson gson = new Gson();
 
                             Login loginResponse= gson.fromJson(response.toString(), Login.class);
-                            if(loginResponse.getResponse().equals("100") || loginResponse.getResponse().equals("200") )
+                            if(loginResponse.getResponse().equals(Constants.SUCCESS))
                             {
+
+                                mCardLogin.setVisibility(View.GONE);
+                                mCardOtp.setVisibility(View.VISIBLE);
+
+                                YoYo.with(Techniques.SlideInRight)
+                                        .duration(400)
+                                        .playOn(mCardOtp);
 
                                 server_otp=loginResponse.getOTP();
                                 //mEdtOtp.setText(server_otp);
                                 user_id=loginResponse.getUser_id();
-                            }
 
+                            }
+                            if(loginResponse.getResponse().equals(Constants.ALREADY_EXIST))
+                            {
+                                Toast.makeText(OtpLoginActivity.this, "This user is already exist", Toast.LENGTH_SHORT).show();
+                            }
+                            dialog.dismiss();
                         } catch (Exception e) {
 
                             e.printStackTrace();
+                            dialog.dismiss();
                             //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -255,6 +275,7 @@ public class OtpLoginActivity extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        dialog.dismiss();
                         // showNoConnectionDialog();
 
                     }
@@ -264,17 +285,18 @@ public class OtpLoginActivity extends AppCompatActivity {
     }
 
     private void ResendOtp() {
-
+        final ProgressDialog dialog = new ProgressDialog(OtpLoginActivity.this);
+        dialog.setMessage("Getting Details...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         Gson gson=new Gson();
 
         HashMap<String,String> param = new HashMap();
         param.put(Constants.MOBILE_NUMBER,mobile);
-        param.put(Constants.NAME,name);
-        param.put(Constants.EMAIL,email);
 
         //url with params
-        String url= SupportFunctions.appendParam(EndPoints.LOGIN_USER,param);
+        String url= SupportFunctions.appendParam(EndPoints.REGISTER_USER,param);
 
         //url without params
         //String url= MyApplication.GET_CATEGORIES;
@@ -298,15 +320,17 @@ public class OtpLoginActivity extends AppCompatActivity {
                             Gson gson = new Gson();
 
                             Login loginResponse= gson.fromJson(response.toString(), Login.class);
-                            if(loginResponse.getResponse().equals("100") || loginResponse.getResponse().equals("200") )
+                            if(loginResponse.getResponse().equals("100"))
                             {
                                 server_otp=loginResponse.getOTP();
                                 user_id=loginResponse.getUser_id();
                             }
+                            dialog.dismiss();
 
                         } catch (Exception e) {
 
                             e.printStackTrace();
+                            dialog.dismiss();
                             //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -318,6 +342,7 @@ public class OtpLoginActivity extends AppCompatActivity {
                     // Handles errors that occur due to Volley
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Test Error");
+                        dialog.dismiss();
                         // showNoConnectionDialog();
 
                     }
@@ -326,6 +351,91 @@ public class OtpLoginActivity extends AppCompatActivity {
         mVolleyRequest.add(obreq);
     }
 
+
+    private void validateOTP() {
+        final ProgressDialog dialog = new ProgressDialog(OtpLoginActivity.this);
+        dialog.setMessage("Validating Credentials...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Gson gson=new Gson();
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.MOBILE_NUMBER,mobile);
+        param.put(Constants.NAME,name);
+        param.put(Constants.EMAIL,email);
+        param.put(Constants.PASSWORD,password);
+        param.put(Constants.OTP,otp);
+
+        //url with params
+        String url= SupportFunctions.appendParam(EndPoints.VALIDATE_OTP,param);
+
+        //url without params
+        //String url= MyApplication.GET_CATEGORIES;
+
+        Log.e("OTP url",url);
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                // The third parameter Listener overrides the method onResponse() and passes
+                //JSONObject as a parameter
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+                            //getting test master array
+                            // testMasterDetails = testMasterArray.toString();
+
+                            Log.e("OTP Json_string",response.toString());
+                            Gson gson = new Gson();
+
+                            Login loginResponse= gson.fromJson(response.toString(), Login.class);
+                            if(loginResponse.getResponse().equals(Constants.SUCCESS))
+                            {
+                                SharedPreferencesHelper.setUserId(user_id,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserName(name,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserMobile(mobile,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserEmail(email,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setIsLogin(true,OtpLoginActivity.this);
+
+                                Toast.makeText(OtpLoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+
+                                Intent intent=new Intent(OtpLoginActivity.this,MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                            if(loginResponse.getResponse().equals(Constants.INVALID_OTP))
+                            {
+                                Toast.makeText(OtpLoginActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                            }
+                                dialog.dismiss();
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                            dialog.dismiss();
+                            //Toast.makeText(NavigationActivity.this, "Invalid album id", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                // The final parameter overrides the method onErrorResponse() and passes VolleyError
+                //as a parameter
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                        dialog.dismiss();
+                        // showNoConnectionDialog();
+
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
 
 
 }

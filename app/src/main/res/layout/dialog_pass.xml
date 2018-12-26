@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:padding="12dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Enter your registered mobile number"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edt_mobile"
+        android:background="@drawable/custom_et_form"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:maxLength="10"
+        android:digits="0123456789"
+        android:inputType="number"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Enter Mobile Number"/>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/btn_submit_pass"
+        android:text="Submit"
+        android:minHeight="1dp"
+        android:padding="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"
+        android:layout_margin="10dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:padding="10dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Cancel"
+            android:minHeight="1dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/custom_resend"
+            android:layout_margin="10dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>

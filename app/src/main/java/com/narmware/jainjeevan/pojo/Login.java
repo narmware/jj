@@ -5,8 +5,40 @@ package com.narmware.jainjeevan.pojo;
  */
 
 public class Login {
-    String user_contact,user_name,user_address;
     String response,user_id,otp;
+    String name,email,mobile;
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getResponse() {
         return response;
@@ -22,32 +54,6 @@ public class Login {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
-    }
-
-
-
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
-
-    public String getUser_contact() {
-        return user_contact;
-    }
-
-    public void setUser_contact(String user_contact) {
-        this.user_contact = user_contact;
-    }
-
-    public String getUser_address() {
-        return user_address;
-    }
-
-    public void setUser_address(String user_address) {
-        this.user_address = user_address;
     }
 
     public String getOTP() {

@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 if(SharedPreferencesHelper.getIsLogin(SplashActivity.this)==false)
                 {
-                    startActivity(new Intent(SplashActivity.this, OtpLoginActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
                 else{

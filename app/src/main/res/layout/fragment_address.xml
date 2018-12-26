@@ -60,6 +60,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/txt_contact_title"
             android:text="Contact Number"
             android:drawableLeft="@drawable/ic_call"
             android:drawablePadding="10dp"
