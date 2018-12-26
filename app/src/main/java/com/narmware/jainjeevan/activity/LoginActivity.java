@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
           init();
@@ -77,10 +78,10 @@ public class LoginActivity extends AppCompatActivity {
                     validFlag=1;
                     mEdtMobile.setError("Enter Valid number");
                 }
-                if(password.equals(""))
+                if(password.length()<6)
                 {
                     validFlag=1;
-                    mEdtPass.setError("Enter password");
+                    mEdtPass.setError("Minimum size of password is 6");
                 }
                 if(validFlag==0)
                 {

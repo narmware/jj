@@ -108,10 +108,10 @@ public class OtpLoginActivity extends AppCompatActivity {
                     validFlag=1;
                     mEdtMail.setError("Enter email id");
                 }
-                if(password.equals(""))
+                if(password.length()<6)
                 {
                     validFlag=1;
-                    mEdtPass.setError("Enter password");
+                    mEdtPass.setError("Minimum size of password is 6");
                 }
                 if(validFlag==0)
                 {
