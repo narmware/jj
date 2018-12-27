@@ -589,6 +589,12 @@ public class AddVendorFragment extends Fragment {
                             for(Area item:area){
                                 areas.add(item);
                             }
+
+                            Area area1=new Area();
+                            area1.setArea_name("Other");
+                            area1.setArea_id("0");
+                            areas.add(area1);
+
                            areaAdapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
