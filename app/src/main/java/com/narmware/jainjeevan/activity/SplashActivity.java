@@ -13,7 +13,7 @@ import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.support.SharedPreferencesHelper;
 
 public class SplashActivity extends AppCompatActivity {
-    private static int TIMEOUT = 2000;
+    private static int TIMEOUT = 2500;
 
     ImageView mImgLogo;
 

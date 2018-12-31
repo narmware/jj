@@ -28,7 +28,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_contact_person"
@@ -45,7 +45,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_mobile"
@@ -64,7 +64,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_prod_name"
@@ -81,7 +81,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
 
     <EditText
@@ -99,7 +99,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
 
     <EditText
@@ -118,11 +118,11 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <LinearLayout
         android:id="@+id/lin_city"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -135,12 +135,13 @@
 
         <Spinner
             android:id="@+id/spinn_city"
+            android:layout_marginTop="15dp"
             android:layout_width="220dp"
             android:layout_height="wrap_content"></Spinner>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -153,6 +154,7 @@
 
         <Spinner
             android:id="@+id/spinn_area"
+            android:layout_marginTop="15dp"
             android:layout_width="220dp"
             android:layout_height="wrap_content"></Spinner>
     </LinearLayout>
@@ -173,7 +175,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_address"
@@ -189,10 +191,11 @@
         android:fontFamily="sans-serif-condensed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <android.support.v7.widget.CardView
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/form_edt_margin"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -243,7 +246,8 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_food_type"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/form_edt_margin"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -290,7 +294,7 @@
         android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <Button
         android:id="@+id/btn_submit_form"

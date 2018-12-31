@@ -1,14 +1,19 @@
 package com.narmware.jainjeevan.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +55,8 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
     String mAddr,mDharamName,mContactName,mContactNumber;
 
     TextView mTxtAddr,mTxtContactPerson,mTxtContactNo,mTxtContactTitle;
+    String[] mPhone1;
+    static Activity activity;
 
     public AddressFragment() {
         // Required empty public constructor
@@ -93,6 +100,7 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
         View view= inflater.inflate(R.layout.fragment_address, container, false);
         SupportMapFragment mapFragment= (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        activity=getActivity();
 
         mTxtAddr=view.findViewById(R.id.txt_address);
         mTxtContactPerson=view.findViewById(R.id.txt_contact_person);
@@ -114,7 +122,25 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
                 if(mContactNumber==null || mContactNumber.equals(""))
                 {
                 }else{
-                    makeCall(mContactNumber);
+
+                    if(mContactNumber.contains("/"))
+                    {
+                        String[] separated_nums = mContactNumber.split("/");
+                        Log.e("Numbers",separated_nums[0]+"  "+separated_nums[1]);
+
+                        mPhone1=new String[separated_nums.length];
+
+                        for(int i=0;i<separated_nums.length;i++)
+                        {
+                            mPhone1[i]=separated_nums[i];
+                        }
+
+                        registerForContextMenu(mTxtContactTitle);
+                        getActivity().openContextMenu(mTxtContactTitle);
+                    }
+                    else{
+                        makeCall(mContactNumber);
+                    }
                 }
             }
         });
@@ -126,11 +152,67 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
                 if(mContactNumber==null || mContactNumber.equals(""))
                 {
                 }else{
-                    makeCall(mContactNumber);
+
+                    if(mContactNumber.contains("/"))
+                    {
+                        String[] separated_nums = mContactNumber.split("/");
+                        Log.e("Numbers",separated_nums[0]+"  "+separated_nums[1]);
+
+                        mPhone1=new String[separated_nums.length];
+
+                        for(int i=0;i<separated_nums.length;i++)
+                        {
+                            mPhone1[i]=separated_nums[i];
+                        }
+
+                        registerForContextMenu(mTxtContactNo);
+                        getActivity().openContextMenu(mTxtContactNo);
+                    }
+                    else{
+                        makeCall(mContactNumber);
+                    }
                 }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        Log.e("Numbers",mPhone1.length+"  ");
+
+
+        if (v.getId() == R.id.txt_contact_no) {
+
+            menu.setHeaderTitle("Select phone number to dial");
+
+            for(int i=0;i<mPhone1.length;i++)
+            {
+                menu.add(mPhone1[i]);
+            }
+        }
+
+        if (v.getId() == R.id.txt_contact_title) {
+
+            menu.setHeaderTitle("Select phone number to dial");
+            for(int i=0;i<mPhone1.length;i++)
+            {
+                menu.add(mPhone1[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        try {
+            String number = String.valueOf(item.getTitle());
+            makeCall(number);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return super.onContextItemSelected(item);
+
     }
 
     public void makeCall(String phone)
@@ -144,6 +226,7 @@ public class AddressFragment extends Fragment implements OnMapReadyCallback {
             mListener.onFragmentInteraction(uri);
         }
     }
+
 
     @Override
     public void onAttach(Context context) {

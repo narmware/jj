@@ -24,7 +24,7 @@
             />
 
     <ImageView
-        android:background="@color/amber_50"
+        android:background="@android:color/white"
         android:id="@+id/img_dharam"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

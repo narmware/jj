@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
     Context mContext;
     ArrayList<DharamshalaItem> dharamshalaItems;
     FragmentManager fragmentManager;
+    String[] mPhone1;
 
     public DharamshalaAdapter(Context mContext, ArrayList<DharamshalaItem> dharamshalaItems, FragmentManager fragmentManager) {
         this.mContext = mContext;
@@ -43,7 +46,6 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_dharamshala, parent, false);
-
         return new MyViewHolder(view);
     }
 
@@ -83,7 +85,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
         return dharamshalaItems.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
 
         ImageView mImgDharam;
         TextView mTxtTitle,mTxtAddress,mTxtCharges;
@@ -98,6 +100,7 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
             mTxtAddress=itemView.findViewById(R.id.txt_address);
             mTxtCharges=itemView.findViewById(R.id.txt_room_charge);
             mBtnCall=itemView.findViewById(R.id.btn_call);
+            itemView.setOnCreateContextMenuListener(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,10 +125,43 @@ public class DharamshalaAdapter extends RecyclerView.Adapter<DharamshalaAdapter.
                 @Override
                 public void onClick(View view) {
                     String phone = mItem.getMobile();
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                    mContext.startActivity(intent);
+
+                    if(phone.contains("/")) {
+                        String[] separated_nums = phone.split("/");
+                        Log.e("Numbers", separated_nums[0] + "  " + separated_nums[1]);
+
+                        mPhone1 = new String[separated_nums.length];
+
+                        for (int i = 0; i < separated_nums.length; i++) {
+                            mPhone1[i] = separated_nums[i];
+                        }
+
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mPhone1[0], null));
+                        mContext.startActivity(intent);
+                    }
+                    else{
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                        mContext.startActivity(intent);
+                    }
+
                 }
             });
+        }
+
+
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            Log.e("Numbers",mPhone1.length+"  ");
+
+            if (v.getId() == R.id.btn_call) {
+
+                menu.setHeaderTitle("Select phone number to dial");
+                for(int i=0;i<mPhone1.length;i++)
+                {
+                    menu.add(mPhone1[i]);
+                }
+            }
         }
     }
 }

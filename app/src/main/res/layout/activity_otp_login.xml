@@ -133,7 +133,7 @@
                                 android:id="@+id/edt_pass"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:maxLength="6"
+                                android:maxLength="12"
                                 android:inputType="textPassword"
                                 android:fontFamily="sans-serif-condensed"
                                 android:hint="Enter Password"/>

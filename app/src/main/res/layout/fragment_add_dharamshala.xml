@@ -29,11 +29,11 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <LinearLayout
         android:padding="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -46,6 +46,7 @@
 
         <Spinner
             android:id="@+id/spinn_type"
+            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></Spinner>
     </LinearLayout>
@@ -66,7 +67,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_mail"
@@ -83,7 +84,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_mobile"
@@ -102,7 +103,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_phone"
@@ -121,7 +122,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_state"
@@ -138,7 +139,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_city"
@@ -155,7 +156,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_pincode"
@@ -173,7 +174,7 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
     <EditText
         android:id="@+id/edt_address"
@@ -189,13 +190,14 @@
         android:fontFamily="sans-serif-condensed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/form_edt_margin"/>
 
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_dharam_facility"
         android:visibility="gone"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/form_edt_margin"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -223,7 +225,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_bhojan_facility"
         android:visibility="gone"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <LinearLayout
@@ -250,7 +252,7 @@
     <Button
         android:id="@+id/btn_submit_form"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/form_edt_margin"
         android:background="@drawable/custom_bt"
         android:layout_gravity="center"
         android:text="Submit"

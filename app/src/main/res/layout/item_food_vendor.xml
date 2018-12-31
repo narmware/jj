@@ -23,7 +23,7 @@
             android:padding="5dp">
 
             <ImageButton
-                android:foreground="?attr/selectableItemBackground"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:id="@+id/btn_call"
                 android:background="@android:color/transparent"
                 android:layout_alignParentRight="true"
@@ -59,7 +59,7 @@
 
                 <Button
                     android:id="@+id/btn_view_menu"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:fontFamily="sans-serif-condensed"
                     android:textSize="12sp"
                     android:layout_marginTop="10dp"
