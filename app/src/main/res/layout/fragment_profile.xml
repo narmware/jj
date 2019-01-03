@@ -70,7 +70,6 @@
             <TextView
                 android:layout_marginTop="45dp"
                 android:id="@+id/profile_name"
-                android:text="Rohit Savant"
                 android:textColor="@color/colorPrimary"
                 android:textAllCaps="true"
                 android:fontFamily="sans-serif-condensed"
@@ -82,20 +81,21 @@
             <TextView
                 android:id="@+id/profile_mobile"
                 android:layout_marginTop="5dp"
-                android:text="8805250944"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_marginTop="10dp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/profile_email"
                 android:focusable="false"
-                android:background="@android:color/transparent"
+                android:padding="5dp"
+                android:background="@drawable/custom_et_form"
                 android:text="savantrohit8@gmail.com"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="wrap_content"

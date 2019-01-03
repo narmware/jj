@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class BhojanalayaAdapter extends RecyclerView.Adapter<BhojanalayaAdapter.
     Context mContext;
     ArrayList<DharamshalaItem> dharamshalaItems;
     FragmentManager fragmentManager;
+    String[] mPhone1;
 
     public BhojanalayaAdapter(Context mContext, ArrayList<DharamshalaItem> dharamshalaItems, FragmentManager fragmentManager) {
         this.mContext = mContext;
@@ -123,10 +125,28 @@ public class BhojanalayaAdapter extends RecyclerView.Adapter<BhojanalayaAdapter.
                 @Override
                 public void onClick(View view) {
                     String phone = mItem.getMobile();
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                    mContext.startActivity(intent);
+
+                    if(phone.contains("/")) {
+                        String[] separated_nums = phone.split("/");
+                        Log.e("Numbers", separated_nums[0] + "  " + separated_nums[1]);
+
+                        mPhone1 = new String[separated_nums.length];
+
+                        for (int i = 0; i < separated_nums.length; i++) {
+                            mPhone1[i] = separated_nums[i];
+                        }
+
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mPhone1[0], null));
+                        mContext.startActivity(intent);
+                    }
+                    else{
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                        mContext.startActivity(intent);
+                    }
+
                 }
-            });
+                });
+
         }
     }
 }

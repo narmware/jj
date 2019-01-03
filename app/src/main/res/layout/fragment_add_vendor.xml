@@ -133,11 +133,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_et_form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <Spinner
             android:id="@+id/spinn_city"
-            android:layout_marginTop="15dp"
             android:layout_width="220dp"
             android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -152,11 +158,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_et_form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <Spinner
             android:id="@+id/spinn_area"
-            android:layout_marginTop="15dp"
             android:layout_width="220dp"
             android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
     </LinearLayout>
 
     <EditText
