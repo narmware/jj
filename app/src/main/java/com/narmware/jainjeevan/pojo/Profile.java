@@ -2,6 +2,7 @@ package com.narmware.jainjeevan.pojo;
 
 public class Profile {
     String cust_id,profile_city,profile_state,profile_pincode,profile_address,profile_dob,profile_img,profile_gender,email;
+    String profile_name,profile_mobile;
 
     public Profile(String cust_id, String profile_city, String profile_state, String profile_pincode, String profile_address, String profile_dob,String profile_gender,String email) {
         this.profile_city = profile_city;
@@ -12,6 +13,30 @@ public class Profile {
         this.profile_dob = profile_dob;
         this.profile_gender = profile_gender;
         this.email=email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getProfile_name() {
+        return profile_name;
+    }
+
+    public void setProfile_name(String profile_name) {
+        this.profile_name = profile_name;
+    }
+
+    public String getProfile_mobile() {
+        return profile_mobile;
+    }
+
+    public void setProfile_mobile(String profile_mobile) {
+        this.profile_mobile = profile_mobile;
     }
 
     public String getProfile_gender() {

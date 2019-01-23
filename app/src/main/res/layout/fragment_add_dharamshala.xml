@@ -16,7 +16,7 @@
     <EditText
         android:id="@+id/edt_name"
         android:inputType="text"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
         android:background="@drawable/custom_et_form"
         android:hint="Name"
         android:maxLines="1"
@@ -113,7 +113,7 @@
 
     <EditText
         android:id="@+id/edt_phone"
-        android:maxLength="10"
+        android:maxLength="15"
         android:inputType="phone"
         android:digits="1234567890"
         android:background="@drawable/custom_et_form"

@@ -136,13 +136,8 @@ public class OtpLoginActivity extends AppCompatActivity {
 
                     if(otp.equals(server_otp))
                     {
-                        SharedPreferencesHelper.setUserId(user_id,OtpLoginActivity.this);
-                        SharedPreferencesHelper.setUserName(name,OtpLoginActivity.this);
-                        SharedPreferencesHelper.setUserMobile(mobile,OtpLoginActivity.this);
-                        SharedPreferencesHelper.setUserEmail(email,OtpLoginActivity.this);
-                        SharedPreferencesHelper.setIsLogin(true,OtpLoginActivity.this);
 
-                        Toast.makeText(OtpLoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OtpLoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
                         Intent intent=new Intent(OtpLoginActivity.this,MainActivity.class);
                         startActivity(intent);
@@ -253,6 +248,12 @@ public class OtpLoginActivity extends AppCompatActivity {
                                 server_otp=loginResponse.getOTP();
                                 //mEdtOtp.setText(server_otp);
                                 user_id=loginResponse.getUser_id();
+
+                                SharedPreferencesHelper.setUserId(user_id,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserName(name,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserMobile(mobile,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserEmail(email,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setIsLogin(true,OtpLoginActivity.this);
 
                             }
                             if(loginResponse.getResponse().equals(Constants.ALREADY_EXIST))
@@ -394,13 +395,13 @@ public class OtpLoginActivity extends AppCompatActivity {
                             Login loginResponse= gson.fromJson(response.toString(), Login.class);
                             if(loginResponse.getResponse().equals(Constants.SUCCESS))
                             {
-                                SharedPreferencesHelper.setUserId(user_id,OtpLoginActivity.this);
+                                SharedPreferencesHelper.setUserId(loginResponse.getUser_id(),OtpLoginActivity.this);
                                 SharedPreferencesHelper.setUserName(name,OtpLoginActivity.this);
                                 SharedPreferencesHelper.setUserMobile(mobile,OtpLoginActivity.this);
                                 SharedPreferencesHelper.setUserEmail(email,OtpLoginActivity.this);
                                 SharedPreferencesHelper.setIsLogin(true,OtpLoginActivity.this);
 
-                                Toast.makeText(OtpLoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OtpLoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
                                 Intent intent=new Intent(OtpLoginActivity.this,MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

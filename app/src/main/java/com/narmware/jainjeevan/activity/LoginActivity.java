@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferencesHelper.setUserEmail(loginResponse.getEmail(),LoginActivity.this);
                                 SharedPreferencesHelper.setIsLogin(true,LoginActivity.this);
 
-                                Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
                                 Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                 startActivity(intent);

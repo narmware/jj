@@ -86,9 +86,9 @@ public class AddVendorFragment extends Fragment {
     int validFlag=0;
     public static Context mContext;
 
-    String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mAddress,mKm,mSpecialFood;
-    String mCity="";
-    String mArea="";
+    public static String mName,mProdName,mContactPerson,mMail,mMobile,mPincode,mAddress,mKm,mSpecialFood;
+    public static String mCity="";
+    public static String mArea="";
     RecyclerView mRecyclerFoodType;
     ArrayList<Facility> foodTypes;
     FilterAdapter foodTypesAdapter;
@@ -232,6 +232,11 @@ public class AddVendorFragment extends Fragment {
                 {
                     validFlag=1;
                     mEdtMail.setError("Enter valid email");
+                }
+                if(mContactPerson.equals(""))
+                {
+                    validFlag=1;
+                    mEdtContactPerson.setError("Enter contact person");
                 }
                 //as per requirnment
                 /* if(mContactPerson.equals(""))
@@ -450,23 +455,25 @@ public class AddVendorFragment extends Fragment {
 
                         try
                         {
-                            Log.e("Vendor Json_string",response.toString());
+                            Log.e("Vendor res Json_string",response.toString());
                             Gson gson = new Gson();
 
                             ApiResponse vendorResponse=gson.fromJson(response.toString(),ApiResponse.class);
                             if(vendorResponse.getResponse().equals("100")) {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
-                                        .setTitleText("Registeration Successfull !")
+                                        .setTitleText("Registeration Successful !")
                                         //.setContentText("Your want to Logout")
                                         .setConfirmText("OK")
                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.dismissWithAnimation();
-                                                getActivity().onBackPressed();
+                                               // getActivity().onBackPressed();
                                             }
                                         })
                                         .show();
+
+                                emailCall(mName,mContactPerson,mMail,mMobile,mCity,mPincode,mAddress,mKm,mSpecialFood,mArea);
                             }
 
                         } catch (Exception e) {
@@ -623,6 +630,71 @@ public class AddVendorFragment extends Fragment {
         );
         mVolleyRequest.add(obreq);
     }
+
+    public void emailCall(String mName, String mContactPerson, String mMail, String mMobile, String mCity, String mPincode, String mAddress, String mKm, String mSpecialFood, String mArea)
+    {
+        Log.e("Email","Call");
+
+
+      /*  HashMap<String,String> param = new HashMap();
+        param.put("business_name", mName);
+        param.put("product_name", mProdName);
+        param.put("contact_person", mContactPerson);
+        param.put("email", mMail);
+        param.put("contact_no", mMobile);
+        param.put("city", mCity);
+        param.put("pincode", mPincode);
+        param.put("detailes_address", mAddress);
+        param.put("kilometeres", mKm);
+        param.put("special_desc", mSpecialFood);
+        param.put("area", mArea);
+        param.put("option","vendor");*/
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.NAME,mName);
+        param.put(Constants.EMAIL,mMail);
+        param.put("contact_person",mContactPerson);
+        param.put("mobile",mMobile);
+        param.put("pincode",mPincode);
+        param.put("address",mAddress);
+        param.put("city",mCity);
+        param.put("km",mKm);
+        param.put("special_food",mSpecialFood);
+        param.put("option","vendor");
+
+        String url= SupportFunctions.appendParam(EndPoints.EMAIL_CALL,param);
+        Log.e("Email url",url);
+
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
 
     private void showNoConnectionDialog() {
         mNoConnectionDialog.setContentView(R.layout.dialog_no_internet);

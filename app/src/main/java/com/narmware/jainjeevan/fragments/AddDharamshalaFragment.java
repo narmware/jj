@@ -221,12 +221,13 @@ public class AddDharamshalaFragment extends Fragment {
         if(mPhone.length()<10)
         {
             validFlag=1;
-            mEdtPhone.setError("Enter valid mobile");
+            mEdtPhone.setError("Phone number is short.If entering landline insert STD code");
         }
-        if(mMobile.length()<10)
-        {
-            validFlag=1;
-            mEdtMobile.setError("Enter valid mobile");
+        if(!mMobile.equals("")) {
+            if (mMobile.length() < 10) {
+                validFlag = 1;
+                mEdtMobile.setError("Enter valid mobile");
+            }
         }
         if(mMail.equals("") || !mMail.matches(emailPattern))
         {
@@ -418,8 +419,9 @@ public void registerData()
 
                         ApiResponse vendorResponse=gson.fromJson(response.toString(),ApiResponse.class);
                         if(vendorResponse.getResponse().equals("100")) {
+                            emailCall(mName,mContactPerson,mMail,mMobile,mPhone,mCity,mPincode,mAddress,mState,mType);
                             new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Registration Successfull !")
+                                    .setTitleText("Registration Successful !")
                                     //.setContentText("Your want to Logout")
                                     .setConfirmText("OK")
                                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -599,6 +601,54 @@ public void registerData()
                         Log.e("Volley", "Test Error");
                         dialog.dismiss();
 
+                    }
+                }
+        );
+        mVolleyRequest.add(obreq);
+    }
+
+    public void emailCall(String mName, String mContactPerson, String mail, String mMobile, String mPhone, String mCity, String mPincode, String mAddress, String mState, String mType)
+    {
+
+        HashMap<String,String> param = new HashMap();
+        param.put(Constants.NAME,mName);
+        param.put(Constants.EMAIL,mail);
+        param.put("contact_person",mContactPerson);
+        param.put("mobile",mMobile);
+        param.put("phone",mPhone);
+        param.put("pincode",mPincode);
+        param.put("address",mAddress);
+        param.put("state",mState);
+        param.put("city",mCity);
+        param.put("option",mType);
+
+        String url= SupportFunctions.appendParam(EndPoints.EMAIL_CALL,param);
+        Log.e("Email url",url);
+
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+
+                    // Takes the response from the JSON request
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try
+                        {
+
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    // Handles errors that occur due to Volley
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Test Error");
                     }
                 }
         );

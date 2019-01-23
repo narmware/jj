@@ -83,6 +83,7 @@ public class ProfileFragment extends Fragment{
     String mDob,mState,mPincode,mCity,mAddress,mGender,mMail;
     RequestQueue mVolleyRequest;
     Bitmap bitmap;
+    TextView mTxtname,mTxtmobile;
     int validData=0;
 
     private OnFragmentInteractionListener mListener;
@@ -93,9 +94,9 @@ public class ProfileFragment extends Fragment{
 
     private void init() {
         mVolleyRequest = Volley.newRequestQueue(getContext());
-        TextView name = mRoot.findViewById(R.id.profile_name);
+        mTxtname = mRoot.findViewById(R.id.profile_name);
         mEdtemail = mRoot.findViewById(R.id.profile_email);
-        TextView mobile = mRoot.findViewById(R.id.profile_mobile);
+        mTxtmobile = mRoot.findViewById(R.id.profile_mobile);
         Button mBtnLogout=mRoot.findViewById(R.id.btn_logout);
         mEdtCity=mRoot.findViewById(R.id.profile_city);
         mEdtState=mRoot.findViewById(R.id.profile_state);
@@ -217,9 +218,9 @@ public class ProfileFragment extends Fragment{
                         .show();
             }
         });
-        name.setText(SharedPreferencesHelper.getUserName(getActivity()));
+        mTxtname.setText(SharedPreferencesHelper.getUserName(getActivity()));
         mEdtemail.setText(SharedPreferencesHelper.getUserEmail(getActivity()));
-        mobile.setText(SharedPreferencesHelper.getUserMobile(getActivity()));
+        mTxtmobile.setText(SharedPreferencesHelper.getUserMobile(getActivity()));
 
         mBtnEditMail=mRoot.findViewById(R.id.btn_edit_mail);
         mBtnEditMail.setOnClickListener(new View.OnClickListener() {
@@ -414,7 +415,6 @@ public class ProfileFragment extends Fragment{
 
         HashMap<String,String> param = new HashMap();
         param.put(Constants.USER_ID,SharedPreferencesHelper.getUserId(getContext()));
-
         String url= SupportFunctions.appendParam(EndPoints.GET_PROFILE,param);
 
         Log.e("profile url",url);
@@ -434,6 +434,14 @@ public class ProfileFragment extends Fragment{
                             Profile profileResponse=gson.fromJson(response.toString(),Profile.class);
                             if(profileResponse!=null)
                             {
+                                mTxtname.setText(profileResponse.getProfile_name());
+                                mEdtemail.setText(profileResponse.getEmail());
+                                mTxtmobile.setText(profileResponse.getProfile_mobile());
+
+                                SharedPreferencesHelper.setUserName(profileResponse.getProfile_name(),getActivity());
+                                SharedPreferencesHelper.setUserEmail(profileResponse.getEmail(),getActivity());
+                                SharedPreferencesHelper.setUserMobile(profileResponse.getProfile_mobile(),getActivity());
+
                                 mEdtCity.setText(profileResponse.getProfile_city());
                                 mEdtState.setText(profileResponse.getProfile_state());
                                 mEdtPincode.setText(profileResponse.getProfile_pincode());
