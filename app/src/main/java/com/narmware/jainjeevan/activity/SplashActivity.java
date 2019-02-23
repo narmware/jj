@@ -52,7 +52,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                //checkExistingUser();
+                if(SharedPreferencesHelper.getUserId(SplashActivity.this)!=null) {
+                    checkExistingUser();
+                }
 
                 if(SharedPreferencesHelper.getIsLogin(SplashActivity.this)==false)
                 {
@@ -88,15 +90,15 @@ public class SplashActivity extends AppCompatActivity {
                             Gson gson = new Gson();
 
                             Login loginResponse= gson.fromJson(response.toString(), Login.class);
-                            if(loginResponse.getResponse().equals(Constants.SUCCESS))
+                            if(loginResponse.getResponse().equals(Constants.ALREADY_EXIST))
                             {
 
-                               /* SharedPreferencesHelper.setUserName(name,SplashActivity.this);
-                                SharedPreferencesHelper.setUserMobile(mobile,SplashActivity.this);
-                                SharedPreferencesHelper.setUserEmail(email,SplashActivity.this);*/
+                                SharedPreferencesHelper.setUserName(loginResponse.getName(),SplashActivity.this);
+                                SharedPreferencesHelper.setUserMobile(loginResponse.getMobile(),SplashActivity.this);
+                                SharedPreferencesHelper.setUserEmail(loginResponse.getEmail(),SplashActivity.this);
 
                             }
-                            else{
+                            if(loginResponse.getResponse().equals(Constants.ERROR)){
                                 SharedPreferencesHelper.setIsLogin(false,SplashActivity.this);
                                 SharedPreferencesHelper.setFilteredCity(null,SplashActivity.this);
                                 SharedPreferencesHelper.setFilteredFacilities(null,SplashActivity.this);
@@ -104,6 +106,12 @@ public class SplashActivity extends AppCompatActivity {
                                 SharedPreferencesHelper.setUserName(null,SplashActivity.this);
                                 SharedPreferencesHelper.setUserMobile(null,SplashActivity.this);
                                 SharedPreferencesHelper.setUserEmail(null,SplashActivity.this);
+                                SharedPreferencesHelper.setUserId(null,SplashActivity.this);
+
+                                Intent intent=new Intent(SplashActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
                             }
 
                         } catch (Exception e) {

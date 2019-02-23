@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.narmware.jainjeevan.R;
+import com.narmware.jainjeevan.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,9 +93,10 @@ public class AboutFragment extends Fragment {
 
     public void setFragment(Fragment fragment,String tag)
     {
+        MainActivity.fragment_call=2;
         fragmentManager=getActivity().getSupportFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,fragment,tag);
+        fragmentTransaction.add(R.id.fragment_container,fragment,tag);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

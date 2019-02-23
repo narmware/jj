@@ -188,6 +188,10 @@ public class AddVendorFragment extends Fragment {
                             validFlag = 1;
                             mEdtKm.setError("Kilometers should not be 0");
                         }
+                        if (tempKm > 99) {
+                            validFlag = 1;
+                            mEdtKm.setError("Delivery cannot exceed 99km");
+                        }
                     }
 
                     if(mKm.equals(""))

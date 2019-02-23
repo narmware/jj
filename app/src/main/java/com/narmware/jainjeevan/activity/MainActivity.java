@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final SingleUploadBroadcastReceiver uploadReceiver =
             new SingleUploadBroadcastReceiver();
     public static NavigationView navigationView;
-    //ProgressDialog dialog;
+    ProgressDialog dialog;
     public static  int fragment_call=0;
 
     ListView mListNav;
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             SharedPreferencesHelper.setFilteredCity(null,MainActivity.this);
                                             SharedPreferencesHelper.setFilteredFacilities(null,MainActivity.this);
                                             SharedPreferencesHelper.setUserLocation(null,MainActivity.this);
+                                            SharedPreferencesHelper.setUserId(null,MainActivity.this);
 
                                             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
                                             MainActivity.this.startActivity(intent);
@@ -239,8 +240,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         })
                         .show();
-            }else{
+            }
+            if(fragment_call==1){
                 fragment_call=0;
+                super.onBackPressed();
+            }
+            if(fragment_call==2){
+                fragment_call=1;
                 super.onBackPressed();
             }
 
@@ -359,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
-            SharedPreferencesHelper.setUserProfileImage(picturePath,MainActivity.this);
+            //SharedPreferencesHelper.setUserProfileImage(picturePath,MainActivity.this);
             cursor.close();
             uploadMultipart(picturePath);
 
@@ -372,6 +378,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void uploadMultipart(String path) {
+
+        dialog = new ProgressDialog(MainActivity.this);
+        dialog.setMessage("Uploading...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         String uploadId = UUID.randomUUID().toString();
 
@@ -427,15 +438,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onCompleted(int serverResponseCode, byte[] serverResponseBody) {
-        //dialog.dismiss();
-        Log.e("ServerResponse", new String(serverResponseBody) + "   " + serverResponseCode);
-        Gson gson=new Gson();
-        ImageUploadResponse imageUploadResponse=gson.fromJson(new String(serverResponseBody),ImageUploadResponse.class);
-       SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(),MainActivity.this);
-        Picasso.with(MainActivity.this)
-                .load(imageUploadResponse.getUrl())
-                .placeholder(R.drawable.logo)
-                .into(ProfileFragment.mImgProf);
+
+        dialog.dismiss();
+
+        if(dialog.isShowing()==false) {
+            Log.e("ServerResponse", new String(serverResponseBody) + "   " + serverResponseCode);
+            Gson gson = new Gson();
+            ImageUploadResponse imageUploadResponse = gson.fromJson(new String(serverResponseBody), ImageUploadResponse.class);
+            SharedPreferencesHelper.setUserProfileImage(null, MainActivity.this);
+            SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(), MainActivity.this);
+            Log.e("ServerResponse", imageUploadResponse.getUrl()+"\n"+SharedPreferencesHelper.getUserProfileImage(MainActivity.this));
+
+           // ProfileFragment.setImage(imageUploadResponse.getUrl());
+
+            Picasso.with(MainActivity.this)
+                    .load(imageUploadResponse.getUrl())
+                    .placeholder(R.drawable.logo)
+                    .into(ProfileFragment.mImgProf);
+        }
+
     }
 
     @Override

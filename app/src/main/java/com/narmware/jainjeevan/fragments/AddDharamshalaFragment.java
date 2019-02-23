@@ -301,7 +301,7 @@ public class AddDharamshalaFragment extends Fragment {
     private void setSpinner() {
         final List<String> categories = new ArrayList<String>();
         categories.add("Dharamshala");
-        categories.add("Bhojanalaya");
+        categories.add("Bhojanshala");
         categories.add("Both");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
@@ -328,7 +328,7 @@ public class AddDharamshalaFragment extends Fragment {
                     mCardBhojanFacility.setVisibility(View.GONE);
                 }
 
-                if(mType.equals("Bhojanalaya"))
+                if(mType.equals("Bhojanshala"))
                 {
                     mCardBhojanFacility.setVisibility(View.VISIBLE);
                     YoYo.with(Techniques.SlideInRight)

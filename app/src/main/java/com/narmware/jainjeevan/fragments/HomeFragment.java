@@ -186,7 +186,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //mSlider.setCustomIndicator(custom_indicator);
         mSlider.setCustomAnimation(new DescriptionAnimation());
         mSlider.setFitsSystemWindows(true);
-        mSlider.setDuration(2000);
+        mSlider.setDuration(4000);
 
     }
 
@@ -233,7 +233,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //mSlider.setCustomIndicator(custom_indicator);
         mBottomSlider.setCustomAnimation(new DescriptionAnimation());
         mBottomSlider.setFitsSystemWindows(true);
-        mBottomSlider.setDuration(2000);
+        mBottomSlider.setDuration(4000);
 
     }
 

@@ -73,8 +73,8 @@ public class ProfileFragment extends Fragment{
     RadioGroup radioGroup;
     RadioButton radBtnMale,radBtnFemale;
 
-    public static CircleImageView mImgProf;
-    ImageView imgBlurredBack;
+    public static ImageView mImgProf;
+    public static ImageView imgBlurredBack;
 
     Button mBtnProfileUpdate;
     EditText mEdtemail;
@@ -82,9 +82,10 @@ public class ProfileFragment extends Fragment{
     EditText mEdtCity,mEdtState,mEdtPincode,mEdtAddress;
     String mDob,mState,mPincode,mCity,mAddress,mGender,mMail;
     RequestQueue mVolleyRequest;
-    Bitmap bitmap;
+    public static Bitmap bitmap;
     TextView mTxtname,mTxtmobile;
     int validData=0;
+    public static Context context;
 
     private OnFragmentInteractionListener mListener;
 
@@ -169,7 +170,7 @@ public class ProfileFragment extends Fragment{
             }
         }catch (Exception e)
         {
-            
+            e.printStackTrace();
         }
         mImgBtnProfChange=mRoot.findViewById(R.id.edit_prof_img);
         mImgBtnProfChange.setOnClickListener(new View.OnClickListener() {
@@ -268,11 +269,12 @@ public class ProfileFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRoot = inflater.inflate(R.layout.fragment_profile, container, false);
+        context=getContext();
+
         init();
         getUserProfile();
         return mRoot;
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {

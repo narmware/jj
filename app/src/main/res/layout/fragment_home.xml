@@ -61,7 +61,7 @@
                 <TextView
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:text="Bhojanalay"
+                    android:text="Bhojanshala"
                     android:fontFamily="sans-serif-condensed"
                     android:textSize="12sp"
                     android:textColor="@android:color/black"

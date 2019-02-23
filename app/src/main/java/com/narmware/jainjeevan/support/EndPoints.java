@@ -24,6 +24,6 @@ public class EndPoints {
     public static final String FORGOT_PASSWORD=SERVER_URL+"forgot-password.php";
     public static final String VALIDATE_OTP=SERVER_URL+"verify_otp.php";
     public static final String EMAIL_CALL=SERVER_URL+"mail_notification.php";
-    public static final String CHECK_EXISIING_USER=SERVER_URL+"mail_notification.php";
+    public static final String CHECK_EXISIING_USER=SERVER_URL+"existing_user.php";
 
 }

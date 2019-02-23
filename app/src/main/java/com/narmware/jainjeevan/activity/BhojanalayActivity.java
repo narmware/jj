@@ -122,7 +122,7 @@ public class BhojanalayActivity extends AppCompatActivity {
 
         mFabFilter=findViewById(R.id.fab_filter);
 
-        mTxtTitle.setText("Bhojanalay");
+        mTxtTitle.setText("Bhojanshala");
 
         mFabFilter.setOnClickListener(new View.OnClickListener() {
             @Override
