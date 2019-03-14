@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.narmware.jainjeevan.R;
 import com.narmware.jainjeevan.activity.MenuActivity;
@@ -53,6 +55,7 @@ public class FoodVendorAdapter extends RecyclerView.Adapter<FoodVendorAdapter.My
 
         holder.mTxtTitle.setText(restoItem.getName());
         holder.mTxtAddress.setText(restoItem.getAddress());
+        holder.mTxtContact.setText("Contact: "+restoItem.getMobile());
         Picasso.with(mContext)
                 .load(restoItem.getIMG())
                 .placeholder(R.drawable.logo)
@@ -77,7 +80,7 @@ public class FoodVendorAdapter extends RecyclerView.Adapter<FoodVendorAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView mImgResto;
-        TextView mTxtTitle,mTxtAddress;
+        TextView mTxtTitle,mTxtAddress,mTxtContact;
         ImageButton mBtnCall;
         RestoItems mItem;
         Button mBtnViewMenu;
@@ -87,6 +90,7 @@ public class FoodVendorAdapter extends RecyclerView.Adapter<FoodVendorAdapter.My
             mImgResto=itemView.findViewById(R.id.img_hotel);
             mTxtTitle=itemView.findViewById(R.id.txt_title);
             mTxtAddress=itemView.findViewById(R.id.txt_address);
+            mTxtContact=itemView.findViewById(R.id.txt_contact);
             mBtnCall=itemView.findViewById(R.id.btn_call);
             mBtnViewMenu=itemView.findViewById(R.id.btn_view_menu);
 
@@ -102,26 +106,44 @@ public class FoodVendorAdapter extends RecyclerView.Adapter<FoodVendorAdapter.My
                 public void onClick(View view) {
                     String phone = mItem.getMobile();
 
-                    if(phone.contains("/")) {
-                        String[] separated_nums = phone.split("/");
-                        Log.e("Numbers", separated_nums[0] + "  " + separated_nums[1]);
+                    if(phone==null || phone.equals(""))
+                    {
+                        Toast.makeText(mContext,"No number available",Toast.LENGTH_SHORT).show();
+                    }else {
 
-                        mPhone1 = new String[separated_nums.length];
+                        if (phone.contains("/")) {
+                            String[] separated_nums = phone.split("/");
+                            Log.e("Numbers", separated_nums[0] + "  " + separated_nums[1]);
 
-                        for (int i = 0; i < separated_nums.length; i++) {
-                            mPhone1[i] = separated_nums[i];
+                            mPhone1 = new String[separated_nums.length];
+                            PopupMenu popup = new PopupMenu(mContext,mBtnCall);
+
+                            for (int i = 0; i < separated_nums.length; i++) {
+                                mPhone1[i] = separated_nums[i];
+                                popup.getMenu().add(mPhone1[i]);
+                            }
+
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(android.view.MenuItem menuItem) {
+
+                                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", String.valueOf(menuItem.getTitle()), null));
+                                    mContext.startActivity(intent);
+
+                                    return false;
+                                }
+
+                            });
+                            popup.show();
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                            mContext.startActivity(intent);
                         }
-
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mPhone1[0], null));
-                        mContext.startActivity(intent);
-                    }
-                    else{
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                        mContext.startActivity(intent);
                     }
 
                 }
             });
+
             mBtnViewMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

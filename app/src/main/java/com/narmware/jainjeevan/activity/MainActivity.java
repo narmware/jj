@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView mobile = findViewById(R.id.header_mobile);
         CircleImageView imageView = findViewById(R.id.imageView);
 
-        try {
+        //commented showing profile photo, as per requirnment 14/03/19
+        /*try {
             if (SharedPreferencesHelper.getUserProfileImage(MainActivity.this) != null) {
                 Picasso.with(MainActivity.this)
                         .load(SharedPreferencesHelper.getUserProfileImage(MainActivity.this))
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }catch (Exception e)
         {
 
-        }
+        }*/
         name.setText(SharedPreferencesHelper.getUserName(this));
         email.setText(SharedPreferencesHelper.getUserEmail(this));
         mobile.setText(SharedPreferencesHelper.getUserMobile(this));
@@ -447,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ImageUploadResponse imageUploadResponse = gson.fromJson(new String(serverResponseBody), ImageUploadResponse.class);
             SharedPreferencesHelper.setUserProfileImage(null, MainActivity.this);
             SharedPreferencesHelper.setUserProfileImage(imageUploadResponse.getUrl(), MainActivity.this);
-            Log.e("ServerResponse", imageUploadResponse.getUrl()+"\n"+SharedPreferencesHelper.getUserProfileImage(MainActivity.this));
+           // Log.e("ServerResponse", imageUploadResponse.getUrl()+"\n"+SharedPreferencesHelper.getUserProfileImage(MainActivity.this));
 
            // ProfileFragment.setImage(imageUploadResponse.getUrl());
 

@@ -156,7 +156,8 @@ public class ProfileFragment extends Fragment{
 
         mImgProf=mRoot.findViewById(R.id.prof_image);
 
-        try {
+        //commented showing profile photo as per requirnment 14/03/19
+        /*try {
             if (SharedPreferencesHelper.getUserProfileImage(getContext()) != null) {
                 Picasso.with(getContext())
                         .load(SharedPreferencesHelper.getUserProfileImage(getContext()))
@@ -171,7 +172,7 @@ public class ProfileFragment extends Fragment{
         }catch (Exception e)
         {
             e.printStackTrace();
-        }
+        }*/
         mImgBtnProfChange=mRoot.findViewById(R.id.edit_prof_img);
         mImgBtnProfChange.setOnClickListener(new View.OnClickListener() {
             @Override
