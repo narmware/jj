@@ -487,8 +487,7 @@ public void registerData()
 
                             for(Facility itemFac:facility){
 
-                                //filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
-
+/*
                                 if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())!=null)
                                 {
                                     facilitySet=SharedPreferencesHelper.getDharamshalaFacilities(getContext());
@@ -503,7 +502,9 @@ public void registerData()
                                 if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())==null)
                                 {
                                     facilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
-                                }
+                                }*/
+
+                                facilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
 
                             }
                             facilityAdapter.notifyDataSetChanged();
@@ -562,9 +563,7 @@ public void registerData()
                             Facility[] facility=filterResponse.getFacility();
 
                             for(Facility itemFac:facility){
-
-                                //filters.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
-
+                              /*
                                 if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())!=null)
                                 {
                                     bhojanFacilitySet=SharedPreferencesHelper.getDharamshalaFacilities(getContext());
@@ -579,7 +578,10 @@ public void registerData()
                                 if(SharedPreferencesHelper.getDharamshalaFacilities(getContext())==null)
                                 {
                                     bhojanFacilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
-                                }
+                                }*/
+
+                                bhojanFacilities.add(new Facility(itemFac.getFacility_id(),itemFac.getFacility_name(),itemFac.getImg(),false));
+
 
                             }
                             bhojanFacilityAdapter.notifyDataSetChanged();
