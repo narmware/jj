@@ -428,6 +428,7 @@ public void registerData()
                                         @Override
                                         public void onClick(SweetAlertDialog sDialog) {
                                             sDialog.dismissWithAnimation();
+                                            getActivity().onBackPressed();
                                         }
                                     })
                                     .show();

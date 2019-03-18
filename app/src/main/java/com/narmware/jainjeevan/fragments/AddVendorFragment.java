@@ -353,7 +353,7 @@ public class AddVendorFragment extends Fragment {
         foodTypes.add(new Facility("6","Others","",false));
 
 
-        for(int i=0;i<foodTypes.size();i++)
+        /*for(int i=0;i<foodTypes.size();i++)
         {
             if(SharedPreferencesHelper.getFoodTypes(getContext())!=null)
             {
@@ -365,7 +365,7 @@ public class AddVendorFragment extends Fragment {
                 }
             }
         }
-
+*/
         SnapHelper snapHelper = new LinearSnapHelper();
 
         foodTypesAdapter = new FilterAdapter(getContext(), foodTypes,Constants.ADD_VENDOR);
@@ -465,14 +465,14 @@ public class AddVendorFragment extends Fragment {
                             ApiResponse vendorResponse=gson.fromJson(response.toString(),ApiResponse.class);
                             if(vendorResponse.getResponse().equals("100")) {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
-                                        .setTitleText("Registeration Successful !")
+                                        .setTitleText("Registration Successful !")
                                         //.setContentText("Your want to Logout")
                                         .setConfirmText("OK")
                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.dismissWithAnimation();
-                                               // getActivity().onBackPressed();
+                                                getActivity().onBackPressed();
                                             }
                                         })
                                         .show();
